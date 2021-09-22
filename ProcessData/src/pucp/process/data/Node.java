@@ -16,7 +16,7 @@ public class Node {
 
 	public static List<Node> cargarBloqueados(String direccion) {
 
-		List<Node> listanodos = new ArrayList<Node>();
+		List<Node> listaNodos = new ArrayList<Node>();
 
 		try {
 			try (BufferedReader bf = new BufferedReader(new FileReader(direccion))) {
@@ -28,7 +28,7 @@ public class Node {
 					for (int i = 1; i < lineaDividida.length; i += 2) {
 						
 						Node c = new Node(Integer.parseInt(lineaDividida[i]), Integer.parseInt(lineaDividida[i + 1]));
-						listanodos.add(c);
+						listaNodos.add(c);
 					}
 
 					linea = bf.readLine();
@@ -39,7 +39,7 @@ public class Node {
 			System.out.println("Error en leer");
 
 		}
-		return listanodos;
+		return listaNodos;
 
 	}
 
