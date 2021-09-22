@@ -1,6 +1,5 @@
 package com.mycompany.geneticoalgoritmo;
 
-import genetico.Pair;
 import java.util.*;
 import java.io.*;
 import java.time.Clock;
@@ -189,39 +188,29 @@ public class Population implements Closeable
 	   generatePopulation();
    }
 
-   // Adaptation of the penalty parameters
-   public final void managePenalties()
-   {
-	   // Setting some bounds [0.1,1000] to the penalty values for safety
-	   double fractionFeasibleLoad = (double) Collections.frequency(listFeasibilityLoad, true) / (double)listFeasibilityLoad.size();
-	   if (fractionFeasibleLoad < params.targetFeasible - 0.05 && params.penaltyCapacity < 1000)
-	   {
-		   params.penaltyCapacity = Math.<Double>min(params.penaltyCapacity * 1.2,1000.0);
-	   }
-   }
-   
+   // Adaptation of the penalty parameters   
 public final void managePenalties()
    {
 	   // Setting some bounds [0.1,1000] to the penalty values for safety
 	   double fractionFeasibleLoad = (double) Collections.frequency(listFeasibilityLoad, true) / (double)listFeasibilityLoad.size();
 	   if (fractionFeasibleLoad < params.targetFeasible - 0.05 && params.penaltyCapacity < 1000)
 	   {
-		   params.penaltyCapacity = Math.<Double>min(params.penaltyCapacity * 1.2,1000.0);
+		   params.penaltyCapacity = Math.min(params.penaltyCapacity * 1.2,1000.0);
 	   }
 	   else if (fractionFeasibleLoad > params.targetFeasible + 0.05 && params.penaltyCapacity > 0.1)
 	   {
-		   params.penaltyCapacity = Math.<Double>max(params.penaltyCapacity * 0.85, 0.1);
+		   params.penaltyCapacity = Math.max(params.penaltyCapacity * 0.85, 0.1);
 	   }
 
 	   // Setting some bounds [0.1,1000] to the penalty values for safety
 	   double fractionFeasibleDuration = (double)Collections.frequency(listFeasibilityDuration, true) / (double)listFeasibilityDuration.size();
 	   if (fractionFeasibleDuration < params.targetFeasible - 0.05 && params.penaltyDuration < 1000)
 	   {
-		   params.penaltyDuration = Math.<Double>min(params.penaltyDuration * 1.2,1000.0);
+		   params.penaltyDuration = Math.min(params.penaltyDuration * 1.2,1000.0);
 	   }
 	   else if (fractionFeasibleDuration > params.targetFeasible + 0.05 && params.penaltyDuration > 0.1)
 	   {
-		   params.penaltyDuration = Math.<Double>max(params.penaltyDuration * 0.85, 0.1);
+		   params.penaltyDuration = Math.max(params.penaltyDuration * 0.85, 0.1);
 	   }
 
 	   // Update the evaluations
@@ -254,7 +243,7 @@ public final void managePenalties()
 	   updateBiasedFitnesses(feasibleSubpopulation);
 	   updateBiasedFitnesses(infeasibleSubpopulation);
 
-	   int place1 = tangible.RandomNumbers.nextNumber() % (feasibleSubpopulation.size() + infeasibleSubpopulation.size());
+	   int place1 = RandomNumbers.nextNumber() % (feasibleSubpopulation.size() + infeasibleSubpopulation.size());
 	   if (place1 >= (int)feasibleSubpopulation.size())
 	   {
 		   individual1 = infeasibleSubpopulation.get(place1 - feasibleSubpopulation.size());
@@ -264,7 +253,7 @@ public final void managePenalties()
 		   individual1 = feasibleSubpopulation.get(place1);
 	   }
 
-	   int place2 = tangible.RandomNumbers.nextNumber() % (feasibleSubpopulation.size() + infeasibleSubpopulation.size());
+	   int place2 = RandomNumbers.nextNumber() % (feasibleSubpopulation.size() + infeasibleSubpopulation.size());
 	   if (place2 >= (int)feasibleSubpopulation.size())
 	   {
 		   individual2 = infeasibleSubpopulation.get(place2 - feasibleSubpopulation.size());

@@ -155,8 +155,8 @@ public class Params
 
 		// Default initialization if the number of vehicles has not been provided by the user
 		if (nbVehicles == Integer.MAX_VALUE)
-		{
-			nbVehicles = Math.ceil(1.2 * totalDemand / vehicleCapacity) + 2; // Safety margin: 20% + 2 more vehicles than the trivial bin packing LB
+		{	
+			nbVehicles = (int)Math.ceil(1.2 * totalDemand / vehicleCapacity) + 2; // Safety margin: 20% + 2 more vehicles than the trivial bin packing LB
 			System.out.print("----- FLEET SIZE WAS NOT SPECIFIED: DEFAULT INITIALIZATION TO ");
 			System.out.print(nbVehicles);
 			System.out.print(" VEHICLES");

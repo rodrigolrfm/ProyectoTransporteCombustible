@@ -142,7 +142,7 @@ public class Individual{
 	  }
   }
 
-  public static boolean readCVRPLibFormat(String fileName, ArrayList<ArrayList<Integer>> readSolution, tangible.RefObject<Double> readCost)
+  public static boolean readCVRPLibFormat(String fileName, ArrayList<ArrayList<Integer>> readSolution, RefObject<Double> readCost)
   {
       readSolution.clear();
       File myObj = new File(fileName);
@@ -193,7 +193,7 @@ public class Individual{
 	      {
 	          chromT.set(i, i + 1);
 	      }
-	      std::random_shuffle(chromT.iterator(), chromT.end());
+	      Collections.shuffle(chromT);
 	  }
 
   	// Constructor: empty individual

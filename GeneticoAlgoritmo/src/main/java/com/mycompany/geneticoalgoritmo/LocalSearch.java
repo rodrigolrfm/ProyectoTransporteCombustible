@@ -65,13 +65,16 @@ public class LocalSearch
 		loadIndividual(indiv);
 
 		// Shuffling the order of the nodes explored by the LS to allow for more diversity in the search
-		std::random_shuffle(orderNodes.begin(), orderNodes.end());
-		std::random_shuffle(orderRoutes.begin(), orderRoutes.end());
+		//std::random_shuffle(orderNodes.begin(), orderNodes.end());
+		Collections.shuffle(orderNodes);
+		//std::random_shuffle(orderRoutes.begin(), orderRoutes.end());
+		Collections.shuffle(orderRoutes);
 		for (int i = 1; i <= params.nbClients; i++)
 		{
-			if (tangible.RandomNumbers.nextNumber() % params.nbGranular == 0) // Designed to use O(nbGranular x n) time overall to avoid possible bottlenecks
+			if (RandomNumbers.nextNumber() % params.nbGranular == 0) // Designed to use O(nbGranular x n) time overall to avoid possible bottlenecks
 			{
-				std::random_shuffle(params.correlatedVertices[i].begin(), params.correlatedVertices[i].end());
+				//std::random_shuffle(params.correlatedVertices[i].begin(), params.correlatedVertices[i].end());
+				Collections.shuffle(params.correlatedVertices.get(i));
 			}
 		}
 
@@ -979,10 +982,10 @@ public class LocalSearch
 	// Exporting the LS solution into an individual and calculating the penalized cost according to the original penalty weights from Params
 	public final void exportIndividual(Individual indiv)
 	{
-		ArrayList< std::pair <Double, Integer>> routePolarAngles = new ArrayList< std::pair <Double, Integer>>();
+		ArrayList< Pair <Double, Integer>> routePolarAngles = new ArrayList< Pair <Double, Integer>>();
 		for (int r = 0; r < params.nbVehicles; r++)
 		{
-			routePolarAngles.add(std::pair <Double, Integer>(routes[r].polarAngleBarycenter, r));
+			routePolarAngles.add(Pair <Double, Integer>(routes[r].polarAngleBarycenter, r));
 		}
 		Collections.sort(routePolarAngles); // empty routes have a polar angle of 1.e30, and therefore will always appear at the end
 
@@ -1021,13 +1024,13 @@ public class LocalSearch
 		for (int i = 0; i < params.nbVehicles; i++)
 		{
 			routes[i].cour = i;
-			routes[i].depot = &depots[i];
+			routes[i].depot = depots[i];
 			depots[i].cour = 0;
 			depots[i].isDepot = true;
-			depots[i].route = &routes[i];
+			depots[i].route = routes[i];
 			depotsEnd[i].cour = 0;
 			depotsEnd[i].isDepot = true;
-			depotsEnd[i].route = &routes[i];
+			depotsEnd[i].route = routes[i];
 		}
 		for (int i = 1 ; i <= params.nbClients ; i++)
 		{

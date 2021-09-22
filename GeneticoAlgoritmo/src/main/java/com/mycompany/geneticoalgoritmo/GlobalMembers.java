@@ -1,3 +1,4 @@
+/*
 package com.mycompany.geneticoalgoritmo;
 import static java.lang.System.nanoTime;
 public class GlobalMembers
@@ -60,3 +61,4 @@ public class GlobalMembers
 	}
 
 }
+*/

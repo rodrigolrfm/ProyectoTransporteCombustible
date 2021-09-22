@@ -18,8 +18,8 @@ public final class Arrays
 	{
 		for (T element : array)
 		{
-			if (element != null)
-				element.close();
+			if (element != null) {}
+				//element.close();
 		}
 	}
 }
