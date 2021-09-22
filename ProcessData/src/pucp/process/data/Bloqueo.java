@@ -1,19 +1,20 @@
 package pucp.process.data;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Bloqueo {
-	public Node[] bloqueados;
+	public List<Node> bloqueados;
 	public ArrayList<Integer> bloqueadosMap;
 	
-	public Bloqueo(Node[] bloqueados) {
+	public Bloqueo(List<Node> bloqueados) {
 		this.bloqueados = bloqueados;
-		this.bloqueadosMap = new ArrayList<Integer>(bloqueados.length);
+		this.bloqueadosMap = new ArrayList<Integer>(bloqueados.size());
 	}
 	
-	public long[][] cargarBloqueos(Node[] nodos, int[][] map, int matrixSize, int K) {
-		for(int i = 0; i < this.bloqueados.length; i++) {
-			Node nodo = this.bloqueados[i];
+	public long[][] cargarBloqueos(List<Node> nodos, int[][] map, int matrixSize, int K) {
+		for(int i = 0; i < this.bloqueados.size(); i++) {
+			Node nodo = this.bloqueados.get(i);
 			this.bloqueadosMap.add(map[nodo.coordX][nodo.coordY]);
 		}
 		long [][] matrix = new long[matrixSize][matrixSize];
@@ -29,7 +30,7 @@ public class Bloqueo {
 					continue;
 				}
 				//calcular distancia, si esta es igual a 1, significa que son consecutivos
-				double distance = Math.sqrt(Math.pow(nodos[i].coordY-nodos[j].coordY,2) + Math.pow(nodos[i].coordX-nodos[j].coordX,2));
+				double distance = Math.sqrt(Math.pow(nodos.get(i).coordY-nodos.get(j).coordY,2) + Math.pow(nodos.get(i).coordX-nodos.get(j).coordX,2));
 				if(distance==1.0) {
 					matrix[i][j] = K;
 				}else {
