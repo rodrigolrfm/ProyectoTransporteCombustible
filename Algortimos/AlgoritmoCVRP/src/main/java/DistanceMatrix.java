@@ -53,14 +53,14 @@ public class DistanceMatrix {
 				// calcular distancia, si esta es igual a 1, significa que son consecutivos
 				double distance = Math.sqrt(Math.pow(this.nodos.get(i).coordY - this.nodos.get(j).coordY, 2)
 						+ Math.pow(this.nodos.get(i).coordX - this.nodos.get(j).coordX, 2));
-				if (distance==(int)distance) {
-					matrix[i][j] = (long) (distance*K);
+				if (distance==1) {
+					matrix[i][j] = K;
 				} else {
 					matrix[i][j] = 0;
 				}
 			}
 		}
-
+		this.matrix = matrix;
 	}
 
 	private void iniMap() {
@@ -85,7 +85,7 @@ public class DistanceMatrix {
 		// TODO Auto-generated method stub
 		for (int i = 0; i < matrixSize; i++) {
 			for (int j = 0; j < matrixSize; j++) {
-				System.out.print(this.matrix[i][j]+" ,");
+				System.out.print(this.matrix[i][j]+",");
 			}
 			System.out.println();
 		}

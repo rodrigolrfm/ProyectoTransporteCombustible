@@ -34,10 +34,10 @@ public final class VrpCapacity {
                 {776, 868, 1552, 560, 674, 1050, 1278, 742, 1084, 810, 1152, 274, 388, 422, 764, 0, 798},
                 {662, 1210, 754, 1358, 1244, 708, 480, 856, 514, 468, 354, 844, 730, 536, 194, 798, 0},
         };*/
-        public final DistanceMatrix distanceMatrixAux = new DistanceMatrix(17, 17, null, null, null);
-        distanceMatrixAux.print();
-        public final long[][] distanceMatrix = distanceMatrixAux.matrix;
-        public final long[] demands = {0, 1, 1, 2, 4, 0, 4, 0, 0, 1, 2, 1, 2, 4, 4, 8, 8};
+        //public DistanceMatrix distanceMatrixAux = new DistanceMatrix(17, 17, null, null, null);
+        //public final long[][] distanceMatrix = distanceMatrixAux.matrix;
+        public long[][] distanceMatrix = null;
+        public final long[] demands = {0, 1, 1, 2, 4, 3, 1, 2, 4, 5, 7, 8, 9, 1, 1};
         public final long[] vehicleCapacities = {15, 15, 15, 15};
         //public final long[] vehicleCapacities = {};
         //public final int vehicleNumber = 4;
@@ -80,9 +80,12 @@ public final class VrpCapacity {
     public static void main(String[] args) throws Exception {
         Loader.loadNativeLibraries();
         // Instantiate the data problem.
-        final DataModel data = new DataModel();
-
+        DataModel data = new DataModel();
+        DistanceMatrix distanceMatrixAux = new DistanceMatrix(3, 5, null, null, null);
+        long[][] distanceMatrix = distanceMatrixAux.matrix;
+        distanceMatrixAux.print();
         // Create Routing Index Manager
+        data.distanceMatrix = distanceMatrix;
         RoutingIndexManager manager =
                 new RoutingIndexManager(data.distanceMatrix.length, data.vehicleNumber, data.depot);
 
