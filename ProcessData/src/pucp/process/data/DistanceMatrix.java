@@ -59,7 +59,7 @@ public class DistanceMatrix {
 				if (distance==1) {
 					matrix[i][j] = K;
 				} else {
-					matrix[i][j] = 0;
+					matrix[i][j] = Integer.MAX_VALUE;
 				}
 			}
 		}
