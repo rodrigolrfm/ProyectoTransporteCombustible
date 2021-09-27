@@ -8,6 +8,9 @@ import com.google.ortools.constraintsolver.RoutingModel;
 import com.google.ortools.constraintsolver.RoutingSearchParameters;
 import com.google.ortools.constraintsolver.main;
 import com.google.protobuf.Duration;
+import com.google.protobuf.StringValue;
+
+import java.util.List;
 import java.util.logging.Logger;
 
 /** Minimal VRP. */
@@ -78,6 +81,25 @@ public final class VrpCapacity {
     }
 
     public static void main(String[] args) throws Exception {
+        Graph mapa = new Graph(15);
+        for(int i=0; i<15;i++){
+            mapa.addVertax(String.valueOf(i));
+        }
+
+        List<Node> listanodos = Node.cargarBloqueados();
+
+        DistanceMatrix mapaPrueb = new DistanceMatrix(3,5,null,null,null);
+        for (int i=0; i<mapaPrueb.matrixSize ;i++){
+            for (int j=0; j<mapaPrueb.matrixSize;j++){
+                if (i!=j){
+                    mapa.addEdges(i,j,(int)mapaPrueb.matrix[i][j]);
+                }
+            }
+        }
+
+        mapa.showEdges();
+        mapa.dijkStra(0);
+        /*
         Loader.loadNativeLibraries();
         // Instantiate the data problem.
         DataModel data = new DataModel();
@@ -128,7 +150,7 @@ public final class VrpCapacity {
         Assignment solution = routing.solveWithParameters(searchParameters);
 
         // Print solution on console.
-        printSolution(data, routing, manager, solution);
+        printSolution(data, routing, manager, solution);*/
     }
 
     private VrpCapacity() {}

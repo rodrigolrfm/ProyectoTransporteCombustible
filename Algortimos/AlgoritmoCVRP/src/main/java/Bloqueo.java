@@ -24,7 +24,7 @@ public class Bloqueo {
 					continue;
 				}
 				if(bloqueadosMap.contains(i) || bloqueadosMap.contains(j)) {
-					matrix[i][j] = 0;
+					matrix[i][j] = 111111;
 					continue;
 				}
 				//calcular distancia, si esta es igual a 1, significa que son consecutivos
@@ -32,7 +32,7 @@ public class Bloqueo {
 				if(distance==1.0) {
 					matrix[i][j] = K;
 				}else {
-					matrix[i][j] = 0;
+					matrix[i][j] = 111111;
 				}
 			}
 		}
