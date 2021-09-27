@@ -41,4 +41,7 @@ public class Node {
 
 	}
 
+	public int numeroNodo(int mapSizeY){
+		return (mapSizeY)*this.coordX + this.coordY;
+	}
 }

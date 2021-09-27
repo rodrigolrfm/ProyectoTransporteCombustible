@@ -10,11 +10,15 @@ import com.google.ortools.constraintsolver.main;
 import com.google.protobuf.Duration;
 import com.google.protobuf.StringValue;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
 /** Minimal VRP. */
+
 public final class VrpCapacity {
+    public final Node plantaPrincipal = new Node(0,0);
+
     private static final Logger logger = Logger.getLogger(VrpCapacity.class.getName());
 
     static class DataModel {
@@ -81,14 +85,15 @@ public final class VrpCapacity {
     }
 
     public static void main(String[] args) throws Exception {
+        ArrayList<Pedido> pedidos = Pedido.leerPedidos("archivo");
         Graph mapa = new Graph(15);
         for(int i=0; i<15;i++){
             mapa.addVertax(String.valueOf(i));
         }
 
-        List<Node> listanodos = Node.cargarBloqueados();
+        List<Node> listaNodos = Node.cargarBloqueados("data\\bloqueos\\prueba1.txt");
 
-        DistanceMatrix mapaPrueb = new DistanceMatrix(3,5,null,null,null);
+        DistanceMatrix mapaPrueb = new DistanceMatrix(3,5,null,null, listaNodos);
         for (int i=0; i<mapaPrueb.matrixSize ;i++){
             for (int j=0; j<mapaPrueb.matrixSize;j++){
                 if (i!=j){
@@ -99,6 +104,7 @@ public final class VrpCapacity {
 
         mapa.showEdges();
         mapa.dijkStra(0);
+
         /*
         Loader.loadNativeLibraries();
         // Instantiate the data problem.
