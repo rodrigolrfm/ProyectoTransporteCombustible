@@ -17,6 +17,7 @@ public class Graph {
         Vertax = new ArrayList<>(n);
         edges  = new int[n][n];
         isVisited = new boolean[n+1];
+        Arrays.fill(isVisited, Boolean.FALSE);
         distance = new double[n];
         for (int i = 0; i <n ; i++) {
             distance[i] = Double.POSITIVE_INFINITY;
@@ -166,7 +167,19 @@ public class Graph {
         return j;
     }
 
-
+    public void reset(){
+        this.n = n;
+        isVisited = new boolean[n+1];
+        Arrays.fill(isVisited, Boolean.FALSE);
+        distance = new double[n];
+        for (int i = 0; i <n ; i++) {
+            distance[i] = Double.POSITIVE_INFINITY;
+        }
+        path = new String[n];
+        for (int i = 0; i <n ; i++) {
+            path[i] = "";
+        }
+    }
 
     /*
     public static void main(String[] args) {

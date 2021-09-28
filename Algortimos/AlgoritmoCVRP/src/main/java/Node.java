@@ -51,4 +51,16 @@ public class Node {
 		return new Node(cordX,cordY);
 	}
 
+	public static String getRoute(ArrayList<Integer> ruta){
+		String cadena = new String("");
+		ruta.remove(0);
+		int last = ruta.size()-1;
+		ruta.remove(last);
+		for (Integer nodo:
+			 ruta) {
+			cadena = cadena + nodo + " -> ";
+		}
+		return cadena;
+	}
+
 }

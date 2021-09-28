@@ -39,7 +39,8 @@ public final class VrpCapacity {
 
     /// @brief Print the solution.
     static void printSolution(
-            DataModel data, RoutingModel routing, RoutingIndexManager manager, Assignment solution, BiMap<Integer, Integer> mapeo) {
+            DataModel data, RoutingModel routing, RoutingIndexManager manager, Assignment solution, BiMap<Integer, Integer> mapeo,
+            Table<Integer, Integer, Pair <Integer, ArrayList<Integer>>> routes) {
         // Solution cost.
         logger.info("Objective: " + solution.objectiveValue());
         // Inspect solution.
@@ -51,12 +52,17 @@ public final class VrpCapacity {
             long routeDistance = 0;
             long routeLoad = 0;
             String route = "";
+            int nIteracion = 0;
             while (!routing.isEnd(index)) {
                 long nodeIndex = manager.indexToNode(index);
                 routeLoad += data.demands[(int) nodeIndex];
                 route += mapeo.inverse().get((int) nodeIndex)  + " Load(" + routeLoad + ") -> ";
                 long previousIndex = index;
                 index = solution.value(routing.nextVar(index));
+
+                long toNode = manager.indexToNode(index);
+                String rutaIntermedia = Node.getRoute(routes.get((int)nodeIndex,(int)toNode).getValue1());
+                route += rutaIntermedia;
                 routeDistance += routing.getArcCostForVehicle(previousIndex, index, i);
             }
             route += mapeo.inverse().get(manager.indexToNode(routing.end(i)));
@@ -72,9 +78,8 @@ public final class VrpCapacity {
     public static void main(String[] args) throws Exception {
         DataModel data = new DataModel();
         Map<Integer, Integer> pedidos = Pedido.leerPedidos("data\\pedidos\\pedidos.txt", data.mapSizeY);
-        System.out.println(pedidos.size());
         Graph mapa = new Graph(data.mapSizeX*data.mapSizeY);
-        for(int i=0; i<15;i++){
+        for(int i=0; i<data.mapSizeX*data.mapSizeY;i++){
             mapa.addVertax(String.valueOf(i));
         }
 
@@ -88,6 +93,7 @@ public final class VrpCapacity {
                 }
             }
         }
+
         Table<Integer, Integer, Pair <Integer, ArrayList<Integer>>> routes = HashBasedTable.create();
         BiMap<Integer, Integer> mapeo = HashBiMap.create();
         //planta
@@ -102,10 +108,13 @@ public final class VrpCapacity {
                data.demands[i] = entry.getValue();
                ++i;
         }
-        mapa.dijkStra(1);
-        System.out.println(mapa.getDistance(12));
-        System.out.println(mapa.getPath(12));
-        ArrayList<Integer> route = Graph.getRoute(mapa.getPath(12));
+        /*
+        mapa.dijkStra(12);
+        System.out.println(mapa.getDistance(0));
+        System.out.println(mapa.getPath(0));
+        ArrayList<Integer> route = Graph.getRoute(mapa.getPath(0));
+         */
+
         data.distanceMatrix = new long[i][i];
         for(int k=0; k<i; ++k){
             for(int w=0; w<i; ++w){
@@ -114,28 +123,48 @@ public final class VrpCapacity {
                     data.distanceMatrix[w][k] = 0;
                 }else{
                     if(!(routes.contains(k,w)||routes.contains(w,k))){
-                        mapa.dijkStra(mapeo.inverse().get(k));
-                        for(int h=k+1; h<i; ++h){
+                        mapa.reset();
+                        mapa.dijkStra(mapeo.inverse().get(w));
+                        for(int h=w+1; h<i; ++h){
                             int distance = (int) mapa.getDistance(mapeo.inverse().get(h));
                             ArrayList<Integer> ruta = Graph.getRoute(mapa.getPath(mapeo.inverse().get(h)));
-                            routes.put(k,h,new Pair<>(distance, ruta));
-                            data.distanceMatrix[k][h] = distance;
-                            data.distanceMatrix[h][k] = distance;
+                            routes.put(w,h,new Pair<>(distance, new ArrayList<>(ruta)));
+                            data.distanceMatrix[w][h] = distance;
+                            data.distanceMatrix[h][w] = distance;
                             Collections.reverse(ruta);
-                            routes.put(h,k,new Pair<>(distance, ruta));
+                            routes.put(h,w,new Pair<>(distance, new ArrayList<>(ruta)));
                         }
+                    }else if(routes.get(k,w).getValue0() > 100000000){
+                        mapa.reset();
+                        mapa.dijkStra(mapeo.inverse().get(k));
+                        int distance = (int) mapa.getDistance(mapeo.inverse().get(w));
+                        ArrayList<Integer> ruta = Graph.getRoute(mapa.getPath(mapeo.inverse().get(w)));
+                        routes.put(k,w,new Pair<>(distance, new ArrayList<>(ruta)));
+                        data.distanceMatrix[w][k] = distance;
+                        data.distanceMatrix[k][w] = distance;
+                        Collections.reverse(ruta);
+                        routes.put(w,k,new Pair<>(distance, new ArrayList<>(ruta)));
                     }
                 }
             }
         }
-
-        for(int k = 0; k<data.distanceMatrix.length; ++k){
-            for(int w = 0; w<data.distanceMatrix.length; ++w){
+        /*
+        for (Map.Entry<Integer,Integer> entry:
+             mapeo.entrySet() ){
+            System.out.print(entry.getKey()+" "+entry.getValue());
+            System.out.println();
+        }
+        System.out.println(routes.get(4,7).getValue0());
+        */
+        /*
+        for(int k = 0; k<data.distanceMatrix.length; ++k) {
+            for (int w = 0; w < data.distanceMatrix.length; ++w) {
                 System.out.print(data.distanceMatrix[k][w] + " ");
             }
             System.out.println();
         }
-        System.out.print(routes.get(mapeo.get(0), mapeo.get(14)).getValue0());
+        */
+
         /*AStar a = new AStar();
         double valor = a.aStar(mapaPrueb.matrix,0,7, mapaPrueb.mapSizeX,mapaPrueb.mapSizeY);
         System.out.println(valor);*/
@@ -193,7 +222,7 @@ public final class VrpCapacity {
         Assignment solution = routing.solveWithParameters(searchParameters);
 
         // Print solution on console.
-        printSolution(data, routing, manager, solution, mapeo);
+        printSolution(data, routing, manager, solution, mapeo, routes);
     }
 
     private VrpCapacity() {}
