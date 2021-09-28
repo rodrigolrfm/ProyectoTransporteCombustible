@@ -1,4 +1,5 @@
 //package com.google.ortools.constraintsolver.samples;
+import com.google.common.collect.HashBiMap;
 import com.google.ortools.Loader;
 import com.google.ortools.constraintsolver.Assignment;
 import com.google.ortools.constraintsolver.FirstSolutionStrategy;
@@ -11,6 +12,7 @@ import com.google.protobuf.Duration;
 import com.google.protobuf.StringValue;
 import com.google.common.collect.Table;
 import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.BiMap;
 
 import java.io.SyncFailedException;
 import java.lang.reflect.Array;
@@ -37,7 +39,7 @@ public final class VrpCapacity {
 
     /// @brief Print the solution.
     static void printSolution(
-            DataModel data, RoutingModel routing, RoutingIndexManager manager, Assignment solution, Map <Integer,Integer>pedidos) {
+            DataModel data, RoutingModel routing, RoutingIndexManager manager, Assignment solution, BiMap<Integer, Integer> mapeo) {
         // Solution cost.
         logger.info("Objective: " + solution.objectiveValue());
         // Inspect solution.
@@ -51,14 +53,13 @@ public final class VrpCapacity {
             String route = "";
             while (!routing.isEnd(index)) {
                 long nodeIndex = manager.indexToNode(index);
-                //routeLoad += data.demands[(int) nodeIndex];
-                routeLoad += pedidos.get((int)nodeIndex);
-                route += nodeIndex + " Load(" + routeLoad + ") -> ";
+                routeLoad += data.demands[(int) nodeIndex];
+                route += mapeo.inverse().get((int) nodeIndex)  + " Load(" + routeLoad + ") -> ";
                 long previousIndex = index;
                 index = solution.value(routing.nextVar(index));
                 routeDistance += routing.getArcCostForVehicle(previousIndex, index, i);
             }
-            route += manager.indexToNode(routing.end(i));
+            route += mapeo.inverse().get(manager.indexToNode(routing.end(i)));
             logger.info(route);
             logger.info("Distance of the route: " + routeDistance + "m");
             totalDistance += routeDistance;
@@ -88,13 +89,53 @@ public final class VrpCapacity {
             }
         }
         Table<Integer, Integer, Pair <Integer, ArrayList<Integer>>> routes = HashBasedTable.create();
-
+        BiMap<Integer, Integer> mapeo = HashBiMap.create();
+        //planta
+        mapeo.put(0,0);
+        data.demands = new long[pedidos.size()+1];
+        data.demands[0] = 0;
+        //pedidos
+        int i = 1;
+        for (Map.Entry<Integer,Integer> entry:
+             pedidos.entrySet()) {
+               mapeo.put(entry.getKey(), i);
+               data.demands[i] = entry.getValue();
+               ++i;
+        }
         mapa.dijkStra(1);
         System.out.println(mapa.getDistance(12));
         System.out.println(mapa.getPath(12));
         ArrayList<Integer> route = Graph.getRoute(mapa.getPath(12));
+        data.distanceMatrix = new long[i][i];
+        for(int k=0; k<i; ++k){
+            for(int w=0; w<i; ++w){
+                if (w==k){
+                    routes.put(k, w, new Pair<>(0, null));
+                    data.distanceMatrix[w][k] = 0;
+                }else{
+                    if(!(routes.contains(k,w)||routes.contains(w,k))){
+                        mapa.dijkStra(mapeo.inverse().get(k));
+                        for(int h=k+1; h<i; ++h){
+                            int distance = (int) mapa.getDistance(mapeo.inverse().get(h));
+                            ArrayList<Integer> ruta = Graph.getRoute(mapa.getPath(mapeo.inverse().get(h)));
+                            routes.put(k,h,new Pair<>(distance, ruta));
+                            data.distanceMatrix[k][h] = distance;
+                            data.distanceMatrix[h][k] = distance;
+                            Collections.reverse(ruta);
+                            routes.put(h,k,new Pair<>(distance, ruta));
+                        }
+                    }
+                }
+            }
+        }
 
-
+        for(int k = 0; k<data.distanceMatrix.length; ++k){
+            for(int w = 0; w<data.distanceMatrix.length; ++w){
+                System.out.print(data.distanceMatrix[k][w] + " ");
+            }
+            System.out.println();
+        }
+        System.out.print(routes.get(mapeo.get(0), mapeo.get(14)).getValue0());
         /*AStar a = new AStar();
         double valor = a.aStar(mapaPrueb.matrix,0,7, mapaPrueb.mapSizeX,mapaPrueb.mapSizeY);
         System.out.println(valor);*/
@@ -103,7 +144,7 @@ public final class VrpCapacity {
         Loader.loadNativeLibraries();
         // Instantiate the data problem.
         //DataModel data = new DataModel();
-        data.distanceMatrix = mapaPrueb.matrix;
+
         //DistanceMatrix distanceMatrixAux = new DistanceMatrix(3, 5, null, null, null);
         //long[][] distanceMatrix = ;
         //distanceMatrixAux.print();
@@ -120,15 +161,7 @@ public final class VrpCapacity {
                     // Convert from routing variable Index to user NodeIndex.
                     int fromNode = manager.indexToNode(fromIndex);
                     int toNode = manager.indexToNode(toIndex);
-                    if(!routes.contains(fromNode,toNode)){
-                        mapa.dijkStra(fromNode);
-                        Integer distancia = (int)mapa.getDistance(toNode);
-                        ArrayList<Integer> ruta = Graph.getRoute(mapa.getPath(toNode));
-                        routes.put(fromNode,toNode,new Pair<Integer, ArrayList<Integer>>(distancia,ruta));
-                        Collections.reverse(ruta);
-                        routes.put(toNode,fromNode,new Pair<Integer, ArrayList<Integer>>(distancia, ruta));
-                    }
-                    return routes.get(fromNode, toNode).getValue0();
+                    return data.distanceMatrix[fromNode][toNode];
                 });
 
         // Define cost of each arc.
@@ -138,12 +171,7 @@ public final class VrpCapacity {
         final int demandCallbackIndex = routing.registerUnaryTransitCallback((long fromIndex) -> {
             // Convert from routing variable Index to user NodeIndex.
             int fromNode = manager.indexToNode(fromIndex);
-            if (pedidos.containsKey(fromNode)){
-                return pedidos.get(fromNode);
-            }else{
-                pedidos.put(fromNode, 0);
-                return 0;
-            }
+            return data.demands[fromNode];
         });
 
 
@@ -165,7 +193,7 @@ public final class VrpCapacity {
         Assignment solution = routing.solveWithParameters(searchParameters);
 
         // Print solution on console.
-        printSolution(data, routing, manager, solution, pedidos);
+        printSolution(data, routing, manager, solution, mapeo);
     }
 
     private VrpCapacity() {}
