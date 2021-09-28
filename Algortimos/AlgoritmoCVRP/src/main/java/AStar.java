@@ -44,6 +44,8 @@ public class AStar {
                 }
             }
 
+            
+            
             if (lowestPriorityIndex == -1) {
                 // There was no node not yet visited --> Node not found
                 return -1;

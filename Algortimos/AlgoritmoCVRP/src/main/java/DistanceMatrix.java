@@ -13,6 +13,7 @@ public class DistanceMatrix {
 	public List<Node> bloqueados;
 	public List<Node> nodos;
 
+	
 	public DistanceMatrix(int[][] map, int mapSizeX, int mapSizeY) {
 		super();
 		this.map = map;
