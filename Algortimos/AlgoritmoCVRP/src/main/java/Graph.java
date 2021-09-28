@@ -131,14 +131,25 @@ public class Graph {
 
     }
 
-    public String getPath(String nodo){
-        return this.path[Integer.valueOf(nodo)];
+    public String getPath(int nodo){
+        return this.path[nodo];
     }
 
-    public double getDistance(String nodo){
-        return this.distance[Integer.valueOf(nodo)];
+    public double getDistance(int nodo){
+        return this.distance[nodo];
     }
 
+    public static ArrayList<Integer> getRoute(String path){
+        ArrayList<Integer> route = new ArrayList<Integer>();
+        String[] nodes = path.split(" ");
+        for (String s:
+             nodes) {
+            if (s!=""){
+                route.add(Integer.parseInt(s));
+            }
+        }
+        return route;
+    }
 
     // Devuelve el siguiente vértice requerido a través de la matriz de distancia y la matriz de acceso dadas
     public int indexGet(double[] distance, boolean[] isVisited) {

@@ -9,10 +9,17 @@ import com.google.ortools.constraintsolver.RoutingSearchParameters;
 import com.google.ortools.constraintsolver.main;
 import com.google.protobuf.Duration;
 import com.google.protobuf.StringValue;
+import com.google.common.collect.Table;
+import com.google.common.collect.HashBasedTable;
 
+import java.io.SyncFailedException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
+import org.javatuples.Pair;
 
 /** Minimal VRP. */
 
@@ -22,16 +29,18 @@ public final class VrpCapacity {
     private static final Logger logger = Logger.getLogger(VrpCapacity.class.getName());
 
     static class DataModel {
+        public int mapSizeX = 3;
+        public int mapSizeY = 5;
         public long[][] distanceMatrix = null;
         public long[] demands = {0, 1, 1, 2, 4, 0, 1, 0, 4, 5, 7, 8, 9, 1, 1};
-        public long[] vehicleCapacities = {15, 15, 15, 15};
+        public long[] vehicleCapacities = {5, 5, 5, 5};
         public int vehicleNumber = 4;
         public int depot = 0;
     }
 
     /// @brief Print the solution.
     static void printSolution(
-            DataModel data, RoutingModel routing, RoutingIndexManager manager, Assignment solution) {
+            DataModel data, RoutingModel routing, RoutingIndexManager manager, Assignment solution, Map <Integer,Integer>pedidos) {
         // Solution cost.
         logger.info("Objective: " + solution.objectiveValue());
         // Inspect solution.
@@ -45,7 +54,8 @@ public final class VrpCapacity {
             String route = "";
             while (!routing.isEnd(index)) {
                 long nodeIndex = manager.indexToNode(index);
-                routeLoad += data.demands[(int) nodeIndex];
+                //routeLoad += data.demands[(int) nodeIndex];
+                routeLoad += pedidos.get(nodeIndex);
                 route += nodeIndex + " Load(" + routeLoad + ") -> ";
                 long previousIndex = index;
                 index = solution.value(routing.nextVar(index));
@@ -62,15 +72,17 @@ public final class VrpCapacity {
     }
 
     public static void main(String[] args) throws Exception {
-        //ArrayList<Pedido> pedidos = Pedido.leerPedidos("archivo");
-        Graph mapa = new Graph(15);
+        DataModel data = new DataModel();
+        Map<Integer, Integer> pedidos = Pedido.leerPedidos("data\\pedidos\\pedidos.txt", data.mapSizeY);
+        System.out.println(pedidos.size());
+        Graph mapa = new Graph(data.mapSizeX*data.mapSizeY);
         for(int i=0; i<15;i++){
             mapa.addVertax(String.valueOf(i));
         }
 
         List<Node> listaNodos = Node.cargarBloqueados("data\\bloqueos\\prueba1.txt");
 
-        DistanceMatrix mapaPrueb = new DistanceMatrix(3,5,null,null, listaNodos);
+        DistanceMatrix mapaPrueb = new DistanceMatrix(data.mapSizeX,data.mapSizeY,null,null, listaNodos);
         for (int i=0; i<mapaPrueb.matrixSize ;i++){
             for (int j=0; j<mapaPrueb.matrixSize;j++){
                 if (i!=j){
@@ -78,19 +90,22 @@ public final class VrpCapacity {
                 }
             }
         }
+        Table<Integer, Integer, Pair <Integer, ArrayList<Integer>>> routes = HashBasedTable.create();
+
         mapa.dijkStra(1);
-        System.out.println(mapa.getDistance("12"));
-        System.out.println(mapa.getPath("12"));
+        System.out.println(mapa.getDistance(12));
+        System.out.println(mapa.getPath(12));
+        ArrayList<Integer> route = Graph.getRoute(mapa.getPath(12));
 
 
         /*AStar a = new AStar();
         double valor = a.aStar(mapaPrueb.matrix,0,7, mapaPrueb.mapSizeX,mapaPrueb.mapSizeY);
         System.out.println(valor);*/
 
-        /*
+
         Loader.loadNativeLibraries();
         // Instantiate the data problem.
-        DataModel data = new DataModel();
+        //DataModel data = new DataModel();
         data.distanceMatrix = mapaPrueb.matrix;
         //DistanceMatrix distanceMatrixAux = new DistanceMatrix(3, 5, null, null, null);
         //long[][] distanceMatrix = ;
@@ -98,7 +113,7 @@ public final class VrpCapacity {
         // Create Routing Index Manager
         ///data.distanceMatrix = distanceMatrix;
 
-        RoutingIndexManager manager = new RoutingIndexManager(data.distanceMatrix.length, data.vehicleNumber, data.depot);
+        RoutingIndexManager manager = new RoutingIndexManager(pedidos.size()+1, data.vehicleNumber, data.depot);
         // Create Routing Model.
         RoutingModel routing = new RoutingModel(manager);
 
@@ -106,12 +121,15 @@ public final class VrpCapacity {
         final int transitCallbackIndex =
                 routing.registerTransitCallback((long fromIndex, long toIndex) -> {
                     // Convert from routing variable Index to user NodeIndex.
-                    System.out.println("From index" + fromIndex);
-
                     int fromNode = manager.indexToNode(fromIndex);
-                    System.out.println("FromNode" + fromNode);
                     int toNode = manager.indexToNode(toIndex);
-                    return data.distanceMatrix[fromNode][toNode];
+                    if(!routes.contains(fromNode,toNode)){
+                        mapa.dijkStra(fromNode);
+                        Integer distancia = (int)mapa.getDistance(toNode);
+                        ArrayList<Integer> ruta = Graph.getRoute(mapa.getPath(toNode));
+                        routes.put(fromNode,toNode,new Pair<>(distancia,ruta));
+                    }
+                    return routes.get(fromNode, toNode).getValue0();
                 });
 
         // Define cost of each arc.
@@ -121,7 +139,12 @@ public final class VrpCapacity {
         final int demandCallbackIndex = routing.registerUnaryTransitCallback((long fromIndex) -> {
             // Convert from routing variable Index to user NodeIndex.
             int fromNode = manager.indexToNode(fromIndex);
-            return data.demands[fromNode];
+            if (pedidos.containsKey(fromNode)){
+                return pedidos.get(fromNode);
+            }else{
+                pedidos.put(fromNode, 0);
+                return 0;
+            }
         });
 
 
@@ -143,7 +166,7 @@ public final class VrpCapacity {
         Assignment solution = routing.solveWithParameters(searchParameters);
 
         // Print solution on console.
-        printSolution(data, routing, manager, solution);*/
+        printSolution(data, routing, manager, solution, pedidos);
     }
 
     private VrpCapacity() {}
