@@ -122,6 +122,7 @@ public class Graph {
         for (int i = 0; i <n ; i++) {
             path[i] = path[i]+" "+Vertax.get(i);
         }
+
         System.out.println("Iniciar nodo:"+Vertax.get(index));
         for (int i = 0; i <n ; i++) {
             System.out.println(Vertax.get(i)+"   "+distance[i]+"   "+path[i]);
@@ -129,6 +130,8 @@ public class Graph {
 
 
     }
+
+
     // Devuelve el siguiente vértice requerido a través de la matriz de distancia y la matriz de acceso dadas
     public int indexGet(double[] distance, boolean[] isVisited) {
         int j = 0;
@@ -143,6 +146,9 @@ public class Graph {
         }
         return j;
     }
+
+
+
     /*
     public static void main(String[] args) {
         Graph graph = new Graph(5);

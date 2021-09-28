@@ -44,4 +44,11 @@ public class Node {
 	public int numeroNodo(int mapSizeY){
 		return (mapSizeY)*this.coordX + this.coordY;
 	}
+
+	public static Node calcularVertice(int start, int sizeY){
+		int cordX = Math.floorDiv(start,sizeY);
+		int cordY = start % sizeY;
+		return new Node(cordX,cordY);
+	}
+
 }
