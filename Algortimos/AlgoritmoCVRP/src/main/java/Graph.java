@@ -69,7 +69,7 @@ public class Graph {
         return numberOfEdges;
     }
 
-    public void dijkStra(int index ){
+    public void dijkStra(int index){
 
         // CO son las coordenadas necesarias para la iteración, headIndex es el vértice inicial de cada DIJKSTRA
 
@@ -122,13 +122,21 @@ public class Graph {
         for (int i = 0; i <n ; i++) {
             path[i] = path[i]+" "+Vertax.get(i);
         }
-
+        /*
         System.out.println("Iniciar nodo:"+Vertax.get(index));
         for (int i = 0; i <n ; i++) {
             System.out.println(Vertax.get(i)+"   "+distance[i]+"   "+path[i]);
-        }
+        }*/
 
 
+    }
+
+    public String getPath(String nodo){
+        return this.path[Integer.valueOf(nodo)];
+    }
+
+    public double getDistance(String nodo){
+        return this.distance[Integer.valueOf(nodo)];
     }
 
 

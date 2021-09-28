@@ -63,24 +63,30 @@ public final class VrpCapacity {
 
     public static void main(String[] args) throws Exception {
         //ArrayList<Pedido> pedidos = Pedido.leerPedidos("archivo");
-        /*Graph mapa = new Graph(15);
+        Graph mapa = new Graph(15);
         for(int i=0; i<15;i++){
             mapa.addVertax(String.valueOf(i));
-        }*/
+        }
 
         List<Node> listaNodos = Node.cargarBloqueados("data\\bloqueos\\prueba1.txt");
 
-        DistanceMatrix mapaPrueb = new DistanceMatrix(3,5,null,null, null);
-        /*for (int i=0; i<mapaPrueb.matrixSize ;i++){
+        DistanceMatrix mapaPrueb = new DistanceMatrix(3,5,null,null, listaNodos);
+        for (int i=0; i<mapaPrueb.matrixSize ;i++){
             for (int j=0; j<mapaPrueb.matrixSize;j++){
                 if (i!=j){
                     mapa.addEdges(i,j,(int)mapaPrueb.matrix[i][j]);
                 }
             }
-        }*/
-        AStar a = new AStar();
+        }
+        mapa.dijkStra(1);
+        System.out.println(mapa.getDistance("12"));
+        System.out.println(mapa.getPath("12"));
+
+
+        /*AStar a = new AStar();
         double valor = a.aStar(mapaPrueb.matrix,0,7, mapaPrueb.mapSizeX,mapaPrueb.mapSizeY);
-        System.out.println(valor);
+        System.out.println(valor);*/
+
         /*
         Loader.loadNativeLibraries();
         // Instantiate the data problem.
