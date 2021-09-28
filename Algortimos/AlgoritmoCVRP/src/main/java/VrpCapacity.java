@@ -14,10 +14,7 @@ import com.google.common.collect.HashBasedTable;
 
 import java.io.SyncFailedException;
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Logger;
 import org.javatuples.Pair;
 
@@ -55,7 +52,7 @@ public final class VrpCapacity {
             while (!routing.isEnd(index)) {
                 long nodeIndex = manager.indexToNode(index);
                 //routeLoad += data.demands[(int) nodeIndex];
-                routeLoad += pedidos.get(nodeIndex);
+                routeLoad += pedidos.get((int)nodeIndex);
                 route += nodeIndex + " Load(" + routeLoad + ") -> ";
                 long previousIndex = index;
                 index = solution.value(routing.nextVar(index));
@@ -127,7 +124,9 @@ public final class VrpCapacity {
                         mapa.dijkStra(fromNode);
                         Integer distancia = (int)mapa.getDistance(toNode);
                         ArrayList<Integer> ruta = Graph.getRoute(mapa.getPath(toNode));
-                        routes.put(fromNode,toNode,new Pair<>(distancia,ruta));
+                        routes.put(fromNode,toNode,new Pair<Integer, ArrayList<Integer>>(distancia,ruta));
+                        Collections.reverse(ruta);
+                        routes.put(toNode,fromNode,new Pair<Integer, ArrayList<Integer>>(distancia, ruta));
                     }
                     return routes.get(fromNode, toNode).getValue0();
                 });
