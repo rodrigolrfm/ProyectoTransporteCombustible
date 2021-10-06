@@ -1,15 +1,25 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.time.LocalDateTime;
+import java.time.chrono.ChronoLocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class Pedido {
+    public LocalDateTime tiempoEntrega;
     public Node node;
     public int demanda;
 
     public Pedido(Node node, int demanda) {
+        this.tiempoEntrega = LocalDateTime.now();
+        this.node = node;
+        this.demanda = demanda;
+    }
+
+    public Pedido(Node node, int demanda, int year, int month, int day, int hour, int minute, int second){
+        this.tiempoEntrega = LocalDateTime.of(year, month, day, hour, minute, second);
         this.node = node;
         this.demanda = demanda;
     }

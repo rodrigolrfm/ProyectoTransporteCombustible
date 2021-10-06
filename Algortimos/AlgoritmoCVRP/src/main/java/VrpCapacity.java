@@ -50,13 +50,14 @@ public final class VrpCapacity {
             long index = routing.start(i);
             logger.info("Route for Vehicle " + i + ":");
             long routeDistance = 0;
-            long routeLoad = 0;
+            //long routeLoad = 0;
+            long routeLoad = data.vehicleCapacities[i];
             String route = "";
             int nIteracion = 0;
             while (!routing.isEnd(index)) {
                 long nodeIndex = manager.indexToNode(index);
-                routeLoad += data.demands[(int) nodeIndex];
-                route += mapeo.inverse().get((int) nodeIndex)  + " Load(" + routeLoad + ") -> ";
+                routeLoad -= data.demands[(int) nodeIndex];
+                route += mapeo.inverse().get((int) nodeIndex)  + " Carga(" + routeLoad + ") -> ";
                 long previousIndex = index;
                 index = solution.value(routing.nextVar(index));
 
@@ -108,12 +109,6 @@ public final class VrpCapacity {
                data.demands[i] = entry.getValue();
                ++i;
         }
-        /*
-        mapa.dijkStra(12);
-        System.out.println(mapa.getDistance(0));
-        System.out.println(mapa.getPath(0));
-        ArrayList<Integer> route = Graph.getRoute(mapa.getPath(0));
-         */
 
         data.distanceMatrix = new long[i][i];
         for(int k=0; k<i; ++k){
