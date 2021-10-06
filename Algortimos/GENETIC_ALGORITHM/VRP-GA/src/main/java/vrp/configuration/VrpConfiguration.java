@@ -65,6 +65,9 @@ public class VrpConfiguration {
         this.numberOfTrucks = numberOfTrucks;
     }
 
+    public Node[] getNodes(){
+        return this.nodes;
+    }
 
     public int getNumberOfTrucks() {
         return numberOfTrucks;

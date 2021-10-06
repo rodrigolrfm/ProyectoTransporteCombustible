@@ -6,6 +6,7 @@ import org.jgap.impl.DoubleGene;
 import org.jgap.impl.IntegerGene;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import vrp.configuration.Node;
 import vrp.configuration.VrpConfiguration;
 import vrp.evolution.VrpFitnessFunc;
 
@@ -32,9 +33,29 @@ public class Vrp {
         final VrpConfiguration vrpConfiguration = new VrpConfiguration(SET_NAME, NUMBER_OF_TRUCKS);
 
         //to configurate el default
+
         configuration.setPreservFittestIndividual(true);
         configuration.setFitnessFunction(new VrpFitnessFunc(vrpConfiguration));
         configuration.setPopulationSize(POPULATION_SIZE);
+        int datos = vrpConfiguration.getGraphDimension();
+        double[] distancias = new double[datos];
+
+        Node[] nodos = vrpConfiguration.getNodes();
+        for(int i=1;i<vrpConfiguration.getGraphDimension();i++){
+            distancias[i] = nodos[0].distanceTo(nodos[i]);
+        }
+
+        int m, n;
+        Node aux = null;
+        for (m = 1; m <vrpConfiguration.getGraphDimension()  - 1; m++) {
+            for (n = 1; n < vrpConfiguration.getGraphDimension() - m - 1; n++) {
+                if (distancias[n + 1] > distancias[n]) {
+                    aux = nodos[n + 1];
+                    nodos[n + 1] = nodos[n];
+                    nodos[n] = aux;
+                }
+            }
+        }
 
 
 
