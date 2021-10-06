@@ -28,8 +28,8 @@ public final class VrpCapacity {
     private static final Logger logger = Logger.getLogger(VrpCapacity.class.getName());
 
     static class DataModel {
-        public int mapSizeX = 3;
-        public int mapSizeY = 5;
+        public int mapSizeX = 70;
+        public int mapSizeY = 50;
         public long[][] distanceMatrix = null;
         public long[] demands = {0, 1, 1, 2, 4, 0, 1, 0, 4, 5, 7, 8, 9, 1, 1};
         public long[] vehicleCapacities = {5, 5, 5, 5};
@@ -78,7 +78,9 @@ public final class VrpCapacity {
 
     public static void main(String[] args) throws Exception {
         DataModel data = new DataModel();
-        Map<Integer, Integer> pedidos = Pedido.leerPedidos("data\\pedidos\\pedidos.txt", data.mapSizeY);
+        Map<Integer, Integer> pedidos = Pedido.leerPedidos("data\\pedidos\\500pedidos.txt", data.mapSizeY);
+
+
         Graph mapa = new Graph(data.mapSizeX*data.mapSizeY);
         for(int i=0; i<data.mapSizeX*data.mapSizeY;i++){
             mapa.addVertax(String.valueOf(i));
@@ -86,7 +88,8 @@ public final class VrpCapacity {
 
         List<Node> listaNodos = Node.cargarBloqueados("data\\bloqueos\\prueba1.txt");
 
-        DistanceMatrix mapaPrueb = new DistanceMatrix(data.mapSizeX,data.mapSizeY,null,null, listaNodos);
+        DistanceMatrix mapaPrueb = new DistanceMatrix(data.mapSizeX,data.mapSizeY,null,null, null);
+
         for (int i=0; i<mapaPrueb.matrixSize ;i++){
             for (int j=0; j<mapaPrueb.matrixSize;j++){
                 if (i!=j){
