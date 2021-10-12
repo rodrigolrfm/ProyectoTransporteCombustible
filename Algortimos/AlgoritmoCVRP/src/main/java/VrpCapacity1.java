@@ -32,6 +32,8 @@ public final class VrpCapacity1 {
         public int mapSizeY = 50;
         public long[][] distanceMatrix = null;
         public long[] demands = null;
+        public long[] vehicleCapacities = null;
+        public int vehicleNumber = 0;
         //Para 50
         //public long[] vehicleCapacities = {41, 41, 41, 41, 41, 41, 41, 41, 41};
         //public int vehicleNumber = 9;
@@ -39,8 +41,8 @@ public final class VrpCapacity1 {
         //public long[] vehicleCapacities = {52,52,52,52,52,52,52,52,52,52,52,52,52,52,52};
         //public int vehicleNumber = 15;
 
-        public long[] vehicleCapacities = {53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53};
-        public int vehicleNumber = 79;
+        //public long[] vehicleCapacities = {53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53};
+        //public int vehicleNumber = 79;
         public int depot = 0;
     }
 
@@ -73,13 +75,38 @@ public final class VrpCapacity1 {
             totalLoad += routeLoad;
         }
         logger.info("Total distance of all routes: " + totalDistance + "m");
-        logger.info("Total load of all routes: " + totalLoad);
+        //logger.info("Total load of all routes: " + totalLoad);
     }
 
     public static void main(String[] args) throws Exception {
+        int nPed = 500;
+        String archivo = new String(Integer.toString(nPed)+"pedidos.txt");
+
         long start = System.currentTimeMillis();
         DataModel data = new DataModel();
-        ArrayList<Pair<Node, Integer>> pedidos = Pedido.leerPedidosExp("data\\pedidos\\500pedidos.txt", data.mapSizeY);
+        ArrayList<Pair<Node, Integer>> pedidos = Pedido.leerPedidosExp("data\\pedidos\\" + archivo, data.mapSizeY);
+
+        if (nPed == 50){
+            data.vehicleCapacities = new long[]{41, 41, 41, 41, 41, 41, 41, 41, 41};
+            data.vehicleNumber = 9;
+        }
+
+        if(nPed == 100){
+            data.vehicleCapacities = new long[]{52,52,52,52,52,52,52,52,52,52,52,52,52,52,52};
+            data.vehicleNumber = 15;
+            //data.vehicleCapacities = new long[]{100,100,100,100,100,100,100,100,100};
+            //data.vehicleNumber = 9;
+        }
+
+        if(nPed == 500){
+            data.vehicleCapacities = new long[]{53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53};
+            data.vehicleNumber = 79;
+        }
+
+        if(nPed == 1000){
+            data.vehicleCapacities = new long[]{70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70};
+            data.vehicleNumber = 156;
+        }
 
         data.distanceMatrix = new long[pedidos.size()+1][pedidos.size()+1];
         data.demands = new long[pedidos.size()+1];
@@ -141,5 +168,5 @@ public final class VrpCapacity1 {
         System.out.println("Tiempo de ejecución: " + (end-start));
     }
 
-    private VrpCapacity1() {}
+    //private VrpCapacity1() {}
 }
