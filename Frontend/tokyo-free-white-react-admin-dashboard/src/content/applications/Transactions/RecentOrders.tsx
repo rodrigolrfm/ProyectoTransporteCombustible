@@ -139,8 +139,11 @@ function RecentOrders() {
   ];
 
   return (
-    <Card>
-      <RecentOrdersTable cryptoOrders={cryptoOrders} />
+    <Card>{
+      /*
+      <RecentOrdersTable cryptoOrders={cryptoOrders} /> 
+    */}
+      
     </Card>
   );
 }
