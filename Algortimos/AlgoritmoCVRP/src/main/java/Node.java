@@ -12,6 +12,14 @@ public class Node {
 		this.coordY = coordY;
 	}
 
+	@Override
+	public String toString() {
+		return "Node{" +
+				"coordX=" + coordX +
+				", coordY=" + coordY +
+				'}';
+	}
+
 	public static List<Node> cargarBloqueados(String direccion) {
 
 		List<Node> listaNodos = new ArrayList<Node>();
