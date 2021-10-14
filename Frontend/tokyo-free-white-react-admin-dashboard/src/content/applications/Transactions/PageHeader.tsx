@@ -15,11 +15,8 @@ const Input = experimentalStyled("input")({
   display: "none",
 });
 
-
-
 function PageHeader() {
-
-  (document.getElementById('bt-subir-pedidos') as HTMLInputElement).disabled = false;
+  
   return (
     <Grid container justifyContent="space-between" alignItems="center">
       <Grid item>
