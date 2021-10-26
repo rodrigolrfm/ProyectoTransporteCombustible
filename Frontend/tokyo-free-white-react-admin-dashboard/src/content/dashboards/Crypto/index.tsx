@@ -1,7 +1,7 @@
 import { Helmet } from 'react-helmet-async';
 import PageHeader from './PageHeader';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
-import { Container, Grid } from '@material-ui/core';
+import { Grid, Container } from '@mui/material';
 import Footer from 'src/components/Footer';
 
 import AccountBalance from './AccountBalance';
@@ -13,9 +13,11 @@ function DashboardCrypto() {
   return (
     <>
       <Helmet>
-        <title>Router Fast</title>
+        <title>Crypto Dashboard</title>
       </Helmet>
-
+      <PageTitleWrapper>
+        <PageHeader />
+      </PageTitleWrapper>
       <Container maxWidth="lg">
         <Grid
           container

@@ -1,21 +1,61 @@
-import {
-  Typography,
-  Button,
-  Grid,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  IconButton,
-  Tooltip,
-} from "@material-ui/core";
-import { experimentalStyled } from "@material-ui/core/styles";
-
-const Input = experimentalStyled("input")({
-  display: "none",
+import { Typography, Button, Grid, FormControl, InputLabel, Select, MenuItem} from '@mui/material';
+import axios from 'axios';
+import CustomSnackbar from 'src/components/Custom/CustomSnackbar';
+import { useState } from 'react';
+import { styled } from '@mui/material/styles';
+import { parse } from 'papaparse';
+import MapR from 'src/components/MapR/MapR';
+const Input = styled('input')({
+  display: 'none',
 });
 
+
+
+
 function PageHeader() {
+  const [alert, setAlert] = useState({isOpen: false, message: '', type: ''})
+  const [filesCheck, setFilesCheck] = useState(0)
+
+  const uploadFile = async (file) => {
+    let formData = new FormData();
+    formData.append("file", file);
+    axios.post('upload_file', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+  }).then((r) => {
+    setAlert({isOpen: true, message: 'Pedidos cargados de manera exitosa.', type: 'success'})
+    setFilesCheck(filesCheck+1)
+  }).catch((e) =>{
+    setAlert({isOpen: true, message: 'Hubo un error al cargar el archivo.', type: 'error'})
+  })
+  }
+  const uploadFileB = async (file) => {
+    console.log("asldkhasld");
+    let formData = new FormData();
+    formData.append("file", file);
+    axios.post('upload_file', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+  }).then((r) => {
+    setAlert({isOpen: true, message: 'Bloqueos cargados de manera exitosa.', type: 'success'})
+    setFilesCheck(filesCheck+1)
+  }).catch((e) =>{
+    setAlert({isOpen: true, message: 'Hubo un error al cargar el archivo.', type: 'error'})
+  })
+  
+
+
+    /*
+    axios.post(process.env.REACT_APP_API_URL + "/inboundOrders/import", result).then((r) => {
+      setAlert({isOpen: true, message: 'Pedidos cargados de manera exitosa.', type: 'success'})
+      axios.get(process.env.REACT_APP_API_URL + "/inboundOrders").then((r) => {
+        setInboundOrders(r.data);
+        
+      });
+    });   */
+  }
   
   return (
     <Grid container justifyContent="space-between" alignItems="center">
@@ -33,9 +73,8 @@ function PageHeader() {
           id="select-simulacion"
           label="Seleccione el tipo de simulación"
         >
-          <MenuItem value={1}>Operación Día a Día</MenuItem>
-          <MenuItem value={2}>Simulación de 3 Días</MenuItem>
-          <MenuItem value={3}>Simulación hasta el colapso logístico</MenuItem>
+          <MenuItem value={1}>Simulación de 3 Días</MenuItem>
+          <MenuItem value={2}>Simulación hasta el colapso logístico</MenuItem>
         </Select>
       </FormControl>
       {/*<Grid item>
@@ -49,47 +88,36 @@ function PageHeader() {
         </Button>
       </Grid>
       */}
+      
       <Grid container spacing={2} sx={{ mt: 2 }}>
         <Grid item xs={2}>
-          <Input accept="text/plain,.csv"  multiple type="file" />
           <label htmlFor="change-cover">
-            <Button variant="contained" id="bt-subir-pedidos" component="span">
+            <Button variant="contained" id="bt-subir-pedidos" component="label">
+            <Input accept="text/csv,.csv,.txt"  hidden multiple type="file" onChange={(e) => uploadFile(e.target.files[0])} />
               Subir Pedidos
             </Button>
           </label>
         </Grid>
         <Grid item xs={2}>
-          <Input accept="text/plain,.csv" id="change-cover" multiple type="file" />
           <label htmlFor="change-cover">
-            <Button variant="contained" component="span">
-              Subir Vehículos
-            </Button>
-          </label>
-        </Grid>
-        <Grid item xs={2}>
-          <Input accept="text/plain,.csv" id="change-cover" multiple type="file" />
-          <label htmlFor="change-cover">
-            <Button variant="contained" component="span">
+            <Button variant="contained" component="label">
+            <Input accept="text/csv,.csv,.txt"  hidden multiple type="file" onChange={(e) => uploadFileB(e.target.files[0])} />
               Subir Bloqueos
-            </Button>
-          </label>
-        </Grid>
-        <Grid item xs={2}>
-          <Input accept="text/plain,.csv" id="change-cover" multiple type="file" />
-          <label htmlFor="change-cover">
-            <Button variant="contained" component="span">
-              Subir Averías
             </Button>
           </label>
         </Grid>
 
         <Grid item xs={2}>
-          <Button variant="contained" disabled>
+          <Button variant="contained" disabled={filesCheck<2}>
             Empezar Simulación
           </Button>
         </Grid>
       </Grid>
+      <CustomSnackbar alert={alert} setAlert={setAlert}/>
+      <MapR></MapR>
+    
     </Grid>
+    
   );
 }
 

@@ -1,8 +1,8 @@
-import { Box, Tooltip } from '@material-ui/core';
+import { Box, Tooltip } from '@mui/material';
 import { Link } from 'react-router-dom';
-import { experimentalStyled } from '@material-ui/core/styles';
+import { styled } from '@mui/material/styles';
 
-const LogoWrapper = experimentalStyled(Link)(
+const LogoWrapper = styled(Link)(
   ({ theme }) => `
         color: ${theme.palette.text.primary};
         display: flex;
@@ -13,14 +13,14 @@ const LogoWrapper = experimentalStyled(Link)(
 `
 );
 
-const LogoSignWrapper = experimentalStyled(Box)(
+const LogoSignWrapper = styled(Box)(
   () => `
         width: 52px;
         height: 38px;
 `
 );
 
-const LogoSign = experimentalStyled(Box)(
+const LogoSign = styled(Box)(
   ({ theme }) => `
         background: ${theme.general.reactFrameworkColor};
         width: 18px;
@@ -57,7 +57,7 @@ const LogoSign = experimentalStyled(Box)(
 `
 );
 
-const LogoSignInner = experimentalStyled(Box)(
+const LogoSignInner = styled(Box)(
   ({ theme }) => `
         width: 16px;
         height: 16px;
@@ -73,10 +73,12 @@ const LogoSignInner = experimentalStyled(Box)(
 function Logo() {
 
   return (
-    <Tooltip title="Soda Infiel" arrow>
+    <Tooltip title="Tokyo Free White React Admin Dashboard" arrow>
       <LogoWrapper to="/overview">
         <LogoSignWrapper>
-            <img src="https://www.google.com/url?sa=i&url=https%3A%2F%2Fsomoskudasai.com%2Fnoticias%2Fanime%2Fkanojo-okarishimasu-celebra-el-cumpleanos-de-ruka-con-una-ilustracion%2F&psig=AOvVaw0_wEJVLh_F8cp1rH3997lY&ust=1633062061770000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCNiV2bLspfMCFQAAAAAdAAAAABAD" alt="" />
+          <LogoSign>
+            <LogoSignInner />
+          </LogoSign>
         </LogoSignWrapper>
       </LogoWrapper>
     </Tooltip>
