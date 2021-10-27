@@ -3,13 +3,10 @@ package pe.edu.pucp.mvc.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import pe.edu.pucp.mvc.models.MapaModel;
 import pe.edu.pucp.mvc.models.NodoModel;
-import pe.edu.pucp.mvc.services.MapaService;
 import pe.edu.pucp.mvc.services.NodoService;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -19,7 +16,7 @@ public class NodoController {
     NodoService nodoService;
 
     @GetMapping()
-    public List<NodoModel> obtenerNodos(){
+    public ArrayList<NodoModel> obtenerNodos(){
         return nodoService.obtenerNodos();
     }
 
@@ -29,8 +26,7 @@ public class NodoController {
     }
 
     @GetMapping(path="/{id}")
-    public Optional<NodoModel> obtenerMapaId(@PathVariable("id") Integer id){
+    public Optional<NodoModel> obtenerNodoId(@PathVariable("id") Integer id){
         return this.nodoService.obtenerPorId(id);
     }
-
 }

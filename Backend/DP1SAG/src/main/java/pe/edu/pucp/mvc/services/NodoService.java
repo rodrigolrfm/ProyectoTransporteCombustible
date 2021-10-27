@@ -15,8 +15,8 @@ public class NodoService {
     @Autowired
     NodoRepository nodoRepository;
 
-    public List<NodoModel> obtenerNodos(){
-        return (List<NodoModel>) nodoRepository.findAll();
+    public ArrayList<NodoModel> obtenerNodos(){
+        return (ArrayList<NodoModel>) nodoRepository.findAll();
     }
 
     public NodoModel guardarNodo(NodoModel nodo){
