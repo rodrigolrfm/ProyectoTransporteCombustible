@@ -13,7 +13,7 @@ import Logo from 'src/components/Logo';
 
 const HeaderWrapper = styled(Box)(
   ({ theme }) => `
-        height: ${theme.header.height};
+        height: 50px;
         color: ${theme.header.textColor};
         padding: ${theme.spacing(0, 2)};
         right: 0;
@@ -35,8 +35,25 @@ function Header() {
 
   return (
     <HeaderWrapper display="flex" alignItems="center">
-
-
+      <Box display="flex" alignItems="center">
+        <Hidden lgUp>
+          <Logo />
+        </Hidden>
+        <Hidden mdDown>
+          <HeaderMenu />
+        </Hidden>
+      </Box>
+      <Box display="flex" alignItems="center">
+        <HeaderButtons />
+        <HeaderUserbox />
+        <Hidden lgUp>
+          <Tooltip arrow title="Ver Menú">
+            <IconButton color="primary" onClick={toggleSidebar}>
+              {!sidebarToggle ? <MenuTwoToneIcon /> : <CloseTwoToneIcon />}
+            </IconButton>
+          </Tooltip>
+        </Hidden>
+      </Box>
     </HeaderWrapper>
   );
 }

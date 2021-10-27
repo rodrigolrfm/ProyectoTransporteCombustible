@@ -4,7 +4,7 @@ import { Box } from '@mui/material';
 import { Outlet } from 'react-router-dom';
 
 import Sidebar from './Sidebar';
-
+import Header from './Header';
 interface SidebarLayoutProps {
   children?: ReactNode;
 }
@@ -23,7 +23,7 @@ const MainWrapper = styled(Box)(
 
 const MainContent = styled(Box)(
   ({ theme }) => `
-        margin-top: 20px;
+        margin-top: 50px;
         flex: 1 1 auto;
         overflow: auto;
 `
@@ -34,6 +34,7 @@ const SidebarLayout: FC<SidebarLayoutProps> = () => {
     <>
       <Sidebar />
       <MainWrapper>
+      <Header />
         <MainContent>
           <Outlet />
         </MainContent>

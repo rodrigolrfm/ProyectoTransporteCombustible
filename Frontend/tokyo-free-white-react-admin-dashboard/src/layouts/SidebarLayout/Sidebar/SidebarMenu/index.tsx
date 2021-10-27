@@ -78,7 +78,7 @@ const SubMenuWrapper = styled(List)(
           }
           
           .MuiButton-endIcon {
-            margin-left: auto;
+            margin-left: 100px;
             font-size: ${theme.typography.pxToRem(22)};
           }
 

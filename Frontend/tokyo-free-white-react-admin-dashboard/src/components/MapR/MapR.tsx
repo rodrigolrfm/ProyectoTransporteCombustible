@@ -36,8 +36,8 @@ const useStyles = makeStyles((theme) => ({
       borderColor: '#DBA581',
       borderWidth: '0px 1.2px 1.2px 0px',
       border: 'solid',
-      width: '25px',
-      height: '25px',
+      width: '21px',
+      height: '21px',
       flexShrink: 0,
       position: 'relative',
   

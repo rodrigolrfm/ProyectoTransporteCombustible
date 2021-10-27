@@ -54,19 +54,6 @@ function HeaderNotifications() {
 
   return (
     <>
-      <Tooltip arrow title="Notifications">
-        <IconButton color="primary" ref={ref} onClick={handleOpen}>
-          <NotificationsBadge
-            badgeContent={1}
-            anchorOrigin={{
-              vertical: 'top',
-              horizontal: 'right'
-            }}
-          >
-            <NotificationsActiveTwoToneIcon />
-          </NotificationsBadge>
-        </IconButton>
-      </Tooltip>
       <Popover
         anchorEl={ref.current}
         onClose={handleClose}
@@ -80,9 +67,6 @@ function HeaderNotifications() {
           horizontal: 'right'
         }}
       >
-        <Box sx={{ p: 2 }} display="flex" alignItems="center" justifyContent="space-between">
-          <Typography variant="h5">Notifications</Typography>
-        </Box>
         <Divider />
         <List sx={{ p: 0 }}>
           <ListItem sx={{ p: 2, minWidth: 350, display: { xs: 'block', sm: 'flex' } }}>
@@ -97,14 +81,7 @@ function HeaderNotifications() {
                   })}
                 </Typography>
               </Box>
-              <Typography
-                component="span"
-                variant="body2"
-                color="text.secondary"
-              >
-                {' '}
-                new messages in your inbox
-              </Typography>
+              
             </Box>
           </ListItem>
         </List>

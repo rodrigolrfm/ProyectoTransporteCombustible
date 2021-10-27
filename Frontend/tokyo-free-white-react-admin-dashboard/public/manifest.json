@@ -1,10 +1,10 @@
 {
   "theme_color": "#1975ff",
-  "background_color": "#f2f5f9",
+  "background_color": "#fff",
   "display": "standalone",
   "start_url": ".",
-  "short_name": "Tokyo Free White",
-  "name": "Tokyo Free White React Admin Dashboard",
+  "short_name": "RouterFast",
+  "name": "RouterFast- Equipo 2B",
   "icons": [
     {
       "src": "/icon-192x192.png",

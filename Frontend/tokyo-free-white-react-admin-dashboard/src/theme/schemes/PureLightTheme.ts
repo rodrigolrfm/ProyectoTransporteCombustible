@@ -55,7 +55,7 @@ const colors = {
       menuItemColor: '#242E6F',
       menuItemColorActive: themeColors.primary,
       menuItemBg: 'transparent',
-      menuItemBgActive: '#f2f5f9',
+      menuItemBgActive: '#f2ff5f9',
       menuItemIconColor: lighten(themeColors.secondary, 0.3),
       menuItemIconColorActive: themeColors.primary,
       menuItemHeadingColor: darken(themeColors.secondary, 0.3),

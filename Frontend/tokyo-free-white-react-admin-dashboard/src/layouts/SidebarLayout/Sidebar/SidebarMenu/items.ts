@@ -35,10 +35,16 @@ const menuItems: MenuItems[] = [
     heading: 'Logística',
     items: [
       {
-        name: 'Simulación',
+        name: 'Operación Día a Día',
         icon: BallotTwoToneIcon,
+        link: '/logistica/operacion'
+      },
+      {
+        name: 'Simulación',
+        icon: TableChartTwoToneIcon,
         link: '/logistica/simulacion'
       },
+      
     ]
   },
   {
