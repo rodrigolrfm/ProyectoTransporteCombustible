@@ -71,4 +71,9 @@ public class Node {
 		return cadena;
 	}
 
+	public static Integer calculardistancia(Node a,Node b){
+
+		return Math.abs(a.coordX - b.coordX) + Math.abs(b.coordY - a.coordY);
+
+	}
 }

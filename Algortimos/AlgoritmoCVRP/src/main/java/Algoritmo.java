@@ -50,6 +50,7 @@ public class Algoritmo {
         };
     }
 
+
     private void buildFleet(int endTime){
         capacities = new long[nVehicles];
 
@@ -196,7 +197,7 @@ public class Algoritmo {
         Loader.loadNativeLibraries();
         Algoritmo algoritmo = new Algoritmo();
         ArrayList<Pedido> pedidos = Pedido.leerPedidos("data\\pedidos\\testAlgoritmo.txt");
-        //ArrayList<Pedido> pedidosSeleccionados = Pedido.priorizarPedidos(pedidos);
+        ArrayList<Pedido> pedidosSeleccionados = Pedido.priorizarPedidos(pedidos);
         algoritmo.buildFleet(10000000);
         algoritmo.buildOrders(pedidos);
         algoritmo.solve();
