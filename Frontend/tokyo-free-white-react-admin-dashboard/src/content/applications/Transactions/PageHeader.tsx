@@ -1,13 +1,20 @@
-import { Typography, Button, Grid, FormControl, InputLabel, Select, MenuItem} from '@mui/material';
+import { Typography, Button, Grid, FormControl, Card, InputLabel, Select, MenuItem} from '@mui/material';
 import axios from 'axios';
 import CustomSnackbar from 'src/components/Custom/CustomSnackbar';
 import { useState } from 'react';
 import { styled } from '@mui/material/styles';
+import UploadTwoToneIcon from '@mui/icons-material/UploadTwoTone';
 import { parse } from 'papaparse';
+import { Container, CardHeader, CardContent, Divider } from '@mui/material';
+import CardActions from '@mui/material/CardActions';
 import MapR from 'src/components/MapR/MapR';
+import CardMedia from '@mui/material/CardMedia';
+import LocalShippingIcon from '@mui/icons-material/LocalShipping';
+
 const Input = styled('input')({
   display: 'none',
 });
+
 
 
 
@@ -92,7 +99,9 @@ function PageHeader() {
       <Grid container spacing={2} sx={{ mt: 2 }}>
         <Grid item xs={2}>
           <label htmlFor="change-cover">
-            <Button variant="contained" id="bt-subir-pedidos" component="label">
+            <Button
+            startIcon={<UploadTwoToneIcon />} 
+            variant="contained" id="bt-subir-pedidos" component="label">
             <Input accept="text/csv,.csv,.txt"  hidden multiple type="file" onChange={(e) => uploadFile(e.target.files[0])} />
               Subir Pedidos
             </Button>
@@ -100,7 +109,9 @@ function PageHeader() {
         </Grid>
         <Grid item xs={2}>
           <label htmlFor="change-cover">
-            <Button variant="contained" component="label">
+            <Button 
+            startIcon={<UploadTwoToneIcon />} 
+            variant="contained" component="label">
             <Input accept="text/csv,.csv,.txt"  hidden multiple type="file" onChange={(e) => uploadFileB(e.target.files[0])} />
               Subir Bloqueos
             </Button>
@@ -114,7 +125,43 @@ function PageHeader() {
         </Grid>
       </Grid>
       <CustomSnackbar alert={alert} setAlert={setAlert}/>
+      
       <MapR></MapR>
+      <CardContent>
+                <Card sx={{ maxWidth: 250}}>
+                  <CardContent>
+                  
+                    <Typography gutterBottom variant="h5" component="div">
+                    <LocalShippingIcon style={{ color: '#35737D'}} />
+                      Chófer: Franco Gamarra <br/>
+                      Placa: INF-13L <br/>
+                      Pedidos: <br/>
+                    </Typography>
+                    <Typography variant="body2" color="green">
+                      A : Entregado <br/>
+                    </Typography>
+                    <Typography variant="body2" color="red"> 
+                      B : En ruta (15' min de retraso)
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </CardContent>
+      <CardContent>
+                <Card sx={{ maxWidth: 120 }}>
+
+                  <CardContent>
+                  <LocalShippingIcon style={{ color: '#35737D' }} />
+                    <Typography gutterBottom variant="h5" component="div">
+                      Chófer Mario Andonaire:
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      Placa: INF-123
+                      Pedido 1 : Entregado
+                      Pedido 2 : En ruta
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </CardContent>
     
     </Grid>
     

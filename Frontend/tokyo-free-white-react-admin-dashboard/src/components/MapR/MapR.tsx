@@ -1,5 +1,6 @@
 import { makeStyles } from '@mui/styles';
-
+import HomeIcon from '@mui/icons-material/Home';
+import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 const boardX = 50;
 const boardY = 35;
 const path = [
@@ -33,11 +34,11 @@ const obtenerRuta = (path) => {
 
 const useStyles = makeStyles((theme) => ({
     square: {
-      borderColor: '#DBA581',
-      borderWidth: '0px 1.2px 1.2px 0px',
+      borderColor: '#D89F7B',
+      borderWidth: '0px 1.5px 1.5px 0px',
       border: 'solid',
-      width: '21px',
-      height: '21px',
+      width: '19px',
+      height: '19px',
       flexShrink: 0,
       position: 'relative',
   
@@ -54,8 +55,10 @@ const useStyles = makeStyles((theme) => ({
     },
     icon: {
       position: 'absolute',
-      right: '-15px',
-      top: '-15px',
+      right: '-14px',
+      // top: '-15px',
+      bottom: '-16px',
+      zIndex: 1,
       transform: 'rotate(0deg)',
     },
   }));
@@ -63,22 +66,48 @@ const useStyles = makeStyles((theme) => ({
 const MapR=()=>{
     const classes = useStyles();
     const map = [];
-    for (let i = 1; i < boardY; i++) {
-        const squareRows = [];
-        for (let j = 1; j < boardX; j++) {
-          squareRows.push(
-            <div
-              className={classes.square}
-              style={{
-                borderRightColor: ruta.find(({ x, y }) => (x === i) && (y === j)) ? 'red' : '#DBA581',
-              }}
-            >
-              <div className={classes.icon}>{/* <LocalShippingIcon /> */}</div>
-            </div>
-          );
-        }
-        map.push(<div className={classes.row}>{squareRows}</div>);
+    for (let i = 0; i < boardY; i++) {
+      const squareRows = [];
+      for (let j = 0; j < boardX; j++) {
+        squareRows.push(
+          <div
+            className={classes.square}
+            style={{
+              borderRightColor:
+                ruta.find(({ x, y }) => x === j && y === i - 1)?.next === 'down'
+                  ? '#D89F7B'
+                  : ruta.find(({ x, y }) => x === j && y === i)?.next === 'up'
+                  ? '#D89F7B'
+                  : 'D89F7B',
+              borderBottomColor:
+                ruta.find(({ x, y }) => x === j - 1 && y === i)?.next === 'right'
+                  ? '#D89F7B'
+                  : ruta.find(({ x, y }) => x === j && y === i)?.next === 'left'
+                  ? '#D89F7B'
+                  : 'D89F7B',
+            }}
+          >
+            {i === 0 && j === 0 && (
+              <div className={classes.icon} style={{ transform: 'rotate(90deg)' }}>
+                <LocalShippingIcon style={{ color: '#35737D' }} />
+              </div>
+            )}
+            {i === 2 && j === 5 && (
+              <div className={classes.icon} style={{ transform: 'rotate(0deg)' }}>
+                <LocalShippingIcon style={{ color: '#35737D' }} />
+              </div>
+            )}
+            {i === 30 && j === 30 && (
+              <div className={classes.icon} style={{ transform: 'rotate(0deg)' }}>
+                <HomeIcon style={{ color: '#35737D' }} />
+              </div>
+            )}
+          </div>
+        );
       }
+      map.push(<div className={classes.row}>{squareRows}</div>);
+    }
+
     return (
         <div className={classes.map}>{map}</div>
     );
