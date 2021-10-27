@@ -222,6 +222,8 @@ public class CapacitatedVehicleRoutingProblemWithTimeWindows {
                 model.registerUnaryTransitCallback(demandCallback), 0, vehicleCapacities, false, capacityStr);
         RoutingDimension capacityDimension = model.getMutableDimension(capacityStr);
 
+        final String fuelStr = "fuel";
+
         // Setting up vehicles
         LongBinaryOperator[] callbacks = new LongBinaryOperator[numberOfVehicles];
         for (int vehicle = 0; vehicle < numberOfVehicles; ++vehicle) {
