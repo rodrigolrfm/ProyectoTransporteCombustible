@@ -1,17 +1,18 @@
 package pe.edu.pucp.mvc.controllers;
 
+
+
+
 import net.bytebuddy.dynamic.DynamicType;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-<<<<<<< HEAD
 import pe.edu.pucp.mvc.dtos.NodoDTO;
-=======
->>>>>>> 96f9da6b49f42dfeba77420d9f99013300fc9a71
 import pe.edu.pucp.mvc.models.NodoModel;
 import pe.edu.pucp.mvc.services.NodoService;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.OptionalInt;
 
@@ -22,7 +23,7 @@ public class NodoController {
     NodoService nodoService;
 
     @GetMapping()
-    public ArrayList<NodoModel> obtenerNodos(){
+    public List<NodoModel> obtenerNodos(){
         return nodoService.obtenerNodos();
     }
 
@@ -41,9 +42,6 @@ public class NodoController {
     public Optional<NodoModel> obtenerNodoId(@PathVariable("id") Integer id){
         return this.nodoService.obtenerPorId(id);
     }
-<<<<<<< HEAD
 
 
-=======
->>>>>>> 96f9da6b49f42dfeba77420d9f99013300fc9a71
 }
