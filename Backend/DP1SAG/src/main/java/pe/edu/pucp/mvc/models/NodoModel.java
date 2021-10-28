@@ -17,16 +17,11 @@ public class NodoModel implements Serializable {
     @Column(unique = true)
     private int idNodo;
 
-
+    
     @ManyToOne
     @JoinColumn(name = "idMapa",nullable = false)
     private MapaModel mapaModel;
 
-    @OneToOne
-    private ClienteModel clienteModel;
-
-    @OneToOne
-    private PlantaModel planta;
 
     private int coordenadaX;
     private int coordenadaY;

@@ -18,11 +18,11 @@ public class RutaXNodoModel implements Serializable {
     @Column(unique = true,nullable = false)
     private int idRutaxNodo;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "idNodo",nullable = false)
     private NodoModel nodo;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "idRuta",nullable = false)
     private RutaModel ruta;
 

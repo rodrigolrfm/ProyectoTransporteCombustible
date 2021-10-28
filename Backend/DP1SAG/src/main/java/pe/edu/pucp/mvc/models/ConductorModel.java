@@ -18,7 +18,7 @@ public class ConductorModel implements Serializable {
     @Column(unique = true,nullable = false)
     private int idConductor;
 
-    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "idUsuario",nullable = false)
     private UsuarioModel conductor;
 
@@ -26,7 +26,5 @@ public class ConductorModel implements Serializable {
 
     }
 
-    @OneToOne(mappedBy = "conductor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private VehiculoModel vehiculo;
 
 }

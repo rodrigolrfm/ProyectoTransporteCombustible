@@ -13,7 +13,7 @@ public class PlantaModel implements Serializable {
     private int idPlanta;
 
 
-    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "idNodo",nullable = false)
     private NodoModel nodo;
 

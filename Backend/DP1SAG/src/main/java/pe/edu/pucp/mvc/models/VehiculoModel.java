@@ -18,12 +18,9 @@ public class VehiculoModel implements Serializable {
     @Column(unique = true,nullable = false)
     private int idVehiculo;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "idConductor",nullable = false)
     private ConductorModel conductor;
-
-    @OneToMany(mappedBy = "vehiculo", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<RutaModel> rutaList;
 
     @Column(nullable = false, length = 50)
     private String estado;
@@ -34,6 +31,4 @@ public class VehiculoModel implements Serializable {
     @Column(nullable = false)
     private int tieneAveria;
 
-    @OneToMany(mappedBy = "vxPedido", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<VehiculoXPedidoModel> ListVxPedido;
 }

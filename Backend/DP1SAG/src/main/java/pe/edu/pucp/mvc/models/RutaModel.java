@@ -20,7 +20,7 @@ public class RutaModel implements Serializable {
     @Column(nullable = false)
     private double distanciaTotal;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "idVehiculo",nullable = false)
     private VehiculoModel vehiculo;
 

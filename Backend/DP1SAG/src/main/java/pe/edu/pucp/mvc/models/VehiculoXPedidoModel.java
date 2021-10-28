@@ -17,11 +17,11 @@ public class VehiculoXPedidoModel implements Serializable {
     @Column(unique = true,nullable = false)
     private int idVehiculoXPedido;
 
-    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "idVehiculo",nullable = false)
     private VehiculoModel vxPedido;
 
-    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "idPedido",nullable = false)
     private PedidoModel pxVehiculo;
 

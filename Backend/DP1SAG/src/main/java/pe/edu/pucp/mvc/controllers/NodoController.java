@@ -31,7 +31,6 @@ public class NodoController {
         nodoModel.setEstaBloqueado(nodo.getEsta_bloqueado());
         nodoModel.setCoordenadaX(nodo.getCoordenadax());
         nodoModel.setCoordenadaY(nodo.getCoordenaday());
-
         return this.nodoService.guardarNodo(nodoModel,nodo.getId_mapa());
 
     }

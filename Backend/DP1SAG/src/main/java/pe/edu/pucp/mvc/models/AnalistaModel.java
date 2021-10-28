@@ -18,15 +18,12 @@ public class AnalistaModel implements Serializable {
     @Column(unique = true,nullable = false)
     private int idAnalista;
 
-    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "idUsuario",nullable = false)
     private UsuarioModel usuarioAnalista;
 
     public AnalistaModel(){
     }
-
-    @OneToMany(mappedBy = "analistaSimulacionModel", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<SimulacionModel> listaSimulacion;
 
     public int getIdAnalista() {
         return idAnalista;

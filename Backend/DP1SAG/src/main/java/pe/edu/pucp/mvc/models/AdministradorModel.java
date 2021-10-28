@@ -16,7 +16,7 @@ public class AdministradorModel implements Serializable {
     @Column(unique = true,nullable = false)
     private int idAdministrador;
 
-    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "idUsuario",nullable = false)
     private UsuarioModel usuarioAdministrador;
 

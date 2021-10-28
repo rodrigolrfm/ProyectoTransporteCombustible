@@ -29,10 +29,8 @@ public class SimulacionModel implements Serializable {
     private LocalDateTime fin;
     private double duracionHoras;
 
-    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "idAnalista",nullable = false)
     private AnalistaModel analistaSimulacionModel;
 
-    @OneToMany(mappedBy = "sxPedido", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<SimulacionXPedidoModel> ListSxPedido;
 }

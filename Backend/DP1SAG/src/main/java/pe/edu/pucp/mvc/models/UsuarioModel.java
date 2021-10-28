@@ -43,13 +43,4 @@ public class UsuarioModel implements Serializable {
         this.correo = correo;
     }
 
-    @OneToOne(mappedBy = "usuarioAnalista",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-    private AnalistaModel usuarioAnalista;
-
-    @OneToOne(mappedBy = "usuarioAdministrador",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-    private AdministradorModel usuarioAdministrador;
-
-    @OneToOne(mappedBy = "conductor",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-    private ConductorModel usuarioConductor;
-
 }

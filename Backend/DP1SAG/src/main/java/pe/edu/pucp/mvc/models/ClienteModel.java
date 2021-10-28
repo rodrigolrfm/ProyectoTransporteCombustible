@@ -24,11 +24,9 @@ public class ClienteModel implements Serializable {
     private String apellidos;
 
 
-    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "idNodo",nullable = false)
     private NodoModel lugarNodo;
 
-    @OneToMany(mappedBy = "clienteModel", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<PedidoModel> clienteModel;
 
 }

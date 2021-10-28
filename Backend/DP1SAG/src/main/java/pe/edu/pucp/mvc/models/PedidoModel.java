@@ -23,14 +23,9 @@ public class PedidoModel implements Serializable {
     private LocalDateTime horaEntrega;
     private double costoOperativo;
 
-    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "idCliente",nullable = false)
     private ClienteModel clienteModel;
 
-    @OneToMany(mappedBy = "pxVehiculo", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<VehiculoXPedidoModel> ListPxVehiculo;
-
-    @OneToMany(mappedBy = "pxSimulacion", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<SimulacionXPedidoModel> ListPxSimulacion;
 
 }

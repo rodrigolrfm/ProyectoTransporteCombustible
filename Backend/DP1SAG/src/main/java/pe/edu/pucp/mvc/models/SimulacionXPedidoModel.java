@@ -17,11 +17,11 @@ public class SimulacionXPedidoModel implements Serializable {
     @Column(unique = true,nullable = false)
     private int idSimulacionXPedido;
 
-    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "idSimulacion",nullable = false)
     private SimulacionModel sxPedido;
 
-    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "idPedido",nullable = false)
     private PedidoModel pxSimulacion;
 
