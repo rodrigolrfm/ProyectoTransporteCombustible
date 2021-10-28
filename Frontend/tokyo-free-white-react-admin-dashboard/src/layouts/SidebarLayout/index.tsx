@@ -1,30 +1,29 @@
 import { FC, ReactNode } from 'react';
-import { experimentalStyled } from '@material-ui/core/styles';
-import { Box } from '@material-ui/core';
+import { styled } from '@mui/material/styles';
+import { Box } from '@mui/material';
 import { Outlet } from 'react-router-dom';
 
 import Sidebar from './Sidebar';
 import Header from './Header';
-
 interface SidebarLayoutProps {
   children?: ReactNode;
 }
 
-const MainWrapper = experimentalStyled(Box)(
+const MainWrapper = styled(Box)(
   ({ theme }) => `
         flex: 1 1 auto;
         display: flex;
         height: 100%;
         
         @media (min-width: ${theme.breakpoints.values.lg}px) {
-            padding-left: ${theme.sidebar.width};
+            padding-left: ${theme.sidebar.width };
         }
 `
 );
 
-const MainContent = experimentalStyled(Box)(
+const MainContent = styled(Box)(
   ({ theme }) => `
-        margin-top: ${theme.header.height};
+        margin-top: 50px;
         flex: 1 1 auto;
         overflow: auto;
 `
@@ -35,7 +34,7 @@ const SidebarLayout: FC<SidebarLayoutProps> = () => {
     <>
       <Sidebar />
       <MainWrapper>
-        <Header />
+      <Header />
         <MainContent>
           <Outlet />
         </MainContent>

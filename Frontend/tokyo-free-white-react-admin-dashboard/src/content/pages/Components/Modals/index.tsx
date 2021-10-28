@@ -1,129 +1,124 @@
-import { Helmet } from 'react-helmet-async';
-import PropTypes from 'prop-types';
+import { Typography, Button, Grid, FormControl, InputLabel, Select, MenuItem} from '@mui/material';
+import axios from 'axios';
+import CustomSnackbar from 'src/components/Custom/CustomSnackbar';
 import { useState } from 'react';
+import { styled } from '@mui/material/styles';
+import { parse } from 'papaparse';
+import MapR from 'src/components/MapR/MapR';
+const Input = styled('input')({
+  display: 'none',
+});
 
-import PageTitle from 'src/components/PageTitle';
-import PageTitleWrapper from 'src/components/PageTitleWrapper';
-import { Container, Grid, Card, CardHeader, CardContent, Divider } from '@material-ui/core';
-import Button from '@material-ui/core/Button';
-import Avatar from '@material-ui/core/Avatar';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import ListItemText from '@material-ui/core/ListItemText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Dialog from '@material-ui/core/Dialog';
-import PersonIcon from '@material-ui/icons/Person';
-import AddIcon from '@material-ui/icons/Add';
-import Typography from '@material-ui/core/Typography';
-import { blue } from '@material-ui/core/colors';
-import Footer from 'src/components/Footer';
 
-const emails = ['username@gmail.com', 'user02@gmail.com'];
 
-function SimpleDialog(props) {
-  const { onClose, selectedValue, open } = props;
 
-  const handleClose = () => {
-    onClose(selectedValue);
-  };
-
-  const handleListItemClick = (value) => {
-    onClose(value);
-  };
-
-  return (
-    <Dialog onClose={handleClose} open={open}>
-      <DialogTitle>Set backup account</DialogTitle>
-      <List sx={{ pt: 0 }}>
-        {emails.map((email) => (
-          <ListItem button onClick={() => handleListItemClick(email)} key={email}>
-            <ListItemAvatar>
-              <Avatar sx={{ bgcolor: blue[100], color: blue[600] }}>
-                <PersonIcon />
-              </Avatar>
-            </ListItemAvatar>
-            <ListItemText primary={email} />
-          </ListItem>
-        ))}
-
-        <ListItem autoFocus button onClick={() => handleListItemClick('addAccount')}>
-          <ListItemAvatar>
-            <Avatar>
-              <AddIcon />
-            </Avatar>
-          </ListItemAvatar>
-          <ListItemText primary="Add account" />
-        </ListItem>
-      </List>
-    </Dialog>
-  );
-}
-
-SimpleDialog.propTypes = {
-  onClose: PropTypes.func.isRequired,
-  open: PropTypes.bool.isRequired,
-  selectedValue: PropTypes.string.isRequired,
-};
 
 function Modals() {
+  const [alert, setAlert] = useState({isOpen: false, message: '', type: ''})
+  const [filesCheck, setFilesCheck] = useState(0)
 
-  const [open, setOpen] = useState(false);
-  const [selectedValue, setSelectedValue] = useState(emails[1]);
+  const uploadFile = async (file) => {
+    let formData = new FormData();
+    formData.append("file", file);
+    axios.post('upload_file', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+  }).then((r) => {
+    setAlert({isOpen: true, message: 'Pedidos cargados de manera exitosa.', type: 'success'})
+    setFilesCheck(filesCheck+1)
+  }).catch((e) =>{
+    setAlert({isOpen: true, message: 'Hubo un error al cargar el archivo.', type: 'error'})
+  })
+  }
+  const uploadFileB = async (file) => {
+    console.log("asldkhasld");
+    let formData = new FormData();
+    formData.append("file", file);
+    axios.post('upload_file', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+  }).then((r) => {
+    setAlert({isOpen: true, message: 'Bloqueos cargados de manera exitosa.', type: 'success'})
+    setFilesCheck(filesCheck+1)
+  }).catch((e) =>{
+    setAlert({isOpen: true, message: 'Hubo un error al cargar el archivo.', type: 'error'})
+  })
+  
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
 
-  const handleClose = (value) => {
-    setOpen(false);
-    setSelectedValue(value);
-  };
-
-
+    /*
+    axios.post(process.env.REACT_APP_API_URL + "/inboundOrders/import", result).then((r) => {
+      setAlert({isOpen: true, message: 'Pedidos cargados de manera exitosa.', type: 'success'})
+      axios.get(process.env.REACT_APP_API_URL + "/inboundOrders").then((r) => {
+        setInboundOrders(r.data);
+        
+      });
+    });   */
+  }
+  
   return (
-    <>
-      <Helmet>
-        <title>Modals - Components</title>
-      </Helmet>
-      <PageTitleWrapper>
-        <PageTitle
-          heading="Modals"
-          subHeading="Dialogs inform users about a task and can contain critical information, require decisions, or involve multiple tasks."
-          docs="https://material-ui.com/components/dialogs/" />
-      </PageTitleWrapper>
-      <Container maxWidth="lg">
-        <Grid
-          container
-          direction="row"
-          justifyContent="center"
-          alignItems="stretch"
-          spacing={3}
+    <Grid container justifyContent="space-between" alignItems="center">
+      <Grid item>
+        <Typography variant="h3" component="h3" gutterBottom>
+          Empezar simulaciónsss
+        </Typography>
+      </Grid>
+      <FormControl fullWidth sx={{ mt: 3 }}>
+        <InputLabel id="demo-simple-select-label">
+          Escoga el tipo de simulación
+        </InputLabel>
+        <Select
+          labelId="demo-simple-select-label"
+          id="select-simulacion"
+          label="Seleccione el tipo de simulación"
         >
-          <Grid item xs={12}>
-            <Card>
-              <CardHeader title="Basic Dialog" />
-              <Divider />
-              <CardContent>
-                <Typography variant="subtitle1" component="div">
-                  Selected: {selectedValue}
-                </Typography>
-                <br />
-                <Button variant="outlined" onClick={handleClickOpen}>
-                  Open simple dialog
-                </Button>
-                <SimpleDialog
-                  selectedValue={selectedValue}
-                  open={open}
-                  onClose={handleClose}
-                />
-              </CardContent>
-            </Card>
-          </Grid>
+          <MenuItem value={1}>Simulación de 3 Días</MenuItem>
+          <MenuItem value={2}>Simulación hasta el colapso logístico</MenuItem>
+        </Select>
+      </FormControl>
+      {/*<Grid item>
+        
+        <Button
+          sx={{ mt: { xs: 2, md: 0 } }}
+          variant="contained"
+          startIcon={<AddTwoToneIcon fontSize="small" />}
+        >
+          Crear usuario
+        </Button>
+      </Grid>
+      */}
+      
+      <Grid container spacing={2} sx={{ mt: 2 }}>
+        <Grid item xs={2}>
+          <label htmlFor="change-cover">
+            <Button variant="contained" id="bt-subir-pedidos" component="label">
+            <Input accept="text/csv,.csv,.txt"  hidden multiple type="file" onChange={(e) => uploadFile(e.target.files[0])} />
+              Subir Pedidos
+            </Button>
+          </label>
         </Grid>
-      </Container>
-      <Footer />
-    </>
+        <Grid item xs={2}>
+          <label htmlFor="change-cover">
+            <Button variant="contained" component="label">
+            <Input accept="text/csv,.csv,.txt"  hidden multiple type="file" onChange={(e) => uploadFileB(e.target.files[0])} />
+              Subir Bloqueos
+            </Button>
+          </label>
+        </Grid>
+
+        <Grid item xs={2}>
+          <Button variant="contained" disabled={filesCheck<2}>
+            Empezar Simulación
+          </Button>
+        </Grid>
+      </Grid>
+      <CustomSnackbar alert={alert} setAlert={setAlert}/>
+      <MapR></MapR>
+    
+    </Grid>
+    
   );
 }
 

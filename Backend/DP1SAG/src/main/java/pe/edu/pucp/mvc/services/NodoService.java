@@ -15,12 +15,17 @@ public class NodoService {
     @Autowired
     NodoRepository nodoRepository;
 
+<<<<<<< HEAD
     @Autowired
     MapaRepository mapaRepository;
 
 
     public List<NodoModel> obtenerNodos(){
         return (List<NodoModel>) nodoRepository.findAll();
+=======
+    public ArrayList<NodoModel> obtenerNodos(){
+        return (ArrayList<NodoModel>) nodoRepository.findAll();
+>>>>>>> 96f9da6b49f42dfeba77420d9f99013300fc9a71
     }
 
     public NodoModel guardarNodo(NodoModel nodo,int id){

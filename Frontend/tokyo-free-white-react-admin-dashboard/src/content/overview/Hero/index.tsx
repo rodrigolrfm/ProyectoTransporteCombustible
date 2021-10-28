@@ -1,22 +1,28 @@
-import { Box, Button, Card, CardContent, CardHeader, Container, Divider, Grid, TextField, Typography } from "@material-ui/core";
+import {
+  Box,
+  Button,
+  Container,
+  Grid,
+  Typography
+} from '@mui/material';
 
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink } from 'react-router-dom';
+import TextField from '@mui/material/TextField';
+import { styled } from '@mui/material/styles';
 
-import { experimentalStyled } from "@material-ui/core/styles";
-
-const TypographyH1 = experimentalStyled(Typography)(
+const TypographyH1 = styled(Typography)(
   ({ theme }) => `
     font-size: ${theme.typography.pxToRem(50)};
 `
 );
 
-const TypographyH2 = experimentalStyled(Typography)(
+const TypographyH2 = styled(Typography)(
   ({ theme }) => `
     font-size: ${theme.typography.pxToRem(17)};
 `
 );
 
-const LabelWrapper = experimentalStyled(Box)(
+const LabelWrapper = styled(Box)(
   ({ theme }) => `
     background-color: ${theme.colors.success.main};
     color: ${theme.palette.success.contrastText};
@@ -25,12 +31,12 @@ const LabelWrapper = experimentalStyled(Box)(
     text-transform: uppercase;
     display: inline-block;
     font-size: ${theme.typography.pxToRem(11)};
-    padding: ${theme.spacing(0.5)} ${theme.spacing(1.5)};
+    padding: ${theme.spacing(.5)} ${theme.spacing(1.5)};
     margin-bottom: ${theme.spacing(2)};
 `
 );
 
-const MuiAvatar = experimentalStyled(Box)(
+const MuiAvatar = styled(Box)(
   ({ theme }) => `
     width: ${theme.spacing(8)};
     height: ${theme.spacing(8)};
@@ -43,14 +49,14 @@ const MuiAvatar = experimentalStyled(Box)(
     margin: 0 auto ${theme.spacing(2)};
 
     img {
-      width: 50%;
+      width: 60%;
       height: 60%;
       display: block;
     }
 `
 );
 
-const TsAvatar = experimentalStyled(Box)(
+const TsAvatar = styled(Box)(
   ({ theme }) => `
     width: ${theme.spacing(8)};
     height: ${theme.spacing(8)};
@@ -74,7 +80,6 @@ const logox =
 
   img: '/static/images/avatars/logo.png'
 };
-
 function Hero() {
   return (
     <Container maxWidth="xl" sx={{ textAlign: "center" }}>

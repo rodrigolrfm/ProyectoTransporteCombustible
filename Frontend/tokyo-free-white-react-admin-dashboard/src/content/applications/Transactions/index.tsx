@@ -1,16 +1,13 @@
 import { Helmet } from 'react-helmet-async';
 import PageHeader from './PageHeader';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
-import { Container, Grid } from '@material-ui/core';
-import Footer from 'src/components/Footer';
-
-import RecentOrders from './RecentOrders';
+import { Grid, Container } from '@mui/material';
 
 function ApplicationsTransactions() {
   return (
     <>
       <Helmet>
-        <title>Transactions - Applications</title>
+        <title>RouterFast</title>
       </Helmet>
       <PageTitleWrapper>
         <PageHeader />
@@ -24,11 +21,10 @@ function ApplicationsTransactions() {
           spacing={3}
         >
           <Grid item xs={12}>
-            <RecentOrders />
+
           </Grid>
         </Grid>
       </Container>
-      <Footer />
     </>
   );
 }
