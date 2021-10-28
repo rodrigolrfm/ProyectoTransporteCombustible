@@ -15,14 +15,12 @@ public class MapaModel implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(unique = true,nullable = false)
+    @Column(unique = true)
     private int idMapa;
 
     private int largo;
     private int ancho;
 
-    @OneToMany(mappedBy = "mapaModel", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<NodoModel> nodoList;
 
     public MapaModel(int largo, int ancho){
         this.largo=largo;

@@ -1,11 +1,9 @@
 package pe.edu.pucp.mvc.models;
 
-import ch.qos.logback.core.net.server.Client;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Getter
@@ -16,18 +14,18 @@ public class NodoModel implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(unique = true,nullable = false)
+    @Column(unique = true)
     private int idNodo;
 
 
-    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-    @JoinColumn(name = "idMapa", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "idMapa",nullable = false)
     private MapaModel mapaModel;
 
-    @OneToOne(mappedBy = "lugarNodo", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne
     private ClienteModel clienteModel;
 
-    @OneToOne(mappedBy = "nodo", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne
     private PlantaModel planta;
 
     private int coordenadaX;
@@ -84,19 +82,5 @@ public class NodoModel implements Serializable {
         this.mapaModel = mapaModel;
     }
 
-    public ClienteModel getClienteModel() {
-        return clienteModel;
-    }
 
-    public void setClienteModel(ClienteModel clienteModel) {
-        this.clienteModel = clienteModel;
-    }
-
-    public PlantaModel getPlanta() {
-        return planta;
-    }
-
-    public void setPlanta(PlantaModel planta) {
-        this.planta = planta;
-    }
 }
