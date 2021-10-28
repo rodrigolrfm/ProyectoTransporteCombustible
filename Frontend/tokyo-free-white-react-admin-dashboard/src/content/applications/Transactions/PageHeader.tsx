@@ -15,10 +15,6 @@ const Input = styled('input')({
   display: 'none',
 });
 
-
-
-
-
 function PageHeader() {
   const [alert, setAlert] = useState({isOpen: false, message: '', type: ''})
   const [filesCheck, setFilesCheck] = useState(0)

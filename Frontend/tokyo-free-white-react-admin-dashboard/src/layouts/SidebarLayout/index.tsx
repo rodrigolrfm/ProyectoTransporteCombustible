@@ -16,7 +16,7 @@ const MainWrapper = styled(Box)(
         height: 100%;
         
         @media (min-width: ${theme.breakpoints.values.lg}px) {
-            padding-left: ${theme.sidebar.width};
+            padding-left: ${theme.sidebar.width };
         }
 `
 );

@@ -81,21 +81,7 @@ function HeaderUserbox() {
   return (
     <>
       
-      <Popover
-        anchorEl={ref.current}
-        onClose={handleClose}
-        open={isOpen}
-        anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'right'
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'right'
-        }}
-      >
-       
-      </Popover>
+
     </>
   );
 }
