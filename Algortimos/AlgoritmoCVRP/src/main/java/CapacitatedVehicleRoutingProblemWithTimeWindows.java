@@ -121,6 +121,10 @@ public class CapacitatedVehicleRoutingProblemWithTimeWindows {
             orderTimeWindows.add(Pair.of(timeWindowStart, timeWindowEnd));
             //orderPenalties.add(randomGenerator.nextInt(penaltyMax - penaltyMin + 1) + penaltyMin);
             orderPenalties.add(500);
+
+            Chromosome c = new Chromosome(randomGenerator.nextInt(p.demanda) + 1, p.demanda);
+            c.genrateRandomChromosome();
+            c.print();
         }
 
        /* for (int order = 0; order < numberOfOrders; ++order) {
