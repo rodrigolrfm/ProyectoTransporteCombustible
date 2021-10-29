@@ -12,6 +12,14 @@ public class Node {
 		this.coordY = coordY;
 	}
 
+	@Override
+	public String toString() {
+		return "Node{" +
+				"coordX=" + coordX +
+				", coordY=" + coordY +
+				'}';
+	}
+
 	public static List<Node> cargarBloqueados(String direccion) {
 
 		List<Node> listaNodos = new ArrayList<Node>();
@@ -63,4 +71,9 @@ public class Node {
 		return cadena;
 	}
 
+	public static Integer calculardistancia(Node a,Node b){
+
+		return Math.abs(a.coordX - b.coordX) + Math.abs(b.coordY - a.coordY);
+
+	}
 }
