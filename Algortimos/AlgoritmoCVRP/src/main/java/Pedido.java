@@ -128,10 +128,10 @@ public class Pedido implements Comparable<Pedido>{
         //tiempo actual 00:00:00 por el momento
         //ratio = tiempo que te demoras / tiempo que te falta para entregar
 
-        ArrayList<Pedido> pedidosPriorizados= new ArrayList<>();
-        ArrayList<Integer> restas=new ArrayList<Integer>();
-        ArrayList<Double> ratio=new ArrayList<Double>();
-        ArrayList<Integer> posiciones=new ArrayList<Integer>();
+        //ArrayList<Pedido> pedidosPriorizados= new ArrayList<>();
+        //ArrayList<Integer> restas=new ArrayList<Integer>();
+        //ArrayList<Double> ratio=new ArrayList<Double>();
+        //ArrayList<Integer> posiciones=new ArrayList<Integer>();
 
 
 
@@ -147,8 +147,7 @@ public class Pedido implements Comparable<Pedido>{
             double tiempofaltante=limitePedido - 0;
             double tiempodemora= (Node.calculardistancia(planta_principal,p.node)/50.0) * 60;
             double division=tiempodemora/tiempofaltante;
-            //System.out.println(p.demanda);
-            //System.out.println(division);
+
             p.ratio=division;
             //ratio.add(division);
 
@@ -159,17 +158,37 @@ public class Pedido implements Comparable<Pedido>{
         for (Pedido p:pedidos){
             System.out.println(p.ratio);
         }
+       //ORDENA DE MENOR A MAYOR RATIO
+        Collections.sort(pedidos);
+        System.out.println("ORDENAMIENTO");
+        for (Pedido p:pedidos){
+            System.out.println(p.ratio);
+        }
 
-        Collections.sort(pedidos,Collections.reverseOrder());
-
-        //ordenamos los ratios
 
 
-        return null;
+        return pedidos;
+    }
+
+    public double getRatio() {
+        return ratio;
     }
 
     @Override
-    public int compareTo(@NotNull Pedido o) {
-        return 0;
+    public int compareTo(Pedido o) {
+
+        if(this.ratio>o.getRatio()){
+            return 1;
+        }else{
+            if(this.ratio<o.getRatio()){
+                return -1;
+            }else{
+                return 0;
+            }
+        }
+
+
+
+
     }
 }
