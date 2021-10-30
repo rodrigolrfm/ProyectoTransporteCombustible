@@ -27,4 +27,13 @@ public class MapaService {
         return mapaRepository.findById(id);
     }
 
+    public boolean eliminarMapa(Integer id){
+        try{
+            mapaRepository.deleteById(id);
+            return true;
+        }catch(Exception ex){
+            return false;
+        }
+    }
+
 }

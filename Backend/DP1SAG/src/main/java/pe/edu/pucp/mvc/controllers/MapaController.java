@@ -30,4 +30,14 @@ public class MapaController {
         return this.mapaService.obtenerPorId(id);
     }
 
+    @DeleteMapping(path = "/{id}")
+    public String eliminarXID(@PathVariable("id") Integer id){
+        boolean ok = this.mapaService.eliminarMapa(id);
+        if (ok){
+            return "Se eliminó el usuario con id: " + id;
+        }else{
+            return "No pudo eliminarse el usuario con id: " + id;
+        }
+    }
+
 }
