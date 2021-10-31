@@ -42,7 +42,6 @@ const path = [
   { x: 14, y: 42, destino: 0 },
   { x: 13, y: 42, destino: 0 },
   { x: 12, y: 42, destino: 0 },
-
 ];
 
 const vehiculo = { codigo: 'INF-13L', conductor: 'Franco Gamarra' };
