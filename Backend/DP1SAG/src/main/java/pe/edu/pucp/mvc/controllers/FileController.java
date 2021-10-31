@@ -19,8 +19,8 @@ public class FileController<st>
 
     public String fileUpload(@RequestParam("file") MultipartFile file) throws IOException
     {
-        //File convertFile = new File("/home/ubuntu/resources/" + file.getOriginalFilename());
-        File convertFile = new File("D:/work/" + file.getOriginalFilename());
+        File convertFile = new File("/home/ubuntu/resources/" + file.getOriginalFilename());
+        //File convertFile = new File("D:/work/" + file.getOriginalFilename());
         convertFile.createNewFile();
 
         try (FileOutputStream fout = new FileOutputStream(convertFile))
