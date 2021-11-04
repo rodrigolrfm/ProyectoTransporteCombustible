@@ -78,11 +78,15 @@ public class CapacitatedVehicleRoutingProblemWithTimeWindows {
         return new LongBinaryOperator() {
             public long applyAsLong(long firstIndex, long secondIndex) {
                 try {
+                    int divisor = 1;
+                    if (costCoefficient == 20){
+                        divisor = 50;
+                    }
                     int firstNode = manager.indexToNode(firstIndex);
                     int secondNode = manager.indexToNode(secondIndex);
                     Pair<Integer, Integer> firstLocation = locations.get(firstNode);
                     Pair<Integer, Integer> secondLocation = locations.get(secondNode);
-                    return (long) costCoefficient
+                    return (long) costCoefficient * 1000 / divisor
                             * (Math.abs(firstLocation.first - secondLocation.first)
                             + Math.abs(firstLocation.second - secondLocation.second));
                 } catch (Throwable throwed) {
@@ -196,8 +200,8 @@ public class CapacitatedVehicleRoutingProblemWithTimeWindows {
         RoutingModel model = new RoutingModel(manager);
 
         // Setting up dimensions
-        final int bigNumber = 100000;
-        final LongBinaryOperator callback = buildManhattanCallback(manager, 1);
+        final int bigNumber = 1000000000;
+        final LongBinaryOperator callback = buildManhattanCallback(manager, 20);
         final String timeStr = "time";
         model.addDimension(
                 model.registerTransitCallback(callback), bigNumber, bigNumber, false, timeStr);

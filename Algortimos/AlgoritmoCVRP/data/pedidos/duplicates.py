@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 
-df = pd.read_csv('ventas.txt', header=None)
+df = pd.read_csv('ventas202109.txt', header=None)
 funcion1 = lambda x: np.random.randint(0,70)
 funcion2 = lambda x: np.random.randint(0,50)
 
