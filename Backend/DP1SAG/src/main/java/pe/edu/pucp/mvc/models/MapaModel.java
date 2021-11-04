@@ -21,13 +21,10 @@ public class MapaModel implements Serializable {
     private int largo;
     private int ancho;
 
-
     public MapaModel(int largo, int ancho){
         this.largo=largo;
         this.ancho=ancho;
     }
-
-
     public MapaModel() {
 
     }
