@@ -15,12 +15,12 @@ import pe.edu.pucp.mvc.dtos.PedidosRutasDTO;
 import pe.edu.pucp.mvc.models.NodoModel;
 
 @RestController
-@RequestMapping( "/upload")
+@RequestMapping( "/archivos")
 public class FileController<st>
 {
-    @GetMapping()
-    //@RequestMapping(value = "/upload", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public JsonObject fileUpload(){
+
+    @PostMapping("/simularRutas")
+    public JsonObject simular(){
         PedidosRutasDTO rutasPedidos1 = new PedidosRutasDTO();
         PedidosRutasDTO rutasPedidos2 = new PedidosRutasDTO();
         PedidosRutasDTO rutasPedidos3 = new PedidosRutasDTO();
@@ -95,8 +95,8 @@ public class FileController<st>
                     " {\"destino\": 0, \"x\": 41, \"y\": 42},\n" +
                     " {\"destino\": 0, \"x\": 42, \"y\": 42}\n" +
                     " ],\n" +
-                    " \"startTime\": \"2021-11-03T00:33:51.969+00:00\",\n" +
-                    " \"endTime\": \"2021-11-03T01:05:51.969+00:00\"},\n" +
+                    " \"startTime\": \"2021-11-04T00:33:51.969+00:00\",\n" +
+                    " \"endTime\": \"2021-11-04T01:05:51.969+00:00\"},\n" +
                     " {\"path\":[\n" +
                     " {\"destino\": 0, \"x\": 12, \"y\": 8},\n" +
                     " {\"destino\": 0, \"x\": 12, \"y\": 9},\n" +
@@ -184,8 +184,8 @@ public class FileController<st>
                     " {\"destino\": 0, \"x\": 41, \"y\": 42},\n" +
                     " {\"destino\": 0, \"x\": 42, \"y\": 42}\n" +
                     " ],\n" +
-                    " \"startTime\": \"2021-11-04T00:33:51.969+00:00\",\n" +
-                    " \"endTime\": \"2021-11-04T01:05:51.969+00:00\"},\n" +
+                    " \"startTime\": \"2021-11-05T00:33:51.969+00:00\",\n" +
+                    " \"endTime\": \"2021-11-05T01:05:51.969+00:00\"},\n" +
                     " {\"path\":[\n" +
                     " {\"destino\": 0, \"x\": 12, \"y\": 8},\n" +
                     " {\"destino\": 0, \"x\": 13, \"y\": 8},\n" +
@@ -253,8 +253,8 @@ public class FileController<st>
                     " {\"destino\": 0, \"x\": 41, \"y\": 42},\n" +
                     " {\"destino\": 0, \"x\": 42, \"y\": 42}\n" +
                     " ],\n" +
-                    " \"startTime\": \"2021-11-05T00:33:51.969+00:00\",\n" +
-                    " \"endTime\": \"2021-11-05T01:05:51.969+00:00\"}] \n" +
+                    " \"startTime\": \"2021-11-06T00:33:51.969+00:00\",\n" +
+                    " \"endTime\": \"2021-11-06T01:05:51.969+00:00\"}] \n" +
                     "}\n";
             convertedObject = new Gson().fromJson(path, JsonObject.class);
 
@@ -263,7 +263,8 @@ public class FileController<st>
         }
         return convertedObject;
     }
-    /*
+
+    @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public String fileUpload(@RequestParam("file") MultipartFile file) throws IOException
     {
         File convertFile = new File("/home/ubuntu/resources/" + file.getOriginalFilename());
@@ -289,7 +290,6 @@ public class FileController<st>
             exe.printStackTrace();
         }
         return "File has uploaded successfully";
-    }*/
-
+    }
 
 }

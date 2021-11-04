@@ -23,6 +23,7 @@ public class NodoModel implements Serializable {
     private MapaModel mapaModel;
 
 
+
     private int coordenadaX;
     private int coordenadaY;
     private int estaBloqueado;
