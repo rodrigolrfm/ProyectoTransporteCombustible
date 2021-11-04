@@ -3,47 +3,30 @@ import HomeIcon from '@mui/icons-material/Home';
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import PersonPinIcon from '@mui/icons-material/PersonPin';
 import { useEffect, useState } from 'react';
+import url from  'src/utils/constant';
+import axios from 'axios';
 const boardX = 70;
 const boardY = 50;
 const path = [
   { x: 12, y: 42, destino: 0 },
-  { x: 13, y: 42, destino: 0 },
-  { x: 14, y: 42, destino: 0 },
-  { x: 15, y: 42, destino: 0 },
-  { x: 16, y: 42, destino: 0 },
-  { x: 17, y: 42, destino: 0 },
-  { x: 18, y: 42, destino: 0 },
-  { x: 19, y: 42, destino: 0 },
-  { x: 20, y: 42, destino: 1 },
-  { x: 21, y: 42, destino: 0 },
-  { x: 22, y: 42, destino: 0 },
-  { x: 23, y: 42, destino: 0 },
-  { x: 24, y: 42, destino: 0 },
-  { x: 25, y: 42, destino: 0 },
-  { x: 26, y: 42, destino: 0 },
-  { x: 27, y: 42, destino: 0 },
-  { x: 28, y: 42, destino: 0 },
-  { x: 29, y: 42, destino: 1 },
-  { x: 29, y: 42, destino: 0 },
-  { x: 28, y: 42, destino: 0 },
-  { x: 27, y: 42, destino: 0 },
-  { x: 26, y: 42, destino: 0 },
-  { x: 25, y: 42, destino: 0 },
-  { x: 24, y: 42, destino: 0 },
-  { x: 23, y: 42, destino: 0 },
-  { x: 22, y: 42, destino: 0 },
-  { x: 21, y: 42, destino: 0 },
-  { x: 20, y: 42, destino: 0 },
-  { x: 19, y: 42, destino: 0 },
-  { x: 18, y: 42, destino: 0 },
-  { x: 17, y: 42, destino: 0 },
-  { x: 16, y: 42, destino: 0 },
-  { x: 15, y: 42, destino: 0 },
-  { x: 14, y: 42, destino: 0 },
-  { x: 13, y: 42, destino: 0 },
+  { x: 12, y: 43, destino: 0 },
+  { x: 12, y: 44, destino: 0 },
+  { x: 12, y: 45, destino: 0 },
+  { x: 12, y: 46, destino: 0 },
+  { x: 12, y: 47, destino: 1 },
+  { x: 12, y: 46, destino: 1 },
+  { x: 12, y: 45, destino: 0 },
+  { x: 12, y: 44, destino: 0 },
+  { x: 12, y: 43, destino: 0 },
   { x: 12, y: 42, destino: 0 },
 ];
+/*
+data = ObjSON que tiene Paths y Tiempo,
+Path -> [] = { x: x , y: y:y , destino: 0};
+Tiempo -> '01-11-2021:'
 
+
+*/
 const vehiculo = { codigo: 'INF-13L', conductor: 'Franco Gamarra' };
 const pathsAux = [
   { vehiculo: vehiculo, ruta: path
@@ -64,8 +47,15 @@ const obtenerRuta = (path) => {
     return ruta;
   };
   
-  const ruta = obtenerRuta(path);
-
+const ruta = obtenerRuta(path);
+const implementarFecha = (startTime, dateTime) => {
+  const startTimeX = new Date(startTime);
+  const dateTimeX = new Date(dateTime);
+  const resultado = startTimeX.getTime() + (dateTimeX.getTime() - startTimeX.getTime())/1000;
+  console.log(startTimeX);
+  console.log(dateTimeX);
+  return new Date (resultado);
+};
 
 const useStyles = makeStyles((theme) => ({
     square: {
@@ -91,7 +81,7 @@ const useStyles = makeStyles((theme) => ({
       // top: '-15px',
       bottom: '-16px',
       zIndex: 1,
-      transform: 'rotate(0deg)',
+      transform: 'rotate(90deg)',
     },
   }));
 
@@ -102,15 +92,23 @@ const MapR=()=>{
     const classes = useStyles();
     const map = [];
     useEffect(() => {
+      const intervalTime = 500;
       const interval = setInterval(() => {
         let arr;
+        
+        //console.log(paths);
         arr = paths.map((path) => {
           const now = new Date();
           const date = new Date(path.date);
-          console.log(now.getMilliseconds());
-          console.log(date.getMilliseconds());
-          const posAux = Math.floor((now.getTime() - date.getTime()) / 1500);
-          console.log(posAux);
+          const nowFixed = new Date(path.nowFixed);
+          const dateStart = new Date(path.dateStart);
+          
+          let rest = now.getTime() - date.getTime() - (nowFixed.getTime() - dateStart.getTime());
+          
+          //console.log("asdlkasjdlsad");
+          const posAux = Math.floor(rest / intervalTime); // restar los milisegundos para igual
+          //al tiempo de inicio del primer pedido 
+          //console.log(posAux);
           if (posAux === path.ruta.length) {
             setRuta(null);
             return null;
@@ -118,9 +116,10 @@ const MapR=()=>{
         });
         setPaths(arr.filter((el) => el != null));
         // setPaths(...paths, pos)
-      }, 1500);
+      }, intervalTime);
       return () => clearInterval(interval);
     }, [paths]);
+    /*
     useEffect(() => {
       setPaths(
         pathsAux.map((path) => {
@@ -128,6 +127,30 @@ const MapR=()=>{
         })
       );
     }, []);
+    */
+    useEffect(() => {
+      axios
+        .post(url + "/archivos/simularRutas") /* LINK QUE ME PASA LAS RUTAS */
+        .then((e) => {
+          console.log(e.data);
+          setPaths(
+            e.data.paths.map((path) => {
+              return {
+                ...path.path,
+                ruta: obtenerRuta(path.path),
+                pos: 0,
+                date: implementarFecha(e.data.paths[0].startTime,path.startTime),
+                dateStart: e.data.paths[0].startTime,
+                nowFixed: new Date(),
+              };
+            })
+          );
+          
+          // setRuta(path[4].ruta);
+          //console.log(paths);
+          //console.log(ruta);
+        });
+    }, []);   
     for (let i = 0; i < boardY; i++) {
       const squareRows = [];
       for (let j = 0; j < boardX; j++) {
@@ -136,28 +159,28 @@ const MapR=()=>{
             className={classes.square}
             style={{
               borderRightColor:
-                ruta?.find(({ x, y }) => x === j && y === i - 1)?.next === 'down'
-                  ? '#D89F7B'
-                  : ruta?.find(({ x, y }) => x === j && y === i)?.next === 'up'
-                  ? '#ff0000'
+                ruta?.find(({ x, y, next }) => x === j && y === i - 1 && next === 'down') ||
+                ruta?.find(({ x, y, next }) => x === j && y === i && next === 'up')
+                  ? '#C27AC0'
                   : '#D89F7B',
+  
               borderBottomColor:
-                ruta?.find(({ x, y }) => x === j - 1 && y === i)?.next === 'right'
-                  ? '#ff0000'
-                  : ruta?.find(({ x, y }) => x === j && y === i)?.next === 'left'
-                  ? '#ff0000'
+                ruta?.find(({ x, y, next }) => x === j - 1 && y === i && next === 'right') ||
+                ruta?.find(({ x, y, next }) => x === j && y === i && next === 'left')
+                  ? '#C27AC0'
                   : '#D89F7B',
             }}
           >
             {ruta?.find(({ x, y }) => x === j && y === i)?.destino ? (
             <div className={classes.icon} style={{ transform: 'rotate(0deg)' }}>
-              <PersonPinIcon style={{ color: '#ff0000'}} />
+              <PersonPinIcon style={{ color: '#C27AC0'}} />
             </div>
           ) : null}
           {paths?.map((path) => {
             // let aux = new Date() - path.date;
             if (path?.ruta[path.pos] && path?.ruta[path.pos].x === j && path?.ruta[path.pos].y === i) {
               let dir = path.ruta[path.pos].next;
+              console.log(dir);
               return (
                 <div
                   className={classes.icon}
@@ -171,13 +194,24 @@ const MapR=()=>{
                         ? 'rotate(180deg)'
                         : 'rotate(0deg)',
                   }}
+                  
                 >
                   <LocalShippingIcon style={{ color: '#35737D' }} onClick={() => setRuta(path.ruta)} />
                 </div>
               );
             }
           })}
-            {i === 42 && j === 12 && (
+            {i === 8 && j === 12 && (
+              <div className={classes.icon} style={{ transform: 'rotate(0deg)' }}>
+                <HomeIcon style={{ color: '#35737D' }} />
+              </div>
+            )}
+            {i === 42 && j === 42 && (
+              <div className={classes.icon} style={{ transform: 'rotate(0deg)' }}>
+                <HomeIcon style={{ color: '#35737D' }} />
+              </div>
+            )}
+            {i === 3 && j === 63 && (
               <div className={classes.icon} style={{ transform: 'rotate(0deg)' }}>
                 <HomeIcon style={{ color: '#35737D' }} />
               </div>

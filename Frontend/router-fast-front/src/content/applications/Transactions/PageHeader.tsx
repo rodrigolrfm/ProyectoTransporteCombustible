@@ -6,10 +6,9 @@ import { styled } from '@mui/material/styles';
 import UploadTwoToneIcon from '@mui/icons-material/UploadTwoTone';
 import { parse } from 'papaparse';
 import { Container, CardHeader, CardContent, Divider } from '@mui/material';
-import CardActions from '@mui/material/CardActions';
 import MapR from 'src/components/MapR/MapR';
-import CardMedia from '@mui/material/CardMedia';
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
+import url from  'src/utils/constant';
 
 const Input = styled('input')({
   display: 'none',
@@ -22,13 +21,14 @@ function PageHeader() {
   const uploadFile = async (file) => {
     let formData = new FormData();
     formData.append("file", file);
-    axios.post('upload_file', formData, {
+    axios.post(`${url}/upload` ,formData, { /* UPLOAD PEDIDOS, PERO Y BLOQUEOS?????  */
       headers: {
         'Content-Type': 'multipart/form-data'
       }
   }).then((r) => {
     setAlert({isOpen: true, message: 'Pedidos cargados de manera exitosa.', type: 'success'})
     setFilesCheck(filesCheck+1)
+    
   }).catch((e) =>{
     setAlert({isOpen: true, message: 'Hubo un error al cargar el archivo.', type: 'error'})
   })
