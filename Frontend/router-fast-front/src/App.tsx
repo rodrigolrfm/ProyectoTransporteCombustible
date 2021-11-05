@@ -1,13 +1,22 @@
-import { Button } from "@material-ui/core";
-import React from "react";
-import {ThemeProvider} from '@material-ui/core'
-import tema from './temaConfig'
-function App() {
+import { useRoutes } from 'react-router-dom';
+import routes from './router';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+
+import ThemeProvider from './theme/ThemeProvider';
+import { CssBaseline } from '@mui/material';
+
+const App = () => {
+
+  const content = useRoutes(routes);
+
   return (
-    <ThemeProvider theme={tema}>
-      <Button color="primary" variant="contained"> Holaaaa </Button>
+    <ThemeProvider>
+      <LocalizationProvider dateAdapter={AdapterDateFns}>
+        <CssBaseline />
+        {content}
+      </LocalizationProvider>
     </ThemeProvider>
   );
 }
-
 export default App;
