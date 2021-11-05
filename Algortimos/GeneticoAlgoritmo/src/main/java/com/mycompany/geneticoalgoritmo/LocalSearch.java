@@ -5,6 +5,8 @@
 //https://www.tangiblesoftwaresolutions.com/order/order-cplus-to-java.html
 //====================================================================================================
 
+import com.mycompany.geneticoalgoritmo.*;
+
 import java.util.*;
 
 
@@ -24,11 +26,11 @@ public class LocalSearch
 	private int loopID; // Current loop index
 
 	/* THE SOLUTION IS REPRESENTED AS A LINKED LIST OF ELEMENTS */
-	private ArrayList< Node > clients = new ArrayList< Node >(); // Elements representing clients (clients[0] is a sentinel and should not be accessed)
+	private ArrayList<Node> clients = new ArrayList< Node >(); // Elements representing clients (clients[0] is a sentinel and should not be accessed)
 	private ArrayList< Node > depots = new ArrayList< Node >(); // Elements representing depots
 	private ArrayList< Node > depotsEnd = new ArrayList< Node >(); // Duplicate of the depots to mark the end of the routes
-	private ArrayList< Route > routes = new ArrayList< Route >(); // Elements representing routes
-	private ArrayList< ArrayList< ThreeBestInsert >> bestInsertClient = new ArrayList< ArrayList< ThreeBestInsert >>(); // (SWAP*) For each route and node, storing the cheapest insertion cost
+	private ArrayList<Route> routes = new ArrayList< Route >(); // Elements representing routes
+	private ArrayList< ArrayList<ThreeBestInsert>> bestInsertClient = new ArrayList< ArrayList< ThreeBestInsert >>(); // (SWAP*) For each route and node, storing the cheapest insertion cost
 
 	/* TEMPORARY VARIABLES USED IN THE LOCAL SEARCH LOOPS */
 	// nodeUPrev -> nodeU -> nodeX -> nodeXNext

@@ -1,3 +1,5 @@
+package com.mycompany.geneticoalgoritmo;
+
 import java.util.Arrays;
 
 public class AStar {
