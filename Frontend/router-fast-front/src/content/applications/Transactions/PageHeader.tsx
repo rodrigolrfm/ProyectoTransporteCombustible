@@ -21,7 +21,7 @@ function PageHeader() {
   const uploadFile = async (file) => {
     let formData = new FormData();
     formData.append("file", file);
-    axios.post(`${url}/upload` ,formData, { /* UPLOAD PEDIDOS, PERO Y BLOQUEOS?????  */
+    axios.post(`${url}/archivos/upload` ,formData, { /* UPLOAD PEDIDOS, PERO Y BLOQUEOS?????  */
       headers: {
         'Content-Type': 'multipart/form-data'
       }

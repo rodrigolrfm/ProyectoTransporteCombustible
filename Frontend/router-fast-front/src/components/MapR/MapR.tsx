@@ -8,30 +8,11 @@ import axios from 'axios';
 const boardX = 70;
 const boardY = 50;
 const path = [
-  { x: 12, y: 42, destino: 0 },
-  { x: 12, y: 43, destino: 0 },
-  { x: 12, y: 44, destino: 0 },
-  { x: 12, y: 45, destino: 0 },
-  { x: 12, y: 46, destino: 0 },
-  { x: 12, y: 47, destino: 1 },
-  { x: 12, y: 46, destino: 1 },
-  { x: 12, y: 45, destino: 0 },
-  { x: 12, y: 44, destino: 0 },
-  { x: 12, y: 43, destino: 0 },
-  { x: 12, y: 42, destino: 0 },
+  { x: 12, y: 42, destino: 0 }
 ];
-/*
-data = ObjSON que tiene Paths y Tiempo,
-Path -> [] = { x: x , y: y:y , destino: 0};
-Tiempo -> '01-11-2021:'
 
-
-*/
 const vehiculo = { codigo: 'INF-13L', conductor: 'Franco Gamarra' };
-const pathsAux = [
-  { vehiculo: vehiculo, ruta: path
-    , date: new Date(), pos: 0 },
-];
+
 
 const obtenerRuta = (path) => {
     const ruta = [];
@@ -48,6 +29,7 @@ const obtenerRuta = (path) => {
   };
   
 const ruta = obtenerRuta(path);
+/*Función para proporcionar el tiempo de simulación */
 const implementarFecha = (startTime, dateTime) => {
   const startTimeX = new Date(startTime);
   const dateTimeX = new Date(dateTime);
