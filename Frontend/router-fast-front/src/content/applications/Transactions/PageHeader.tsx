@@ -1,7 +1,7 @@
 import { Typography, Button, Grid, FormControl, Card, InputLabel, Select, MenuItem} from '@mui/material';
 import axios from 'axios';
 import CustomSnackbar from 'src/components/Custom/CustomSnackbar';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { styled } from '@mui/material/styles';
 import UploadTwoToneIcon from '@mui/icons-material/UploadTwoTone';
 import { parse } from 'papaparse';
@@ -9,6 +9,7 @@ import { Container, CardHeader, CardContent, Divider } from '@mui/material';
 import MapR from 'src/components/MapR/MapR';
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import url from  'src/utils/constant';
+import { Send } from '@mui/icons-material';
 
 const Input = styled('input')({
   display: 'none',
@@ -17,21 +18,41 @@ const Input = styled('input')({
 function PageHeader() {
   const [alert, setAlert] = useState({isOpen: false, message: '', type: ''})
   const [filesCheck, setFilesCheck] = useState(0)
+  const [start, setStart] = useState(false)
+  const [fileA, setFileA] = useState(null)
 
-  const uploadFile = async (file) => {
+  const sendFiles= ()=>{
+    setStart(true);
+
+  }
+  
+  useEffect(()=>{
+    if (start) {
+      sendFileA();
+    }
+
+  },[start])
+
+  const sendFileA = async () => {
     let formData = new FormData();
-    formData.append("file", file);
+    formData.append("file", fileA);
     axios.post(`${url}/archivos/upload` ,formData, { /* UPLOAD PEDIDOS, PERO Y BLOQUEOS?????  */
       headers: {
         'Content-Type': 'multipart/form-data'
       }
-  }).then((r) => {
+    }).then((r) => {
     setAlert({isOpen: true, message: 'Pedidos cargados de manera exitosa.', type: 'success'})
     setFilesCheck(filesCheck+1)
     
   }).catch((e) =>{
     setAlert({isOpen: true, message: 'Hubo un error al cargar el archivo.', type: 'error'})
   })
+  }
+
+
+  const uploadFile = (file) => {
+    setFileA(file);
+    
   }
   const uploadFileB = async (file) => {
     console.log("asldkhasld");
@@ -115,7 +136,7 @@ function PageHeader() {
         </Grid>
 
         <Grid item xs={2}>
-          <Button variant="contained" disabled={filesCheck<2}>
+          <Button variant="contained"  onClick={sendFiles}>
             Empezar Simulación
           </Button>
         </Grid>
