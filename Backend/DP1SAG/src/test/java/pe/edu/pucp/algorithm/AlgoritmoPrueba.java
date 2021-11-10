@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.PriorityQueue;
 
 import javafx.util.Pair;
+import org.junit.jupiter.api.Test;
 import pe.edu.pucp.mvc.models.Depot;
 import pe.edu.pucp.mvc.models.Pedido;
 import pe.edu.pucp.mvc.models.Vehicle;
@@ -16,8 +17,11 @@ import pe.edu.pucp.utils.RequestReader;
 import pe.edu.pucp.utils.VehicleReader;
 
 
-public class Knapsack_Test {
-    public static void main(String[] args) throws Exception {
+public class AlgoritmoPrueba {
+    //public static void main(String[] args) throws Exception {
+
+    @Test
+    public void simularpedido() throws Exception {
         List<Pedido> requestList;
         List<Vehicle> vehicleList;
         
@@ -213,13 +217,14 @@ public class Knapsack_Test {
         System.out.println("Pedidos completados = " + pedidoCompletado);
         System.out.println("C logró :D");
         
-    }
-    
+      }
+
+      /*
     private static void printCalendar(Calendar cal){
         System.out.println("Año: " + cal.get(Calendar.YEAR) + " - Mes: " + cal.get(Calendar.MONTH) + " - Día: " + cal.get(Calendar.DATE)
                 + " - Hora: " + cal.get(Calendar.HOUR) + " - Minuto: " + cal.get(Calendar.MINUTE) + " - Segundo: " + cal.get(Calendar.SECOND));
     }
-    
+    */
 }
 
 
