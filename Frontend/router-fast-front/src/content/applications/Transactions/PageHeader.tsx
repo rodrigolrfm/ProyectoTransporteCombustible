@@ -20,23 +20,39 @@ function PageHeader() {
   const [filesCheck, setFilesCheck] = useState(0)
   const [start, setStart] = useState(false)
   const [fileA, setFileA] = useState(null)
+  const [fileB, setFileB] = useState(null)
 
   const sendFiles= ()=>{
     setStart(true);
-
   }
-  
+
   useEffect(()=>{
     if (start) {
       sendFileA();
+      sendFileB();
     }
-
   },[start])
 
   const sendFileA = async () => {
     let formData = new FormData();
     formData.append("file", fileA);
-    axios.post(`${url}/archivos/upload` ,formData, { /* UPLOAD PEDIDOS, PERO Y BLOQUEOS?????  */
+    axios.post(`${url}/archivos/upload` ,formData, { /* UPLOAD PEDIDOS */
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    }).then((r) => {
+    setAlert({isOpen: true, message: 'Pedidos cargados de manera exitosa.', type: 'success'})
+    setFilesCheck(filesCheck+1)
+    
+  }).catch((e) =>{
+    setAlert({isOpen: true, message: 'Hubo un error al cargar el archivo.', type: 'error'})
+  })
+  }
+
+  const sendFileB = async () => {
+    let formData = new FormData();
+    formData.append("file", fileA);
+    axios.post(`${url}/archivos/bloqueos` ,formData, { /* UPLOAD  BLOQUEOS  */
       headers: {
         'Content-Type': 'multipart/form-data'
       }
@@ -50,35 +66,13 @@ function PageHeader() {
   }
 
 
-  const uploadFile = (file) => {
+  const uploadFileA = (file) => {
     setFileA(file);
-    
+
   }
-  const uploadFileB = async (file) => {
-    console.log("asldkhasld");
-    let formData = new FormData();
-    formData.append("file", file);
-    axios.post('upload_file', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      }
-  }).then((r) => {
-    setAlert({isOpen: true, message: 'Bloqueos cargados de manera exitosa.', type: 'success'})
-    setFilesCheck(filesCheck+1)
-  }).catch((e) =>{
-    setAlert({isOpen: true, message: 'Hubo un error al cargar el archivo.', type: 'error'})
-  })
-  
+ const uploadFileB = (file) => {
+    setFileB(file);
 
-
-    /*
-    axios.post(process.env.REACT_APP_API_URL + "/inboundOrders/import", result).then((r) => {
-      setAlert({isOpen: true, message: 'Pedidos cargados de manera exitosa.', type: 'success'})
-      axios.get(process.env.REACT_APP_API_URL + "/inboundOrders").then((r) => {
-        setInboundOrders(r.data);
-        
-      });
-    });   */
   }
   
   return (
@@ -119,7 +113,7 @@ function PageHeader() {
             <Button
             startIcon={<UploadTwoToneIcon />} 
             variant="contained" id="bt-subir-pedidos" component="label">
-            <Input accept="text/csv,.csv,.txt"  hidden multiple type="file" onChange={(e) => uploadFile(e.target.files[0])} />
+            <Input accept="text/csv,.csv,.txt"  hidden multiple type="file" onChange={(e) => uploadFileA(e.target.files[0])} />
               Subir Pedidos
             </Button>
           </label>
