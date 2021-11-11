@@ -7,9 +7,7 @@ import url from  'src/utils/constant';
 import axios from 'axios';
 const boardX = 70;
 const boardY = 50;
-const path = [
-  { x: 12, y: 42, destino: 0 }
-];
+const path = [ ];
 
 const vehiculo = { codigo: 'INF-13L', conductor: 'Franco Gamarra' };
 
@@ -33,7 +31,7 @@ const ruta = obtenerRuta(path);
 const implementarFecha = (startTime, dateTime) => {
   const startTimeX = new Date(startTime);
   const dateTimeX = new Date(dateTime);
-  const resultado = startTimeX.getTime() + (dateTimeX.getTime() - startTimeX.getTime())/1000;
+  const resultado = startTimeX.getTime() + (dateTimeX.getTime() - startTimeX.getTime())/500;
   console.log(startTimeX);
   console.log(dateTimeX);
   return new Date (resultado);
@@ -67,13 +65,16 @@ const useStyles = makeStyles((theme) => ({
     },
   }));
 
-const MapR=()=>{
+interface simulacion{simulacion : Boolean}; // Integer
+
+const MapR=(props: simulacion )=>{
 
     const [ruta, setRuta] = useState([]);
     const [paths, setPaths] = useState([]);
     const classes = useStyles();
     const map = [];
     useEffect(() => {
+
       const intervalTime = 500;
       const interval = setInterval(() => {
         let arr;
@@ -101,18 +102,46 @@ const MapR=()=>{
       }, intervalTime);
       return () => clearInterval(interval);
     }, [paths]);
-    /*
     useEffect(() => {
-      setPaths(
-        pathsAux.map((path) => {
-          return { ...path, ruta: obtenerRuta(path.ruta) };
+
+      /*
+
+      let serverURL = new EventSource(url + "/archivos/simularRutas");
+      let data = [];
+          
+      // Inicializa el sentEvent 
+      serverURL.onopen=function (event) {
+          console.log ("Conexión cliente servidor");
+      }
+      serverURL.addEventListener("MAPAS", function(e) {
+          console.log(event);
+          data = JSON.parse(event.data);
+          if(data.flag == 3){
+            // Cerrar conexión
+              serverURL.close();
+          }
+          setPaths(
+            data.paths.map((path) => {
+              return {
+                ...path.path,
+                ruta: obtenerRuta(path.path),
+                pos: 0,
+                date: implementarFecha(data.paths[0].startTime,path.startTime),
+                dateStart: data.paths[0].startTime,
+                nowFixed: new Date(),
+              };
+            })
         })
-      );
-    }, []);
-    */
-    useEffect(() => {
-      axios
-        .post(url + "/archivos/simularRutas") /* LINK QUE ME PASA LAS RUTAS */
+
+      serverURL.οnerrοr=function (event) {
+          serverURL.close();
+      }
+
+      /*
+      */
+      if( props.simulacion){ // = 1 
+        axios
+        .post(url + "/archivos/simularRutas")
         .then((e) => {
           console.log(e.data);
           setPaths(
@@ -127,11 +156,9 @@ const MapR=()=>{
               };
             })
           );
-          
-          // setRuta(path[4].ruta);
-          //console.log(paths);
-          //console.log(ruta);
-        });
+        });        
+      }
+      
     }, []);   
     for (let i = 0; i < boardY; i++) {
       const squareRows = [];

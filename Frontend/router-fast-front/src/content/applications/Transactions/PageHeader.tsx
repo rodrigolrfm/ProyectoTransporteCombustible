@@ -21,15 +21,19 @@ function PageHeader() {
   const [start, setStart] = useState(false)
   const [fileA, setFileA] = useState(null)
   const [fileB, setFileB] = useState(null)
+  const [simulacion,setSimulacion] = useState(false);
 
   const sendFiles= ()=>{
     setStart(true);
+    // a 3 días  -> true -> 1 
+    setSimulacion(true);
   }
 
   useEffect(()=>{
     if (start) {
       sendFileA();
       sendFileB();
+
     }
   },[start])
 
@@ -137,7 +141,7 @@ function PageHeader() {
       </Grid>
       <CustomSnackbar alert={alert} setAlert={setAlert}/>
       
-      <MapR></MapR>
+      <MapR simulacion={simulacion}></MapR>
       <CardContent>
                 <Card sx={{ maxWidth: 250}}>
                   <CardContent>
@@ -145,7 +149,6 @@ function PageHeader() {
                     <Typography gutterBottom variant="h5" component="div">
                     <LocalShippingIcon style={{ color: '#35737D'}} />
                       Chófer: Franco Gamarra <br/>
-                      Placa: INF-13L <br/>
                       Pedidos: <br/>
                     </Typography>
                     <Typography variant="body2" color="green">
