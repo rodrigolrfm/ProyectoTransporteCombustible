@@ -13,8 +13,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import pe.edu.pucp.algorithm.Node;
-import pe.edu.pucp.utils.VehicleState;
-import pe.edu.pucp.utils.VehicleType;
+import pe.edu.pucp.utils.EstadoVehiculo;
+import pe.edu.pucp.utils.TipoVehiculo;
 
 
 @Data
@@ -24,12 +24,12 @@ import pe.edu.pucp.utils.VehicleType;
 public class Vehicle {
     private int idVehicle;
     private double velocity;
-    private VehicleType type;
+    private TipoVehiculo type;
     private double grossWeightTara;
     private int loadGLP;
     private double loadWeightGLP;
     private double totalWeight;
-    private VehicleState state;
+    private EstadoVehiculo state;
     private Calendar initDate;
     @Builder.Default
     private double quantityRequest = 0;
@@ -45,7 +45,7 @@ public class Vehicle {
     public void clearVehicle(){
         quantityRequest = 0;
         requestList.clear();
-        state = VehicleState.DISPONIBLE;
+        state = EstadoVehiculo.DISPONIBLE;
     }
     
     public float calculateTimeToDispatch(){

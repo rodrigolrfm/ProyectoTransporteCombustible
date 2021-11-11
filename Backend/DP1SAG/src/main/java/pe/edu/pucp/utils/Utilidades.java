@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class ListUtils<T> {
+public class Utilidades<T> {
     
     public static <T> List<T> shuffle(List<T> arr) {
         List<T> copy = new ArrayList<>();

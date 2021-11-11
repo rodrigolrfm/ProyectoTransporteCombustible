@@ -1,6 +1,6 @@
 package pe.edu.pucp.utils;
 
-public enum VehicleType {
+public enum TipoVehiculo {
     TA,
     TB,
     TC,

@@ -15,7 +15,7 @@ import lombok.AllArgsConstructor;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import pe.edu.pucp.mvc.models.Block;
-import pe.edu.pucp.utils.DateUtils;
+import pe.edu.pucp.utils.UtilidadesFechas;
 
 
 @Data
@@ -61,7 +61,7 @@ public class Node implements Comparable<Node>{
     public boolean isBlocked(){
         if(this.initDateBlocked == null || this.endDateBlocked == null)
             return false;
-        Date dateNow = DateUtils.convertToDateViaInstant(LocalDateTime.now());
+        Date dateNow = UtilidadesFechas.convertToDateViaInstant(LocalDateTime.now());
         return dateNow.compareTo(this.initDateBlocked) > 0 && dateNow.compareTo(this.endDateBlocked) < 0;
     }
 

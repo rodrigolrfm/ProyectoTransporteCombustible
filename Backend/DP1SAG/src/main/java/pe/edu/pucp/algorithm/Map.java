@@ -10,7 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import pe.edu.pucp.mvc.models.Depot;
-import pe.edu.pucp.utils.DateUtils;
+import pe.edu.pucp.utils.UtilidadesFechas;
 
 
 @Data
@@ -30,7 +30,7 @@ public class Map {
         this.depots = depots;
         for (int i = 0; i < nColumns; i++) {
             for (int j = 0; j < nRows; j++) {
-                Date dateNow = DateUtils.convertToDateViaInstant(LocalDateTime.now());
+                Date dateNow = UtilidadesFechas.convertToDateViaInstant(LocalDateTime.now());
                 Node v = Node.builder().coordX(i).coordY(j)
                         .initDateBlocked(dateNow).endDateBlocked(dateNow).build();
                 map[i][j] = v;

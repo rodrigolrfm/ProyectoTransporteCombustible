@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class VehicleReader {
+public class LecturaVehiculo {
     public static List<Vehicle> TxtReader(String path) throws IOException , Exception{
         List<Vehicle> vehicleList = new ArrayList<>();
 
@@ -29,15 +29,15 @@ public class VehicleReader {
                         .loadGLP(Integer.parseInt(rowRequest[2]))
                         .loadWeightGLP(Double.parseDouble(rowRequest[3]))
                         .totalWeight(Double.parseDouble(rowRequest[4]))
-                        .state(VehicleState.DISPONIBLE).build();
+                        .state(EstadoVehiculo.DISPONIBLE).build();
                 switch(type){
-                    case 'A': r.setType(VehicleType.TA);
+                    case 'A': r.setType(TipoVehiculo.TA);
                         break;
-                    case 'B': r.setType(VehicleType.TB);
+                    case 'B': r.setType(TipoVehiculo.TB);
                         break;
-                    case 'C': r.setType(VehicleType.TC);
+                    case 'C': r.setType(TipoVehiculo.TC);
                         break;
-                    case 'D': r.setType(VehicleType.TD);
+                    case 'D': r.setType(TipoVehiculo.TD);
                         break;
                 } 
                 

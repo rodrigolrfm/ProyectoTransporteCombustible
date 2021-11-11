@@ -1,6 +1,6 @@
 package pe.edu.pucp.utils;
 
-public enum VehicleState {
+public enum EstadoVehiculo {
     DISPONIBLE,
     NO_DISPONIBLE,
     TRABAJANDO,

@@ -7,7 +7,7 @@ import java.util.PriorityQueue;
 import javafx.util.Pair;
 import pe.edu.pucp.mvc.models.Pedido;
 import pe.edu.pucp.mvc.models.Vehicle;
-import pe.edu.pucp.utils.VehicleState;
+import pe.edu.pucp.utils.EstadoVehiculo;
 
 
 public class Knapsack {
@@ -35,7 +35,7 @@ public class Knapsack {
             throw new Exception("Vehiculos no aptos");
         }
         for (Vehicle v : vehicles) {
-            if (v.getState().equals(VehicleState.DISPONIBLE) &&
+            if (v.getState().equals(EstadoVehiculo.DISPONIBLE) &&
                 r.getQuantityGLP() + v.getQuantityRequest() <= v.getLoadGLP()) {
                 v.setQuantityRequest(r.getQuantityGLP()+ v.getQuantityRequest());
                 if(!v.getRequestList().isEmpty()){
@@ -56,7 +56,7 @@ public class Knapsack {
                 }
                 else v.getRequestList().add(r);
                 if(v.getQuantityRequest() == v.getLoadGLP()){
-                    v.setState(VehicleState.NO_DISPONIBLE);
+                    v.setState(EstadoVehiculo.NO_DISPONIBLE);
                 }
                 return true;
             }

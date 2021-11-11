@@ -12,9 +12,9 @@ import org.junit.jupiter.api.Test;
 import pe.edu.pucp.mvc.models.Depot;
 import pe.edu.pucp.mvc.models.Pedido;
 import pe.edu.pucp.mvc.models.Vehicle;
-import pe.edu.pucp.utils.BlockingReader;
-import pe.edu.pucp.utils.RequestReader;
-import pe.edu.pucp.utils.VehicleReader;
+import pe.edu.pucp.utils.LecturaBloques;
+import pe.edu.pucp.utils.Lectura;
+import pe.edu.pucp.utils.LecturaVehiculo;
 
 
 public class AlgoritmoPrueba {
@@ -26,12 +26,12 @@ public class AlgoritmoPrueba {
         List<Vehicle> vehicleList;
         
 
-        vehicleList = VehicleReader.TxtReader("src\\main\\java\\pe\\edu\\pucp\\files\\vehiculos2021.txt");
+        vehicleList = LecturaVehiculo.TxtReader("src\\main\\java\\pe\\edu\\pucp\\files\\vehiculos2021.txt");
 
-        requestList = RequestReader.TxtReader("src\\main\\java\\pe\\edu\\pucp\\files\\ventas\\ventas202112.txt");
+        requestList = Lectura.TxtReader("src\\main\\java\\pe\\edu\\pucp\\files\\ventas\\ventas202112.txt");
 
         
-        ArrayList<Node> blockList = BlockingReader.TxtReader("src\\main\\java\\pe\\edu\\pucp\\files\\bloqueos\\202112bloqueadas.txt");
+        ArrayList<Node> blockList = LecturaBloques.TxtReader("src\\main\\java\\pe\\edu\\pucp\\files\\bloqueos\\202112bloqueadas.txt");
         
         // Depositos iniciales
         ArrayList<Depot> depots = new ArrayList<>();

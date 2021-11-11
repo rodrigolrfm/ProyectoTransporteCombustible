@@ -13,7 +13,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import pe.edu.pucp.mvc.models.Pedido;
 import pe.edu.pucp.mvc.models.Vehicle;
-import pe.edu.pucp.utils.CountUtils;
+import pe.edu.pucp.utils.UtilidadesCuenta;
 
 
 @Data
@@ -193,7 +193,7 @@ public class Chromosome {
         List<Node> sublist2 = new ArrayList<>(child2.getGenes().subList(0, pos));
         for (Node v1 : sublist1) {
             int repeat = 0;
-            repeat = CountUtils.countOcurrences(v1, child1Aux.getGenes());
+            repeat = UtilidadesCuenta.countOcurrences(v1, child1Aux.getGenes());
             if (repeat > 1) {
                 int count2 = 0;
                 List<Node> subparent1 = new ArrayList<>(parent1.getGenes().subList(pos, parent1.getGenes().size()));
@@ -212,7 +212,7 @@ public class Chromosome {
         count1 = 0;
         for (Node v1 : sublist2) {
             int repeat = 0;
-            repeat = CountUtils.countOcurrences(v1, child2Aux.getGenes());
+            repeat = UtilidadesCuenta.countOcurrences(v1, child2Aux.getGenes());
             if (repeat > 1) {
                 int count2 = 0;
                 List<Node> subparent2 = new ArrayList<>(parent2.getGenes().subList(pos, parent2.getGenes().size()));

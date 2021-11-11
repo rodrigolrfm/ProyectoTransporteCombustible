@@ -15,7 +15,7 @@ import java.text.ParseException;
 
 
 
-public class BlockingReader {
+public class LecturaBloques {
     public static ArrayList<Node> TxtReader(String path) throws Exception{
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm");
         ArrayList<Node> blockedList = new ArrayList<>();

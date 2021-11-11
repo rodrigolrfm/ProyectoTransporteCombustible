@@ -8,7 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import pe.edu.pucp.mvc.models.Depot;
 import pe.edu.pucp.mvc.models.Vehicle;
-import pe.edu.pucp.utils.ListUtils;
+import pe.edu.pucp.utils.Utilidades;
 
 import java.util.*;
 
@@ -37,7 +37,7 @@ public class Generation {
         for(int i = 0; i < population_size; i++){
             Chromosome newChromosome = new Chromosome();
             List<Node> shuffleGenes = new ArrayList<>(chromosome.getGenes());
-            shuffleGenes = ListUtils.shuffle(shuffleGenes);
+            shuffleGenes = Utilidades.shuffle(shuffleGenes);
             newChromosome.setCurrentStart(chromosome.getCurrentStart());
             newChromosome.setGenes(shuffleGenes);
             newChromosome.setFinalDepot((Node) depots.get(r.nextInt(depots.size())));
@@ -110,7 +110,7 @@ public class Generation {
         List<Chromosome> winners = new ArrayList<>();
         List<Chromosome> tournamentResults = new ArrayList<>();
         int n = type.equals("Direct") ? n_directs : n_parents;
-        ListUtils.shuffle(chromosomesList);
+        Utilidades.shuffle(chromosomesList);
         for (int j=0; j < 2; j++) {
             for (int i = 0; i < n; i += 2) {
                 Chromosome c = chromosomesList.get(i)
