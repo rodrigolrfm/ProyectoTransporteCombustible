@@ -11,7 +11,7 @@ import java.io.*;
 
 public class Lectura {
     public static List<Pedido> TxtReader(String path) throws IOException , Exception{
-        List<Pedido> requestList =new ArrayList<Pedido>();
+        List<Pedido> requestList = new ArrayList<Pedido>();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm");
         int glpTotal = 0;
         try {
