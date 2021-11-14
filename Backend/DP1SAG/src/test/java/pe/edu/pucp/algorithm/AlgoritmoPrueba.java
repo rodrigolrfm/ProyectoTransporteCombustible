@@ -18,7 +18,6 @@ import pe.edu.pucp.utils.LecturaVehiculo;
 
 
 public class AlgoritmoPrueba {
-    //public static void main(String[] args) throws Exception {
 
     @Test
     public void simularpedido() throws Exception {
@@ -114,11 +113,11 @@ public class AlgoritmoPrueba {
                     Vehicle v = lvc.getKey();
                     PriorityQueue<Pair<Float, Pedido>> requestListArreange = lvc.getValue();
                     float distance = v.getCurrentLocation().getDistancia(req),
-                          time = (float)(distance/v.getVelocity()),
-                          tiempoLlegada = req.getHoursLimit().getTimeInMillis() - v.getInitDate().getTimeInMillis();
+                          tiempoAproximado = (float)(distance/v.getVelocity()),
+                          tiempoLlegadaLimite = req.getHoursLimit().getTimeInMillis() - v.getInitDate().getTimeInMillis();
                     
-                    if(tiempoLlegada > 0)
-                        requestListArreange.add(new Pair<>((tiempoLlegada/time),req));
+                    if(tiempoLlegadaLimite > 0)
+                        requestListArreange.add(new Pair<>((tiempoLlegadaLimite /tiempoAproximado),req));
                     else{
                         System.out.println("idPedido colapsado: " + req.getIdPedido() + "-" + req.getIdDesdoblado());
                         colapso++;
@@ -158,6 +157,7 @@ public class AlgoritmoPrueba {
                 int assigned = 0;
                 try {
                     assigned += Knapsack.allocate(vc.getValue(), vehicleList, auxRequest); // TODO: refactorizar para no destruir la lista a cada rato
+                    //verificar si entra en el camión los pedidos.
                 }
                 catch (Exception e) {
                     System.out.println(e.getMessage());
@@ -180,14 +180,16 @@ public class AlgoritmoPrueba {
                     
             }
             for(Vehicle v : vehicleList){
-                if(v.getRuta() != null && !v.getRuta().isEmpty()){
+                if(v.getRuta() != null && !v.getRuta().isEmpty()) { // si encontró una buana ruta.
                     v.getInitDate().add(Calendar.MINUTE, Math.round((float) Math.ceil(v.calculateTimeToDispatch())));
-                    v.setCurrentLocation(v.getRuta().get(v.getRuta().size()-1));
+                    v.setCurrentLocation(v.getRuta().get(v.getRuta().size() - 1));
                     totalTime += v.calculateTimeToDispatch();
-                 }
+                    // se guardan las rutas y los pedidos
+                }
                 v.clearVehicle();
             }
-            
+
+            // Se hace sort para las capacidadades
             vehicleList.sort((v1, v2) -> Long.compare(v1.getInitDate().getTimeInMillis() , v2.getInitDate().getTimeInMillis()));
 
             List<Pedido> aux = new ArrayList<>();
