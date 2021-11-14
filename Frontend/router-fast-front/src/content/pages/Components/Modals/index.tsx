@@ -55,7 +55,11 @@ function Modals() {
         setInboundOrders(r.data);
         
       });
-    });   */
+    });   
+    
+    
+    //122 <MapR><MapR> <--- Con parametro
+    */
   }
   
   return (
@@ -115,7 +119,6 @@ function Modals() {
         </Grid>
       </Grid>
       <CustomSnackbar alert={alert} setAlert={setAlert}/>
-      <MapR></MapR>
     
     </Grid>
     

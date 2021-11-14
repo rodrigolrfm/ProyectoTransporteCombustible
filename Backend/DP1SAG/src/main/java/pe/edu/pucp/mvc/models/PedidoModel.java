@@ -27,5 +27,20 @@ public class PedidoModel implements Serializable {
     @JoinColumn(name = "idCliente",nullable = false)
     private ClienteModel clienteModel;
 
+    public PedidoModel(double cantidadGLP, LocalDateTime horaPedido,LocalDateTime horaEntrega,double costoOperativo){
+        this.cantidadGLP=cantidadGLP;
+        this.horaPedido=horaPedido;
+        this.horaEntrega=horaEntrega;
+        this.costoOperativo=costoOperativo;
+    }
+
+
+    public PedidoModel() {
+
+
+
+    }
+
+
 
 }
