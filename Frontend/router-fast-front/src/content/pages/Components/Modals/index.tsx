@@ -3,16 +3,10 @@ import axios from 'axios';
 import CustomSnackbar from 'src/components/Custom/CustomSnackbar';
 import { useState } from 'react';
 import { styled } from '@mui/material/styles';
-import { parse } from 'papaparse';
-import MapR from 'src/components/MapR/MapR';
+
 const Input = styled('input')({
   display: 'none',
 });
-
-
-
-
-
 function Modals() {
   const [alert, setAlert] = useState({isOpen: false, message: '', type: ''})
   const [filesCheck, setFilesCheck] = useState(0)

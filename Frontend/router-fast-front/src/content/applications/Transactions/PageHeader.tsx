@@ -1,15 +1,13 @@
-import { Typography, Button, Grid, FormControl, Card, InputLabel, Select, MenuItem} from '@mui/material';
+import { Typography, Button, Grid, FormControl, InputLabel, MenuItem} from '@mui/material';
 import axios from 'axios';
 import CustomSnackbar from 'src/components/Custom/CustomSnackbar';
 import { useEffect, useState } from 'react';
 import { styled } from '@mui/material/styles';
 import UploadTwoToneIcon from '@mui/icons-material/UploadTwoTone';
-import { parse } from 'papaparse';
-import { Container, CardHeader, CardContent, Divider } from '@mui/material';
 import MapR from 'src/components/MapR/MapR';
-import LocalShippingIcon from '@mui/icons-material/LocalShipping';
+import MapC from 'src/components/MapC/MapC';
 import url from  'src/utils/constant';
-import { Send } from '@mui/icons-material';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 const Input = styled('input')({
   display: 'none',
@@ -21,19 +19,29 @@ function PageHeader() {
   const [start, setStart] = useState(false)
   const [fileA, setFileA] = useState(null)
   const [fileB, setFileB] = useState(null)
-  const [simulacion,setSimulacion] = useState(false);
+  const [simulacion,setSimulacion] = useState(0)
+  const [tipo, setTipo] = useState('')
 
+  const handleChange = (event: SelectChangeEvent) => {
+    setTipo(event.target.value);
+  };
   const sendFiles= ()=>{
     setStart(true);
-    // a 3 días  -> true -> 1 
-    setSimulacion(true);
+    // a 3 días  -> true -> 1
+    if( tipo == "1"){
+      setSimulacion(1);
+    }
+    if( tipo == "2"){
+      setSimulacion(2);
+    }
   }
 
   useEffect(()=>{
     if (start) {
-      sendFileA();
-      sendFileB();
-
+      //sendFileA();
+      //sendFileB();
+      console.log("Envio de archivos..")
+      console.log("Tipo:", tipo)
     }
   },[start])
 
@@ -69,7 +77,6 @@ function PageHeader() {
   })
   }
 
-
   const uploadFileA = (file) => {
     setFileA(file);
 
@@ -86,7 +93,8 @@ function PageHeader() {
           Empezar simulación
         </Typography>
       </Grid>
-      <FormControl fullWidth sx={{ mt: 3 }}>
+      
+        <FormControl fullWidth sx={{ mt: 3 }}>
         <InputLabel id="demo-simple-select-label">
           Escoga el tipo de simulación
         </InputLabel>
@@ -94,22 +102,13 @@ function PageHeader() {
           labelId="demo-simple-select-label"
           id="select-simulacion"
           label="Seleccione el tipo de simulación"
+          value={tipo}
+          onChange={handleChange}
         >
           <MenuItem value={1}>Simulación de 3 Días</MenuItem>
           <MenuItem value={2}>Simulación hasta el colapso logístico</MenuItem>
         </Select>
       </FormControl>
-      {/*<Grid item>
-        
-        <Button
-          sx={{ mt: { xs: 2, md: 0 } }}
-          variant="contained"
-          startIcon={<AddTwoToneIcon fontSize="small" />}
-        >
-          Crear usuario
-        </Button>
-      </Grid>
-      */}
       
       <Grid container spacing={2} sx={{ mt: 2 }}>
         <Grid item xs={2}>
@@ -140,9 +139,15 @@ function PageHeader() {
         </Grid>
       </Grid>
       <CustomSnackbar alert={alert} setAlert={setAlert}/>
+      {simulacion===1? <MapR simulacion={simulacion}></MapR>:<div>
+      </div>
+      }
+      {simulacion===2? <MapC simulacion={simulacion}></MapC>:<div>
+      </div>
+      }
       
-      <MapR simulacion={simulacion}></MapR>
-      <CardContent>
+      {/*
+        <CardContent>
                 <Card sx={{ maxWidth: 250}}>
                   <CardContent>
                   
@@ -176,6 +181,10 @@ function PageHeader() {
                   </CardContent>
                 </Card>
               </CardContent>
+        */
+               
+      }
+      
     
     </Grid>
     

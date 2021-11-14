@@ -3,13 +3,11 @@ import HomeIcon from '@mui/icons-material/Home';
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import PersonPinIcon from '@mui/icons-material/PersonPin';
 import { useEffect, useState } from 'react';
-import EmojiPeopleIcon from '@mui/icons-material/EmojiPeople';
 import url from  'src/utils/constant';
 import axios from 'axios';
 const boardX = 70;
 const boardY = 50;
 const path = [ ];
-
 
 const obtenerRuta = (path) => {
     const ruta = [];
@@ -18,14 +16,14 @@ const obtenerRuta = (path) => {
         if (path[i].y > path[i + 1].y) ruta.push({ ...path[i], next: 'up' });
         else ruta.push({ ...path[i], next: 'down' });
       } else {
-        if (path[i].x > path[i + 1].x) ruta.push({ ...path[i], next: 'left' });
+        if (path[i].x > path[i + 1].xA) ruta.push({ ...path[i], next: 'left' });
         else ruta.push({ ...path[i], next: 'right' });
       }
     }
     return ruta;
   };
   
-const ruta = obtenerRuta(path); 
+//const ruta = obtenerRuta(path);
 /*Función para proporcionar el tiempo de simulación */
 const implementarFecha = (startTime, dateTime) => {
   const startTimeX = new Date(startTime);
@@ -64,7 +62,7 @@ const useStyles = makeStyles((theme) => ({
 
 interface simulacion{simulacion : number}; // Integer
 
-const MapR=(props: simulacion )=>{
+const MapC=(props: simulacion )=>{
 
     const [ruta, setRuta] = useState([]);
     const [paths, setPaths] = useState([]);
@@ -136,9 +134,9 @@ const MapR=(props: simulacion )=>{
 
       /*
       */
-       console.log("Mapa 3 días");
+        console.log("Mapa Colapso");
         axios
-        .post(url + "/archivos/simularRutas")
+        .post(url + "/archivos/simularRutasColapso")
         .then((e) => {
           setPaths(
             e.data.paths.map((path) => {
@@ -176,7 +174,7 @@ const MapR=(props: simulacion )=>{
           >
             {ruta?.find(({ x, y }) => x === j && y === i)?.destino ? (
             <div className={classes.icon} style={{ transform: 'rotate(0deg)' }}>
-              <EmojiPeopleIcon style={{ color: '#424774'}} />
+              <PersonPinIcon style={{ color: '#424774'}} />
             </div>
           ) : null}
           {paths?.map((path) => {
@@ -229,4 +227,4 @@ const MapR=(props: simulacion )=>{
     );
   }
   
-  export default MapR;
+  export default MapC;
