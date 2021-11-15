@@ -11,7 +11,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import pe.edu.pucp.mvc.models.Pedido;
+import pe.edu.pucp.mvc.models.NodoModel;
+import pe.edu.pucp.mvc.models.PedidoModel;
 import pe.edu.pucp.mvc.models.Vehicle;
 import pe.edu.pucp.utils.UtilidadesCuenta;
 
@@ -21,12 +22,12 @@ import pe.edu.pucp.utils.UtilidadesCuenta;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Chromosome {
-    private List<Node> genes;
+    private List<NodoModel> genes;
     @Builder.Default
     private double fitness = Double.MAX_VALUE;
-    private Node currentStart;
-    private Node finalDepot;
-    private List<Node> route;
+    private NodoModel currentStart;
+    private NodoModel finalDepot;
+    private List<NodoModel> route;
 
     private void computeFitness() {
         // cojer todos los genes y calcular sus distancias para obtener el fitness
@@ -55,61 +56,61 @@ public class Chromosome {
         }
 
         int i = 0;
-        double distancia = 0, gastoCombustible = 0, distanciaTotal = 0, glp = v.getLoadWeightGLP()/2 + v.getGrossWeightTara(); 
+        double distancia = 0, gastoCombustible = 0, distanciaTotal = 0, glp = v.getLoadWeightGLP()/2 + v.getPesoTara();
         long tiempoTotal = (long) 0.0, tiempo = (long) 0.0, partial_time = (long) 0.0;
         Date init_delivery_time, previousDeliveredDate;
-        Pedido req = null;
+        PedidoModel req = null;
         this.route = new ArrayList<>();
-        List<Node> partialRoute;
+        List<NodoModel> partialRoute;
         
         previousDeliveredDate = v.getInitDate().getTime();
-        if(!currentStart.equals(new Node(genes.get(0)))){
+        if(!currentStart.equals(new NodoModel(genes.get(0)))){
             partialRoute = AStar.get_shortest_path(currentStart, genes.get(0), 
-                    mapConfiguration, previousDeliveredDate, (int) v.getVelocity(), null);
+                    mapConfiguration, previousDeliveredDate, (int) v.getVelocidad(), null);
             partialRoute.removeIf(Objects::isNull);
             this.route.addAll(partialRoute);
             distancia = partialRoute.size();
-            partial_time = new Double(((double)partialRoute.size()*3600000/v.getVelocity())).longValue();
+            partial_time = new Double(((double)partialRoute.size()*3600000/v.getVelocidad())).longValue();
             previousDeliveredDate = Date.from(previousDeliveredDate.toInstant().plus(partial_time, ChronoUnit.MILLIS));
             if(distancia == 0)
                 return Double.MAX_VALUE;
         }
         
-        if(previousDeliveredDate.compareTo(((Pedido) genes.get(0)).getHoursLimit().getTime()) > 0)
+        if(previousDeliveredDate.compareTo(((PedidoModel) genes.get(0)).getHorasLimite().getTime()) > 0)
             return -1;
         
         gastoCombustible = distancia*glp/150;
         distanciaTotal = distancia;
 
-        // verificar que el pedido llegue en el plazo establecido
+        // verificar que el PedidoModel llegue en el plazo establecido
         for(; i < genes.size() - 1; i++){
-            req = (Pedido) genes.get(i);
-            Node prevVertex = i == 0 ? currentStart : this.route.get(this.route.size() - 1);
+            req = (PedidoModel) genes.get(i);
+            NodoModel prevVertex = i == 0 ? currentStart : this.route.get(this.route.size() - 1);
             distancia = 0;
             
-            if(!req.equals(new Node(genes.get(i+1)))){
+            if(!req.equals(new NodoModel(genes.get(i+1)))){
                 partialRoute = AStar.get_shortest_path(req, genes.get(i + 1), 
-                        mapConfiguration, previousDeliveredDate, (int) v.getVelocity(), prevVertex);
+                        mapConfiguration, previousDeliveredDate, (int) v.getVelocidad(), prevVertex);
                 partialRoute.removeIf(Objects::isNull);
                 this.route.addAll(partialRoute);
                 distancia = partialRoute.size();
-                partial_time = new Double(((double)partialRoute.size()*3600000/v.getVelocity())).longValue();
+                partial_time = new Double(((double)partialRoute.size()*3600000/v.getVelocidad())).longValue();
                 previousDeliveredDate = Date.from(previousDeliveredDate.toInstant().plus(partial_time, ChronoUnit.MILLIS));
                 if(distancia == 0)
                     return Double.MAX_VALUE;
                 
-                if(previousDeliveredDate.compareTo(((Pedido) genes.get(i + 1)).getHoursLimit().getTime()) > 0)
+                if(previousDeliveredDate.compareTo(((PedidoModel) genes.get(i + 1)).getHorasLimite().getTime()) > 0)
                     return -1;
             }
-            glp -= req.getQuantityGLP()/2; // hacer peso del glp una constante simbolica
+            glp -= req.getCantidadGLP()/2; // hacer peso del glp una constante simbolica
             gastoCombustible += distancia*glp/150;
             distanciaTotal += distancia; 
         }
 
-        req = (Pedido) genes.get(i);
-        glp -= req.getQuantityGLP()/2;
+        req = (PedidoModel) genes.get(i);
+        glp -= req.getCantidadGLP()/2;
         partialRoute = AStar.get_shortest_path(genes.get(i), finalDepot, 
-                mapConfiguration, previousDeliveredDate, (int) v.getVelocity(), this.route.get(this.route.size() - 1));
+                mapConfiguration, previousDeliveredDate, (int) v.getVelocidad(), this.route.get(this.route.size() - 1));
         partialRoute.removeIf(Objects::isNull);
         this.route.addAll(partialRoute);
         distancia = partialRoute.size();
@@ -127,9 +128,9 @@ public class Chromosome {
         return distanciaTotal;
     }
     
-    public void setGenes(Node current, List<Node> v, Node finalD){
+    public void setGenes(NodoModel current, List<NodoModel> v, NodoModel finalD){
         currentStart = current;
-        ArrayList<Node> vertexList = new ArrayList<>();
+        ArrayList<NodoModel> vertexList = new ArrayList<>();
         vertexList.addAll(v);
         genes = vertexList;
         finalDepot = finalD;
@@ -169,10 +170,10 @@ public class Chromosome {
         while (i == 0) {
             i = random.nextInt(parent1.getGenes().size());
         }
-        List<Node> firstC1 = new ArrayList<>(parent1.getGenes().subList(0, i));
-        List<Node> firstC2 = new ArrayList<>(parent2.getGenes().subList(0, i));
-        List<Node> lastC1 = new ArrayList<>(parent1.getGenes().subList(i, parent1.getGenes().size()));
-        List<Node> lastC2 = new ArrayList<>(parent2.getGenes().subList(i, parent2.getGenes().size()));
+        List<NodoModel> firstC1 = new ArrayList<>(parent1.getGenes().subList(0, i));
+        List<NodoModel> firstC2 = new ArrayList<>(parent2.getGenes().subList(0, i));
+        List<NodoModel> lastC1 = new ArrayList<>(parent1.getGenes().subList(i, parent1.getGenes().size()));
+        List<NodoModel> lastC2 = new ArrayList<>(parent2.getGenes().subList(i, parent2.getGenes().size()));
         firstC1.addAll(lastC2);
         firstC2.addAll(lastC1);
         Chromosome child1 = Chromosome.builder().currentStart(parent1.getCurrentStart()).genes(firstC1).finalDepot(parent1.getFinalDepot()).build();
@@ -189,15 +190,15 @@ public class Chromosome {
         Chromosome child2Aux = new Chromosome();
         child2Aux.setGenes(child2.getCurrentStart() ,child2.getGenes(), child2.getFinalDepot());
         int count1 = 0;
-        List<Node> sublist1 = new ArrayList<>(child1.getGenes().subList(0, pos));
-        List<Node> sublist2 = new ArrayList<>(child2.getGenes().subList(0, pos));
-        for (Node v1 : sublist1) {
+        List<NodoModel> sublist1 = new ArrayList<>(child1.getGenes().subList(0, pos));
+        List<NodoModel> sublist2 = new ArrayList<>(child2.getGenes().subList(0, pos));
+        for (NodoModel v1 : sublist1) {
             int repeat = 0;
             repeat = UtilidadesCuenta.countOcurrences(v1, child1Aux.getGenes());
             if (repeat > 1) {
                 int count2 = 0;
-                List<Node> subparent1 = new ArrayList<>(parent1.getGenes().subList(pos, parent1.getGenes().size()));
-                for (Node v2 : subparent1) {
+                List<NodoModel> subparent1 = new ArrayList<>(parent1.getGenes().subList(pos, parent1.getGenes().size()));
+                for (NodoModel v2 : subparent1) {
                     if (!child1Aux.getGenes().contains(v2)) {
                         child1Aux.getGenes().remove(count1);
                         //child1Aux.getGenes().set(count1,parent1.getGenes().get(count2));
@@ -210,13 +211,13 @@ public class Chromosome {
         }
 
         count1 = 0;
-        for (Node v1 : sublist2) {
+        for (NodoModel v1 : sublist2) {
             int repeat = 0;
             repeat = UtilidadesCuenta.countOcurrences(v1, child2Aux.getGenes());
             if (repeat > 1) {
                 int count2 = 0;
-                List<Node> subparent2 = new ArrayList<>(parent2.getGenes().subList(pos, parent2.getGenes().size()));
-                for (Node v2 : subparent2) {
+                List<NodoModel> subparent2 = new ArrayList<>(parent2.getGenes().subList(pos, parent2.getGenes().size()));
+                for (NodoModel v2 : subparent2) {
                     if (!child2Aux.getGenes().contains(v2)) {
                         child2Aux.getGenes().remove(count1);
                         //child2Aux.getGenes().set(count1,parent2.getGenes().get(count2));

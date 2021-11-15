@@ -5,23 +5,23 @@ package pe.edu.pucp.algorithm;
 import java.util.List;
 import java.util.PriorityQueue;
 import javafx.util.Pair;
-import pe.edu.pucp.mvc.models.Pedido;
+import pe.edu.pucp.mvc.models.PedidoModel;
 import pe.edu.pucp.mvc.models.Vehicle;
 import pe.edu.pucp.utils.EstadoVehiculo;
 
 
 public class Knapsack {
     
-    public static int allocate(PriorityQueue<Pair<Float, Pedido>> requestList, List<Vehicle> vehicles, List<Pedido> listaDesdoblada) throws Exception {
+    public static int allocate(PriorityQueue<Pair<Float, PedidoModel>> requestList, List<Vehicle> vehicles, List<PedidoModel> listaDesdoblada) throws Exception {
         boolean assign = false;
         int assigned = 0;
-        for (Pair<Float, Pedido> par: requestList){ 
-            Pedido r = par.getValue();
-            if(!r.isFlat()){
+        for (Pair<Float, PedidoModel> par: requestList){ 
+            PedidoModel r = par.getValue();
+            if(!r.isAtendido()){
                 assign = assignToAvailableVehicle(r, vehicles, listaDesdoblada);
                 if(assign){
                     assigned += 1;
-                    r.setFlat(true); 
+                    r.setAtendido(true);
                 }
             }
         }
@@ -29,19 +29,19 @@ public class Knapsack {
         return assigned;
     }
 
-    public static boolean assignToAvailableVehicle(Pedido r, List<Vehicle> vehicles, List<Pedido> listaDesdoblada) throws Exception {
+    public static boolean assignToAvailableVehicle(PedidoModel r, List<Vehicle> vehicles, List<PedidoModel> listaDesdoblada) throws Exception {
         boolean flat = false;
         if (vehicles.isEmpty()) {
             throw new Exception("Vehiculos no aptos");
         }
         for (Vehicle v : vehicles) {
             if (v.getState().equals(EstadoVehiculo.DISPONIBLE) &&
-                r.getQuantityGLP() + v.getQuantityRequest() <= v.getLoadGLP()) {
-                v.setQuantityRequest(r.getQuantityGLP()+ v.getQuantityRequest());
+                r.getCantidadGLP() + v.getQuantityRequest() <= v.getLoadGLP()) {
+                v.setQuantityRequest(r.getCantidadGLP()+ v.getQuantityRequest());
                 if(!v.getRequestList().isEmpty()){
-                    for(Pedido req : v.getRequestList()){
+                    for(PedidoModel req : v.getRequestList()){
                         if(req.equals(r)){
-                            req.setQuantityGLP(r.getQuantityGLP()+ req.getQuantityGLP());
+                            req.setCantidadGLP(r.getCantidadGLP()+ req.getCantidadGLP());
                             int i = 0;
                             for(; i< listaDesdoblada.size(); i++)
                                 if(listaDesdoblada.get(i).completetlyEqual(r))

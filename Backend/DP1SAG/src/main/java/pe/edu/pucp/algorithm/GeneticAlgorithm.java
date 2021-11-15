@@ -8,6 +8,7 @@ package pe.edu.pucp.algorithm;
 
 import java.util.ArrayList;
 import javafx.util.Pair;
+import pe.edu.pucp.mvc.models.NodoModel;
 import pe.edu.pucp.mvc.models.Vehicle;
 
 
@@ -19,7 +20,7 @@ public class GeneticAlgorithm {
     public static final int NUMBER_OF_PARENTS = 20;
     public static final int NUMBER_OF_DIRECT_CHROMOSOMES = 25;
     
-    public static void GA(Vehicle vehicle, ArrayList<Node> pedidos, Map mapConfiguration){ //podriamos poner el mapa como parametro
+    public static void GA(Vehicle vehicle, ArrayList<NodoModel> pedidos, Map mapConfiguration){ //podriamos poner el mapa como parametro
         int i=0;
         Chromosome chromosome = Chromosome.builder().currentStart(vehicle.getCurrentLocation())
                 .genes(pedidos).finalDepot(vehicle.getCurrentLocation()) //este ultimo puede cambiar
@@ -40,7 +41,7 @@ public class GeneticAlgorithm {
         
         double menor = generation.getBest_fitness();
         Chromosome route = generation.getBest_chromosome();
-        System.out.println("Ruta inicial: " + route.getRoute());
+        //System.out.println("Ruta inicial: " + route.getRoute());
                 
         // aqui se implementa el algoritmo genetico con 30 generaciones
         while(i < GENERATIONS){
@@ -57,7 +58,7 @@ public class GeneticAlgorithm {
                 System.err.println(ex.getMessage());
             }
         }
-        
+        System.out.println("Ruta final: " + route.getRoute());
         vehicle.setRuta(new ArrayList<>(route.getRoute()));
     }
 }

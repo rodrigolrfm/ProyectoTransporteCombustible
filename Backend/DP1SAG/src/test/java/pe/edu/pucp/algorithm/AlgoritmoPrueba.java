@@ -9,8 +9,10 @@ import java.util.PriorityQueue;
 
 import javafx.util.Pair;
 import org.junit.jupiter.api.Test;
-import pe.edu.pucp.mvc.models.Depot;
-import pe.edu.pucp.mvc.models.Pedido;
+import pe.edu.pucp.mvc.models.NodoModel;
+//import pe.edu.pucp.mvc.models.NodoModel;
+import pe.edu.pucp.mvc.models.PedidoModel;
+import pe.edu.pucp.mvc.models.PlantaModel;
 import pe.edu.pucp.mvc.models.Vehicle;
 import pe.edu.pucp.utils.LecturaBloques;
 import pe.edu.pucp.utils.Lectura;
@@ -21,7 +23,7 @@ public class AlgoritmoPrueba {
 
     @Test
     public void simularpedido() throws Exception {
-        List<Pedido> requestList;
+        List<PedidoModel> requestList;
         List<Vehicle> vehicleList;
         
 
@@ -30,13 +32,13 @@ public class AlgoritmoPrueba {
         requestList = Lectura.TxtReader("src\\main\\java\\pe\\edu\\pucp\\files\\ventas\\ventas202112.txt");
 
         
-        ArrayList<Node> blockList = LecturaBloques.TxtReader("src\\main\\java\\pe\\edu\\pucp\\files\\bloqueos\\202112bloqueadas.txt");
+        ArrayList<NodoModel> blockList = LecturaBloques.TxtReader("src\\main\\java\\pe\\edu\\pucp\\files\\bloqueos\\202112bloqueadas.txt");
         
         // Depositos iniciales
-        ArrayList<Depot> depots = new ArrayList<>();
-        depots.add(Depot.builder().coordX(12).coordY(8).isPrincipalDepot(true).build());
-        depots.add(Depot.builder().coordX(42).coordY(42).build());
-        depots.add(Depot.builder().coordX(63).coordY(3).build());
+        ArrayList<PlantaModel> depots = new ArrayList<>();
+        depots.add(PlantaModel.builder().coordenadaX(12).coordenadaY(8).esPrincipal(true).build());
+        depots.add(PlantaModel.builder().coordenadaX(42).coordenadaY(42).build());
+        depots.add(PlantaModel.builder().coordenadaX(63).coordenadaY(3).build());
         
         Map map = new Map(70, 50, depots);
         map.setBlockList(blockList);
@@ -51,45 +53,45 @@ public class AlgoritmoPrueba {
             v.setInitDate(init); 
             v.setCurrentLocation(depots.get(0)); 
             v.setFuel(25);
-            v.setVelocity(50);
+            v.setVelocidad(50);
         });
         
-        List<Pedido> requestListDesdoblado = new ArrayList<>();
+        List<PedidoModel> requestListDesdoblado = new ArrayList<>();
         int minimo = 5;
 
         // Split request list in minimum capacity
         int totalCapacity = 0;
         // TODO: Mapear pedidos desdoblados
-        for(Pedido r : requestList){ 
+        for(PedidoModel r : requestList){ 
             int i = 0;
-            for(; i < (int)r.getQuantityGLP()/minimo; i++)
-                requestListDesdoblado.add(Pedido.builder()
+            for(; i < (int)r.getCantidadGLP()/minimo; i++)
+                requestListDesdoblado.add(PedidoModel.builder()
                     .idPedido(r.getIdPedido())
-                    .idDesdoblado(i)
-                    .client(r.getClient())
-                    .quantityGLP(minimo)
-                    .coordX(r.getCoordX())
-                    .coordY(r.getCoordY())
-                    .orderDate(r.getOrderDate())
-                    .hoursLimit(r.getHoursLimit()).build());
-            if(r.getQuantityGLP()%minimo != 0.0)
-                requestListDesdoblado.add(Pedido.builder()
+                    .idExtendido(i)
+                        .clienteModel(r.getClienteModel())
+                    .cantidadGLP(minimo)
+                    .coordenadaX(r.getCoordenadaX())
+                    .coordenadaY(r.getCoordenadaY())
+                    .fechaPedido(r.getFechaPedido())
+                    .horasLimite(r.getHorasLimite()).build());
+            if(r.getCantidadGLP()%minimo != 0.0)
+                requestListDesdoblado.add(PedidoModel.builder()
                     .idPedido(r.getIdPedido())
-                    .idDesdoblado(++i)
-                    .client(r.getClient())
-                    .quantityGLP(r.getQuantityGLP()%minimo)
-                    .coordX(r.getCoordX())
-                    .coordY(r.getCoordY())
-                    .orderDate(r.getOrderDate())
-                    .hoursLimit(r.getHoursLimit()).build());
-            totalCapacity += r.getQuantityGLP();
+                    .idExtendido(++i)
+                    .clienteModel(r.getClienteModel())
+                    .cantidadGLP(r.getCantidadGLP()%minimo)
+                    .coordenadaX(r.getCoordenadaX())
+                    .coordenadaY(r.getCoordenadaY())
+                    .fechaPedido(r.getFechaPedido())
+                    .horasLimite(r.getHorasLimite()).build());
+            totalCapacity += r.getCantidadGLP();
         }      
     
         System.out.println("Total Capacity: " + totalCapacity);
         // lista que tendrá los vehículos y sus listas de pedidos ordenados por indice
-        ArrayList<Pair<Vehicle, PriorityQueue<Pair<Float, Pedido>>>> listaVC = new ArrayList<>();
+        ArrayList<Pair<Vehicle, PriorityQueue<Pair<Float, PedidoModel>>>> listaVC = new ArrayList<>();
         
-        List<Pedido> auxRequest = new ArrayList<>();
+        List<PedidoModel> auxRequest = new ArrayList<>();
         requestListDesdoblado.forEach(r -> {
             auxRequest.add(r);
         });
@@ -101,42 +103,42 @@ public class AlgoritmoPrueba {
             listaVC.clear();
 
             vehicleList.forEach(v -> {
-                PriorityQueue<Pair<Float, Pedido>> requestListArreange = new PriorityQueue<>(Comparator.comparing(Pair::getKey));
+                PriorityQueue<Pair<Float, PedidoModel>> requestListArreange = new PriorityQueue<>(Comparator.comparing(Pair::getKey));
                 listaVC.add(new Pair<>(v, requestListArreange));
             });
             
             int colapso;
             // TODO: filtrar los pedidos que no se han registrado hasta ese momento
-            for(Pedido req : requestListDesdoblado){
+            for(PedidoModel req : requestListDesdoblado){
                 colapso = 0;
-                for(Pair<Vehicle, PriorityQueue<Pair<Float, Pedido>>> lvc : listaVC){
+                for(Pair<Vehicle, PriorityQueue<Pair<Float, PedidoModel>>> lvc : listaVC){
                     Vehicle v = lvc.getKey();
-                    PriorityQueue<Pair<Float, Pedido>> requestListArreange = lvc.getValue();
+                    PriorityQueue<Pair<Float, PedidoModel>> requestListArreange = lvc.getValue();
                     float distance = v.getCurrentLocation().getDistancia(req),
-                          tiempoAproximado = (float)(distance/v.getVelocity()),
-                          tiempoLlegadaLimite = req.getHoursLimit().getTimeInMillis() - v.getInitDate().getTimeInMillis();
+                          tiempoAproximado = (float)(distance/v.getVelocidad()),
+                          tiempoLlegadaLimite = req.getHorasLimite().getTimeInMillis() - v.getInitDate().getTimeInMillis();
                     
                     if(tiempoLlegadaLimite > 0)
                         requestListArreange.add(new Pair<>((tiempoLlegadaLimite /tiempoAproximado),req));
                     else{
-                        System.out.println("idPedido colapsado: " + req.getIdPedido() + "-" + req.getIdDesdoblado());
+                        System.out.println("idPedido colapsado: " + req.getIdPedido() + "-" + req.getIdExtendido());
                         colapso++;
                     }
                 }
                 if(colapso == listaVC.size()){
 
                     int totalGLP = 0;
-                    for(Pedido r : requestListDesdoblado)
-                        totalGLP += r.getQuantityGLP();
+                    for(PedidoModel r : requestListDesdoblado)
+                        totalGLP += r.getCantidadGLP();
                     
                     int pedidoCompletado = 0;
-                    for(Pedido rq : requestList){
+                    for(PedidoModel rq : requestList){
                         double aux = 0;
                         aux = auxRequest.stream()
                                 .filter(auxrq -> auxrq.getIdPedido() == rq.getIdPedido())
-                                .map(auxrq -> auxrq.isFlat() ? auxrq.getQuantityGLP() : 0)
+                                .map(auxrq -> auxrq.isAtendido() ? auxrq.getCantidadGLP() : 0)
                                 .reduce(aux, (accumulator, _item) -> accumulator + _item);
-                        if(aux == rq.getQuantityGLP())
+                        if(aux == rq.getCantidadGLP())
                             pedidoCompletado++;
                     }
                             
@@ -149,7 +151,7 @@ public class AlgoritmoPrueba {
                 }
             }          
             
-            for(Pair<Vehicle, PriorityQueue<Pair<Float, Pedido>>> vc : listaVC){
+            for(Pair<Vehicle, PriorityQueue<Pair<Float, PedidoModel>>> vc : listaVC){
                 //Assign request to vehicles
                 vehicleList.clear(); // se puede quitar esta lista intermedia
                 vehicleList.add(vc.getKey());
@@ -170,7 +172,7 @@ public class AlgoritmoPrueba {
             });
 
             //Algoritmo Genetico
-            ArrayList<Node> vertices = new ArrayList<>(); // se puede quitar esta lista intermedia
+            ArrayList<NodoModel> vertices = new ArrayList<>(); // se puede quitar esta lista intermedia
             for(Vehicle v : vehicleList){
                 vertices.clear();
                 v.getRequestList().forEach( p -> { vertices.add(p); });
@@ -192,9 +194,9 @@ public class AlgoritmoPrueba {
             // Se hace sort para las capacidadades
             vehicleList.sort((v1, v2) -> Long.compare(v1.getInitDate().getTimeInMillis() , v2.getInitDate().getTimeInMillis()));
 
-            List<Pedido> aux = new ArrayList<>();
+            List<PedidoModel> aux = new ArrayList<>();
             requestListDesdoblado.forEach(r -> {
-                if(!r.isFlat()) {
+                if(!r.isAtendido()) {
                     aux.add(r);
                 }
             });
@@ -205,13 +207,13 @@ public class AlgoritmoPrueba {
         
         System.out.println("Total de tiempo = " + totalTime/60);
         int pedidoCompletado = 0;
-        for(Pedido rq : requestList){
+        for(PedidoModel rq : requestList){
             double aux = 0;
             aux = auxRequest.stream()
                     .filter(auxrq -> auxrq.getIdPedido() == rq.getIdPedido())
-                    .map(auxrq -> auxrq.isFlat() ? auxrq.getQuantityGLP() : 0)
+                    .map(auxrq -> auxrq.isAtendido() ? auxrq.getCantidadGLP() : 0)
                     .reduce(aux, (accumulator, _item) -> accumulator + _item);
-            if(aux == rq.getQuantityGLP())
+            if(aux == rq.getCantidadGLP())
                 pedidoCompletado++;
         }
                 

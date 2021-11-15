@@ -6,7 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import pe.edu.pucp.mvc.models.Depot;
+import pe.edu.pucp.mvc.models.NodoModel;
+import pe.edu.pucp.mvc.models.PlantaModel;
 import pe.edu.pucp.mvc.models.Vehicle;
 import pe.edu.pucp.utils.Utilidades;
 
@@ -31,16 +32,16 @@ public class Generation {
     private int n_parents;
     private int n_directs;
 
-    public void initPopulation(Chromosome chromosome, List<Depot> depots, int population_size){
+    public void initPopulation(Chromosome chromosome, List<PlantaModel> depots, int population_size){
         generation_number = 0;
         Random r = new Random();
         for(int i = 0; i < population_size; i++){
             Chromosome newChromosome = new Chromosome();
-            List<Node> shuffleGenes = new ArrayList<>(chromosome.getGenes());
+            List<NodoModel> shuffleGenes = new ArrayList<>(chromosome.getGenes());
             shuffleGenes = Utilidades.shuffle(shuffleGenes);
             newChromosome.setCurrentStart(chromosome.getCurrentStart());
             newChromosome.setGenes(shuffleGenes);
-            newChromosome.setFinalDepot((Node) depots.get(r.nextInt(depots.size())));
+            newChromosome.setFinalDepot((NodoModel) depots.get(r.nextInt(depots.size())));
             chromosomesList.add(newChromosome);
         }
     }
@@ -72,7 +73,7 @@ public class Generation {
     }
 
     private Chromosome mutation(Chromosome c, double prob_mutate) {
-        List<Node> auxiliar = new ArrayList<>();
+        List<NodoModel> auxiliar = new ArrayList<>();
         Random random = new Random();
         for(int i = 0; i < c.getGenes().size(); i++){
             double j = random.nextDouble();
@@ -84,13 +85,13 @@ public class Generation {
         return c;
     }
 
-    private List<Node> inversion_mutation(List<Node> genes) {
+    private List<NodoModel> inversion_mutation(List<NodoModel> genes) {
         Random random = new Random();
         int index1 = random.nextInt(genes.size());
         int index2 = random.nextInt(genes.size()-index1)+index1;
-        List<Node> chromosome_mid = new ArrayList<>(genes.subList(index1,index2));
+        List<NodoModel> chromosome_mid = new ArrayList<>(genes.subList(index1,index2));
         Collections.reverse(chromosome_mid);
-        List<Node> chromosome_result= new ArrayList<>(genes.subList(0,index1));
+        List<NodoModel> chromosome_result= new ArrayList<>(genes.subList(0,index1));
         chromosome_result.addAll(chromosome_mid);
         chromosome_result.addAll(genes.subList(index2,genes.size()));
         return chromosome_result;

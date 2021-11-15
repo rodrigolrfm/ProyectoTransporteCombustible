@@ -12,7 +12,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import pe.edu.pucp.algorithm.Node;
 import pe.edu.pucp.utils.EstadoVehiculo;
 import pe.edu.pucp.utils.TipoVehiculo;
 
@@ -22,10 +21,11 @@ import pe.edu.pucp.utils.TipoVehiculo;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Vehicle {
+
     private int idVehicle;
-    private double velocity;
-    private TipoVehiculo type;
-    private double grossWeightTara;
+    private double velocidad;
+    private TipoVehiculo tipoVehiculo;
+    private double pesoTara;
     private int loadGLP;
     private double loadWeightGLP;
     private double totalWeight;
@@ -34,12 +34,12 @@ public class Vehicle {
     @Builder.Default
     private double quantityRequest = 0;
     @Builder.Default
-    private List<Pedido> requestList = new ArrayList<>();
-    private Pedido assignRequest;
+    private List<PedidoModel> requestList = new ArrayList<>();
+    private PedidoModel assignRequest;
     @Builder.Default
-    Node currentLocation = null;
+    NodoModel currentLocation = null;
     @Builder.Default
-    ArrayList<Node> ruta = null;
+    ArrayList<NodoModel> ruta = null;
     private double fuel;
     
     public void clearVehicle(){
@@ -49,7 +49,7 @@ public class Vehicle {
     }
     
     public float calculateTimeToDispatch(){
-        return ((float) this.ruta.size() / (float) this.velocity)*60; 
+        return ((float) this.ruta.size() / (float) this.velocidad)*60;
     }
 
 }

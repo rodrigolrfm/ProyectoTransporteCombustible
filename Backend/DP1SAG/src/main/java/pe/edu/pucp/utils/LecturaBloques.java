@@ -1,7 +1,7 @@
 package pe.edu.pucp.utils;
 
-import pe.edu.pucp.algorithm.Node;
-import pe.edu.pucp.mvc.models.Block;
+import pe.edu.pucp.mvc.models.BloqueModel;
+import pe.edu.pucp.mvc.models.NodoModel;
 
 import java.io.File;
 import java.io.FileReader;
@@ -10,15 +10,14 @@ import java.util.Date;
 import java.io.IOException;
 import java.io.BufferedReader;
 import java.util.ArrayList;
-
 import java.text.ParseException;
 
 
 
 public class LecturaBloques {
-    public static ArrayList<Node> TxtReader(String path) throws Exception{
+    public static ArrayList<NodoModel> TxtReader(String path) throws Exception{
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm");
-        ArrayList<Node> blockedList = new ArrayList<>();
+        ArrayList<NodoModel> blockedList = new ArrayList<>();
         try{
             File file = new File(path);
             final BufferedReader br = new BufferedReader(new FileReader(file));
@@ -40,15 +39,15 @@ public class LecturaBloques {
                 initDate = sdf.parse(strInitDate);
                 endDate = sdf.parse(strEndDate);
                 for(int i = 1; i<rowRequest.length; i+=2){
-                    Node p = null;
-                    Block block = Block.builder().initDateBlocked(initDate).endDateBlocked(endDate).build();
+                    NodoModel p = null;
+                    BloqueModel block = BloqueModel.builder().inicioBloqueo(initDate).finBloqueo(endDate).build();
                     try{
                         int x = Integer.parseInt(rowRequest[i+2]);
                         int y = Integer.parseInt(rowRequest[i+3]);
                     }catch (IndexOutOfBoundsException e){
-                        p = Node.builder().initDateBlocked(initDate).endDateBlocked(endDate).blocked(true)
-                                .coordX(Integer.parseInt(rowRequest[i]))
-                                .coordY(Integer.parseInt(rowRequest[i+1])).build();
+                        p = NodoModel.builder().inicioBloqueo(initDate).finBloqueo(endDate).estaBloqueado(true)
+                                .coordenadaX(Integer.parseInt(rowRequest[i]))
+                                .coordenadaY(Integer.parseInt(rowRequest[i+1])).build();
                         p.getBlockList().add(block);
                         blockedList.add(p);
                         break;
@@ -64,35 +63,35 @@ public class LecturaBloques {
 
                     if(canty>0){
                         for(int j =0;j<canty;j++){
-                            p = Node.builder().initDateBlocked(initDate).endDateBlocked(endDate).blocked(true)
-                                    .coordX(Integer.parseInt(rowRequest[i]))
-                                    .coordY(Integer.parseInt(rowRequest[i+1])+j).build();
+                            p = NodoModel.builder().inicioBloqueo(initDate).finBloqueo(endDate).estaBloqueado(true)
+                                    .coordenadaX(Integer.parseInt(rowRequest[i]))
+                                    .coordenadaY(Integer.parseInt(rowRequest[i+1])+j).build();
                             p.getBlockList().add(block);
                             blockedList.add(p);
                         }
 
                     }else{
                         for(int j =0;j<Math.abs(canty);j++){
-                            p = Node.builder().initDateBlocked(initDate).endDateBlocked(endDate).blocked(true)
-                                    .coordX(Integer.parseInt(rowRequest[i]))
-                                    .coordY(Integer.parseInt(rowRequest[i+1])-j).build();
+                            p = NodoModel.builder().inicioBloqueo(initDate).finBloqueo(endDate).estaBloqueado(true)
+                                    .coordenadaX(Integer.parseInt(rowRequest[i]))
+                                    .coordenadaY(Integer.parseInt(rowRequest[i+1])-j).build();
                             p.getBlockList().add(block);
                             blockedList.add(p);
                         }
                     }
                     if(cantx>0){
                         for(int j =0;j<cantx;j++){
-                            p = Node.builder().initDateBlocked(initDate).endDateBlocked(endDate).blocked(true)
-                                    .coordX(Integer.parseInt(rowRequest[i])+j)
-                                    .coordY(Integer.parseInt(rowRequest[i+1])).build();
+                            p = NodoModel.builder().inicioBloqueo(initDate).finBloqueo(endDate).estaBloqueado(true)
+                                    .coordenadaX(Integer.parseInt(rowRequest[i])+j)
+                                    .coordenadaY(Integer.parseInt(rowRequest[i+1])).build();
                             p.getBlockList().add(block);
                             blockedList.add(p);
                         }
                     }else{
                         for(int j =0 ;j<Math.abs(cantx);j++) {
-                            p = Node.builder().initDateBlocked(initDate).endDateBlocked(endDate).blocked(true)
-                                    .coordX(Integer.parseInt(rowRequest[i]) - j)
-                                    .coordY(Integer.parseInt(rowRequest[i + 1])).build();
+                            p = NodoModel.builder().inicioBloqueo(initDate).finBloqueo(endDate).estaBloqueado(true)
+                                    .coordenadaX(Integer.parseInt(rowRequest[i]) - j)
+                                    .coordenadaY(Integer.parseInt(rowRequest[i + 1])).build();
                             p.getBlockList().add(block);
                             blockedList.add(p);
                         }

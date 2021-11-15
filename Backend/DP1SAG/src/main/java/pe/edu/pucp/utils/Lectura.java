@@ -1,5 +1,6 @@
 package pe.edu.pucp.utils;
-import pe.edu.pucp.mvc.models.Pedido;
+
+import pe.edu.pucp.mvc.models.PedidoModel;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -10,8 +11,8 @@ import java.util.ArrayList;
 import java.io.*;
 
 public class Lectura {
-    public static List<Pedido> TxtReader(String path) throws IOException , Exception{
-        List<Pedido> requestList = new ArrayList<Pedido>();
+    public static List<PedidoModel> TxtReader(String path) throws IOException , Exception{
+        List<PedidoModel> requestList = new ArrayList<PedidoModel>();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm");
         int glpTotal = 0;
         try {
@@ -36,13 +37,13 @@ public class Lectura {
                 
                 glpTotal += Integer.parseInt(rowRequest[3]);
                 
-                Pedido r = Pedido.builder()
+                PedidoModel r = PedidoModel.builder()
                         .idPedido(num++)
-                        .coordX(Integer.parseInt(rowRequest[1]))
-                        .coordY(Integer.parseInt(rowRequest[2]))
-                        .orderDate(reqDate)
-                        .quantityGLP(Integer.parseInt(rowRequest[3]))
-                        .hoursLimit(cal).build();
+                        .coordenadaX(Integer.parseInt(rowRequest[1]))
+                        .coordenadaY(Integer.parseInt(rowRequest[2]))
+                        .fechaPedido(reqDate)
+                        .cantidadGLP(Integer.parseInt(rowRequest[3]))
+                        .horasLimite(cal).build();
                 requestList.add(r);
                 
             }
@@ -52,7 +53,7 @@ public class Lectura {
         
 
         
-        requestList.sort((r1, r2) -> Long.compare(r1.getHoursLimit().getTimeInMillis() , r2.getHoursLimit().getTimeInMillis()));
+        requestList.sort((r1, r2) -> Long.compare(r1.getHorasLimite().getTimeInMillis() , r2.getHorasLimite().getTimeInMillis()));
         
         
         return requestList;
