@@ -38,8 +38,8 @@ function PageHeader() {
 
   useEffect(()=>{
     if (start) {
-      //sendFileA();
-      //sendFileB();
+      sendFileA();
+      sendFileB();
       console.log("Envio de archivos..")
       console.log("Tipo:", tipo)
     }
@@ -48,7 +48,7 @@ function PageHeader() {
   const sendFileA = async () => {
     let formData = new FormData();
     formData.append("file", fileA);
-    axios.post(`${url}/archivos/upload` ,formData, { /* UPLOAD PEDIDOS */
+    axios.post(`${url}/archivos/uploadPedidos` ,formData, { /* UPLOAD PEDIDOS */
       headers: {
         'Content-Type': 'multipart/form-data'
       }
@@ -64,7 +64,7 @@ function PageHeader() {
   const sendFileB = async () => {
     let formData = new FormData();
     formData.append("file", fileA);
-    axios.post(`${url}/archivos/bloqueos` ,formData, { /* UPLOAD  BLOQUEOS  */
+    axios.post(`${url}/archivos/uploadPedidos` ,formData, { /* UPLOAD  BLOQUEOS  */
       headers: {
         'Content-Type': 'multipart/form-data'
       }
