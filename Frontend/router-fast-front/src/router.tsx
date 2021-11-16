@@ -6,6 +6,9 @@ import SidebarLayout from 'src/layouts/SidebarLayout';
 import BaseLayout from 'src/layouts/BaseLayout';
 
 import SuspenseLoader from 'src/components/SuspenseLoader';
+import RecentOrders from './content/applications/Transactions/RecentOrders';
+import BulkActions from './content/applications/Transactions/BulkActions';
+import RecentActivity from './content/applications/Users/profile/RecentActivity';
 
 const Loader = (Component) => (props) => (
   <Suspense fallback={<SuspenseLoader />}>
@@ -123,7 +126,7 @@ const routes: PartialRouteObject[] = [
       },
       {
         path: 'operacion',
-        element: <Modals/>
+        element: <Forms/>
       },
     ]
   },
