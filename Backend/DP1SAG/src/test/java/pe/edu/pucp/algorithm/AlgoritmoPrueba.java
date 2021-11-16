@@ -35,7 +35,7 @@ public class AlgoritmoPrueba {
         
         // Depositos iniciales
         ArrayList<Depot> depots = new ArrayList<>();
-        depots.add(Depot.builder().coordX(5).coordY(10).isPrincipalDepot(true).build());
+        depots.add(Depot.builder().coordX(12).coordY(8).isPrincipalDepot(true).build());
         depots.add(Depot.builder().coordX(42).coordY(42).build());
         depots.add(Depot.builder().coordX(63).coordY(3).build());
         
@@ -184,6 +184,7 @@ public class AlgoritmoPrueba {
                     v.getInitDate().add(Calendar.MINUTE, Math.round((float) Math.ceil(v.calculateTimeToDispatch())));
                     v.setCurrentLocation(v.getRuta().get(v.getRuta().size()-1));
                     totalTime += v.calculateTimeToDispatch();
+
                  }
                 v.clearVehicle();
             }

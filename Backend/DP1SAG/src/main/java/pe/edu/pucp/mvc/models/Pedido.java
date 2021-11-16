@@ -14,6 +14,7 @@ import pe.edu.pucp.algorithm.Node;
 
 public class Pedido extends Node {
     private int idPedido;
+
     private int idDesdoblado;
     private String client;
     private Calendar orderDate;

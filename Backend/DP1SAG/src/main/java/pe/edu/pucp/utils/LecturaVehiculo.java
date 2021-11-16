@@ -19,11 +19,14 @@ public class LecturaVehiculo {
             String line;
             String[] rowRequest;
             char type;
+            int nVehicle = 0;
             while ((line = br.readLine()) != null) {
+                nVehicle++;
                 rowRequest = line.split(",");
                 type = rowRequest[0].charAt(1);
                 
                 Vehicle r = Vehicle.builder()
+                        .idVehicle(nVehicle)
                         .velocity(50)
                         .grossWeightTara(Double.parseDouble(rowRequest[1]))
                         .loadGLP(Integer.parseInt(rowRequest[2]))

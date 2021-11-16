@@ -6,6 +6,10 @@
 package pe.edu.pucp.algorithm;
 
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import javafx.util.Pair;
 import pe.edu.pucp.mvc.models.Vehicle;
@@ -40,7 +44,7 @@ public class GeneticAlgorithm {
         
         double menor = generation.getBest_fitness();
         Chromosome route = generation.getBest_chromosome();
-        System.out.println("Ruta inicial: " + route.getRoute());
+        //System.out.println("Ruta inicial: " + route.getRoute());
                 
         // aqui se implementa el algoritmo genetico con 30 generaciones
         while(i < GENERATIONS){
@@ -57,6 +61,20 @@ public class GeneticAlgorithm {
                 System.err.println(ex.getMessage());
             }
         }
+
+        String filename = "archivo" + String.valueOf(vehicle.getIdVehicle());
+
+        try(FileWriter fw = new FileWriter(filename , true);
+            BufferedWriter bw = new BufferedWriter(fw);
+            PrintWriter out = new PrintWriter(bw))
+        {
+            out.println(route.getRoute());
+        } catch (IOException e) {
+            //exception handling left as an exercise for the reader
+        }
+
+        System.out.println("Ruta para el vehiculo" + vehicle.getIdVehicle());
+        System.out.println("Ruta final: " + route.getRoute());
         
         vehicle.setRuta(new ArrayList<>(route.getRoute()));
     }
