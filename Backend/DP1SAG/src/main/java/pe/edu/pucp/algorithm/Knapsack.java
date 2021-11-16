@@ -6,13 +6,13 @@ import java.util.List;
 import java.util.PriorityQueue;
 import javafx.util.Pair;
 import pe.edu.pucp.mvc.models.PedidoModel;
-import pe.edu.pucp.mvc.models.Vehicle;
+import pe.edu.pucp.mvc.models.VehiculoModel;
 import pe.edu.pucp.utils.EstadoVehiculo;
 
 
 public class Knapsack {
     
-    public static int allocate(PriorityQueue<Pair<Float, PedidoModel>> requestList, List<Vehicle> vehicles, List<PedidoModel> listaDesdoblada) throws Exception {
+    public static int allocate(PriorityQueue<Pair<Float, PedidoModel>> requestList, List<VehiculoModel> vehicles, List<PedidoModel> listaDesdoblada) throws Exception {
         boolean assign = false;
         int assigned = 0;
         for (Pair<Float, PedidoModel> par: requestList){ 
@@ -29,17 +29,17 @@ public class Knapsack {
         return assigned;
     }
 
-    public static boolean assignToAvailableVehicle(PedidoModel r, List<Vehicle> vehicles, List<PedidoModel> listaDesdoblada) throws Exception {
+    public static boolean assignToAvailableVehicle(PedidoModel r, List<VehiculoModel> vehicles, List<PedidoModel> listaDesdoblada) throws Exception {
         boolean flat = false;
         if (vehicles.isEmpty()) {
             throw new Exception("Vehiculos no aptos");
         }
-        for (Vehicle v : vehicles) {
-            if (v.getState().equals(EstadoVehiculo.DISPONIBLE) &&
-                r.getCantidadGLP() + v.getQuantityRequest() <= v.getLoadGLP()) {
-                v.setQuantityRequest(r.getCantidadGLP()+ v.getQuantityRequest());
-                if(!v.getRequestList().isEmpty()){
-                    for(PedidoModel req : v.getRequestList()){
+        for (VehiculoModel v : vehicles) {
+            if ((v.getEstadoVehiculo()==0) &&
+                r.getCantidadGLP() + v.getCantidadPedidos() <= v.getCargaGLP()) {
+                v.setCantidadPedidos(r.getCantidadGLP()+ v.getCantidadPedidos());
+                if(!v.getListaPedidos().isEmpty()){
+                    for(PedidoModel req : v.getListaPedidos()){
                         if(req.equals(r)){
                             req.setCantidadGLP(r.getCantidadGLP()+ req.getCantidadGLP());
                             int i = 0;
@@ -52,11 +52,11 @@ public class Knapsack {
                             flat = true;
                         }
                     }
-                    if (!flat) v.getRequestList().add(r);
+                    if (!flat) v.getListaPedidos().add(r);
                 }
-                else v.getRequestList().add(r);
-                if(v.getQuantityRequest() == v.getLoadGLP()){
-                    v.setState(EstadoVehiculo.NO_DISPONIBLE);
+                else v.getListaPedidos().add(r);
+                if(v.getCantidadPedidos() == v.getCargaGLP()){
+                    v.setEstadoVehiculo(1);
                 }
                 return true;
             }

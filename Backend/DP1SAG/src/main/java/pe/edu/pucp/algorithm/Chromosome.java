@@ -13,7 +13,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import pe.edu.pucp.mvc.models.NodoModel;
 import pe.edu.pucp.mvc.models.PedidoModel;
-import pe.edu.pucp.mvc.models.Vehicle;
+import pe.edu.pucp.mvc.models.VehiculoModel;
 import pe.edu.pucp.utils.UtilidadesCuenta;
 
 
@@ -46,7 +46,7 @@ public class Chromosome {
         fitness += finalDepot.getDistancia(genes.get(i));
     }
     
-    private double computeFitness(Vehicle v, Map mapConfiguration) {
+    private double computeFitness(VehiculoModel v, Map mapConfiguration) {
         if(currentStart == null){
             throw new NullPointerException("currentStart es null");
         }
@@ -56,14 +56,14 @@ public class Chromosome {
         }
 
         int i = 0;
-        double distancia = 0, gastoCombustible = 0, distanciaTotal = 0, glp = v.getLoadWeightGLP()/2 + v.getPesoTara();
+        double distancia = 0, gastoCombustible = 0, distanciaTotal = 0, glp = v.getPesoCargaGLP()/2 + v.getPesoTara();
         long tiempoTotal = (long) 0.0, tiempo = (long) 0.0, partial_time = (long) 0.0;
         Date init_delivery_time, previousDeliveredDate;
         PedidoModel req = null;
         this.route = new ArrayList<>();
         List<NodoModel> partialRoute;
         
-        previousDeliveredDate = v.getInitDate().getTime();
+        previousDeliveredDate = v.getFechaInicio().getTime();
         if(!currentStart.equals(new NodoModel(genes.get(0)))){
             partialRoute = AStar.get_shortest_path(currentStart, genes.get(0), 
                     mapConfiguration, previousDeliveredDate, (int) v.getVelocidad(), null);
@@ -120,7 +120,7 @@ public class Chromosome {
         gastoCombustible += distancia*glp/150;
         distanciaTotal += distancia; 
         
-        if(gastoCombustible >= v.getFuel())
+        if(gastoCombustible >= v.getCombustible())
             return -1.0;
         // TODO: setear petroleo que sobra para pasarlo al camion
         this.route.add(finalDepot);
@@ -136,16 +136,16 @@ public class Chromosome {
         finalDepot = finalD;
     }
     
-    public Double getFitness(BiFunction<Vehicle, Chromosome, Double> fn, Vehicle vehicle){
+    public Double getFitness(BiFunction<VehiculoModel, Chromosome, Double> fn, VehiculoModel VehiculoModel){
         if(fitness == Double.MAX_VALUE)
-            fitness = fn.apply(vehicle, this);
+            fitness = fn.apply(VehiculoModel, this);
         
         return fitness == -1 ? Double.MAX_VALUE : fitness;
     }
     
-    public Double getFitness(Vehicle vehicle, Map mapConfiguration){
+    public Double getFitness(VehiculoModel VehiculoModel, Map mapConfiguration){
         if(fitness == Double.MAX_VALUE)
-            fitness = computeFitness(vehicle, mapConfiguration);
+            fitness = computeFitness(VehiculoModel, mapConfiguration);
         
         return fitness == -1 ? Double.MAX_VALUE : fitness;
     }

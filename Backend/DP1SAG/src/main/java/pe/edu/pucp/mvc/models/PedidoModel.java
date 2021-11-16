@@ -30,6 +30,10 @@ public class PedidoModel extends NodoModel implements Serializable {
     private double costoOperativo;
     private double horaPedido;
 
+    @ManyToOne
+    @JoinColumn(name = "idVehiculo",nullable = false)
+    private VehiculoModel vehiculoModel;
+
     @Builder.Default
     private boolean atendido = false;
 

@@ -1,6 +1,6 @@
 package pe.edu.pucp.utils;
 
-import pe.edu.pucp.mvc.models.Vehicle;
+import pe.edu.pucp.mvc.models.VehiculoModel;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -11,8 +11,8 @@ import java.util.List;
 
 
 public class LecturaVehiculo {
-    public static List<Vehicle> TxtReader(String path) throws IOException , Exception{
-        List<Vehicle> vehicleList = new ArrayList<>();
+    public static List<VehiculoModel> TxtReader(String path) throws IOException , Exception{
+        List<VehiculoModel> vehicleList = new ArrayList<>();
 
             File file = new File(path);
             final BufferedReader br = new BufferedReader(new FileReader(file));
@@ -23,21 +23,21 @@ public class LecturaVehiculo {
                 rowRequest = line.split(",");
                 type = rowRequest[0].charAt(1);
                 
-                Vehicle r = Vehicle.builder()
+                VehiculoModel r = VehiculoModel.builder()
                         .velocidad(50)
                         .pesoTara(Double.parseDouble(rowRequest[1]))
-                        .loadGLP(Integer.parseInt(rowRequest[2]))
-                        .loadWeightGLP(Double.parseDouble(rowRequest[3]))
-                        .totalWeight(Double.parseDouble(rowRequest[4]))
-                        .state(EstadoVehiculo.DISPONIBLE).build();
+                        .cargaGLP(Integer.parseInt(rowRequest[2]))
+                        .pesoCargaGLP(Double.parseDouble(rowRequest[3]))
+                        .pesoTotal(Double.parseDouble(rowRequest[4]))
+                        .estadoVehiculo(0).build();
                 switch(type){
-                    case 'A': r.setTipoVehiculo(TipoVehiculo.TA);
+                    case 'A': r.setTipoVehiculo(1);
                         break;
-                    case 'B': r.setTipoVehiculo(TipoVehiculo.TB);
+                    case 'B': r.setTipoVehiculo(2);
                         break;
-                    case 'C': r.setTipoVehiculo(TipoVehiculo.TC);
+                    case 'C': r.setTipoVehiculo(3);
                         break;
-                    case 'D': r.setTipoVehiculo(TipoVehiculo.TD);
+                    case 'D': r.setTipoVehiculo(4);
                         break;
                 } 
                 

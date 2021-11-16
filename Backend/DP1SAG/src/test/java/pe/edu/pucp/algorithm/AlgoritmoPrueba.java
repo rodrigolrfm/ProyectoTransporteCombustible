@@ -13,7 +13,7 @@ import pe.edu.pucp.mvc.models.NodoModel;
 //import pe.edu.pucp.mvc.models.NodoModel;
 import pe.edu.pucp.mvc.models.PedidoModel;
 import pe.edu.pucp.mvc.models.PlantaModel;
-import pe.edu.pucp.mvc.models.Vehicle;
+import pe.edu.pucp.mvc.models.VehiculoModel;
 import pe.edu.pucp.utils.LecturaBloques;
 import pe.edu.pucp.utils.Lectura;
 import pe.edu.pucp.utils.LecturaVehiculo;
@@ -24,7 +24,7 @@ public class AlgoritmoPrueba {
     @Test
     public void simularpedido() throws Exception {
         List<PedidoModel> requestList;
-        List<Vehicle> vehicleList;
+        List<VehiculoModel> vehicleList;
         
 
         vehicleList = LecturaVehiculo.TxtReader("src\\main\\java\\pe\\edu\\pucp\\files\\vehiculos2021.txt");
@@ -50,9 +50,9 @@ public class AlgoritmoPrueba {
             // Fecha de inicio y copia de fecha de inicio
             Calendar init = Calendar.getInstance(); 
             init.set(2021, 11, 1, 0, 0, 0);
-            v.setInitDate(init); 
-            v.setCurrentLocation(depots.get(0)); 
-            v.setFuel(25);
+            v.setFechaInicio(init);
+            v.setNodoActual(depots.get(0));
+            v.setCombustible(25);
             v.setVelocidad(50);
         });
         
@@ -89,7 +89,7 @@ public class AlgoritmoPrueba {
     
         System.out.println("Total Capacity: " + totalCapacity);
         // lista que tendrá los vehículos y sus listas de pedidos ordenados por indice
-        ArrayList<Pair<Vehicle, PriorityQueue<Pair<Float, PedidoModel>>>> listaVC = new ArrayList<>();
+        ArrayList<Pair<VehiculoModel, PriorityQueue<Pair<Float, PedidoModel>>>> listaVC = new ArrayList<>();
         
         List<PedidoModel> auxRequest = new ArrayList<>();
         requestListDesdoblado.forEach(r -> {
@@ -111,12 +111,12 @@ public class AlgoritmoPrueba {
             // TODO: filtrar los pedidos que no se han registrado hasta ese momento
             for(PedidoModel req : requestListDesdoblado){
                 colapso = 0;
-                for(Pair<Vehicle, PriorityQueue<Pair<Float, PedidoModel>>> lvc : listaVC){
-                    Vehicle v = lvc.getKey();
+                for(Pair<VehiculoModel, PriorityQueue<Pair<Float, PedidoModel>>> lvc : listaVC){
+                    VehiculoModel v = lvc.getKey();
                     PriorityQueue<Pair<Float, PedidoModel>> requestListArreange = lvc.getValue();
-                    float distance = v.getCurrentLocation().getDistancia(req),
+                    float distance = v.getNodoActual().getDistancia(req),
                           tiempoAproximado = (float)(distance/v.getVelocidad()),
-                          tiempoLlegadaLimite = req.getHorasLimite().getTimeInMillis() - v.getInitDate().getTimeInMillis();
+                          tiempoLlegadaLimite = req.getHorasLimite().getTimeInMillis() - v.getFechaInicio().getTimeInMillis();
                     
                     if(tiempoLlegadaLimite > 0)
                         requestListArreange.add(new Pair<>((tiempoLlegadaLimite /tiempoAproximado),req));
@@ -151,7 +151,7 @@ public class AlgoritmoPrueba {
                 }
             }          
             
-            for(Pair<Vehicle, PriorityQueue<Pair<Float, PedidoModel>>> vc : listaVC){
+            for(Pair<VehiculoModel, PriorityQueue<Pair<Float, PedidoModel>>> vc : listaVC){
                 //Assign request to vehicles
                 vehicleList.clear(); // se puede quitar esta lista intermedia
                 vehicleList.add(vc.getKey());
@@ -173,18 +173,18 @@ public class AlgoritmoPrueba {
 
             //Algoritmo Genetico
             ArrayList<NodoModel> vertices = new ArrayList<>(); // se puede quitar esta lista intermedia
-            for(Vehicle v : vehicleList){
+            for(VehiculoModel v : vehicleList){
                 vertices.clear();
-                v.getRequestList().forEach( p -> { vertices.add(p); });
-                System.out.println(v.getRequestList());
-                if(!v.getRequestList().isEmpty())
+                v.getListaPedidos().forEach(p -> { vertices.add(p); });
+                System.out.println(v.getListaPedidos());
+                if(!v.getListaPedidos().isEmpty())
                     GeneticAlgorithm.GA(v, vertices, map);
                     
             }
-            for(Vehicle v : vehicleList){
-                if(v.getRuta() != null && !v.getRuta().isEmpty()) { // si encontró una buana ruta.
-                    v.getInitDate().add(Calendar.MINUTE, Math.round((float) Math.ceil(v.calculateTimeToDispatch())));
-                    v.setCurrentLocation(v.getRuta().get(v.getRuta().size() - 1));
+            for(VehiculoModel v : vehicleList){
+                if(v.getRutaVehiculo() != null && !v.getRutaVehiculo().isEmpty()) { // si encontró una buana ruta.
+                    v.getFechaInicio().add(Calendar.MINUTE, Math.round((float) Math.ceil(v.calculateTimeToDispatch())));
+                    v.setNodoActual(v.getRutaVehiculo().get(v.getRutaVehiculo().size() - 1));
                     totalTime += v.calculateTimeToDispatch();
                     // se guardan las rutas y los pedidos
                 }
@@ -192,7 +192,7 @@ public class AlgoritmoPrueba {
             }
 
             // Se hace sort para las capacidadades
-            vehicleList.sort((v1, v2) -> Long.compare(v1.getInitDate().getTimeInMillis() , v2.getInitDate().getTimeInMillis()));
+            vehicleList.sort((v1, v2) -> Long.compare(v1.getFechaInicio().getTimeInMillis() , v2.getFechaInicio().getTimeInMillis()));
 
             List<PedidoModel> aux = new ArrayList<>();
             requestListDesdoblado.forEach(r -> {
