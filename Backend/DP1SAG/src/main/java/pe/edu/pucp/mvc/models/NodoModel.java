@@ -16,6 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 @Table(name="nodo")
 public class NodoModel implements Comparable<NodoModel>{
 

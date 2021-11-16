@@ -13,7 +13,7 @@ import java.util.Calendar;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name="PedidoModel")
+@Table(name="pedido")
 public class PedidoModel extends NodoModel implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
