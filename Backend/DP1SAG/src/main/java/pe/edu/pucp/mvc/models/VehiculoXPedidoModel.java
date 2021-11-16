@@ -22,7 +22,7 @@ public class VehiculoXPedidoModel implements Serializable {
     private VehiculoModel vxPedido;
 
     @ManyToOne
-    @JoinColumn(name = "idPedido",nullable = false)
+    @JoinColumn(name = "idNodo",nullable = false)
     private PedidoModel pxVehiculo;
 
 }

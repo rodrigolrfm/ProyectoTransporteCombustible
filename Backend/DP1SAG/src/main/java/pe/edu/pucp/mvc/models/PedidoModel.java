@@ -15,10 +15,6 @@ import java.util.Calendar;
 @Entity
 @Table(name="pedido")
 public class PedidoModel extends NodoModel implements Serializable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(unique = true,nullable = false)
-    private int idPedido;
 
 
     private int idExtendido;
@@ -45,7 +41,7 @@ public class PedidoModel extends NodoModel implements Serializable {
     public boolean merge(PedidoModel PedidoModel){
         return this.getCoordenadaX() == PedidoModel.getCoordenadaX() &&
                 this.getCoordenadaY() == PedidoModel.getCoordenadaY() &&
-                this.idPedido == PedidoModel.getIdPedido() &&
+                this.getIdNodo() == PedidoModel.getIdNodo() &&
                 (this.clienteModel == null ? PedidoModel.getClienteModel() == null : this.clienteModel.equals(PedidoModel.getClienteModel())) &&
                 this.horasLimite.equals(PedidoModel.getHorasLimite());
     }
@@ -53,7 +49,7 @@ public class PedidoModel extends NodoModel implements Serializable {
         return this.getCoordenadaX() == PedidoModel.getCoordenadaX() &&
                 this.getCoordenadaY() == PedidoModel.getCoordenadaY() &&
                 this.idExtendido == PedidoModel.getIdExtendido() &&
-                this.idPedido == PedidoModel.getIdPedido() &&
+                this.getIdNodo() == PedidoModel.getIdNodo() &&
                 (this.clienteModel == null ? PedidoModel.getClienteModel() == null : this.clienteModel.equals(PedidoModel.getClienteModel())) &&
                 this.horasLimite.equals(PedidoModel.getHorasLimite()) &&
                 this.cantidadGLP == PedidoModel.getCantidadGLP();
@@ -69,7 +65,7 @@ public class PedidoModel extends NodoModel implements Serializable {
     public boolean equals(Object obj) {
         if(obj instanceof PedidoModel){
             PedidoModel r = (PedidoModel) obj;
-            return this.getCoordenadaX() == r.getCoordenadaX() && this.getCoordenadaY() == r.getCoordenadaY() && this.idPedido == r.getIdPedido();
+            return this.getCoordenadaX() == r.getCoordenadaX() && this.getCoordenadaY() == r.getCoordenadaY() && this.getIdNodo() == r.getIdNodo();
         }
         else if(obj instanceof NodoModel){
             NodoModel v = (NodoModel) obj;
@@ -81,7 +77,7 @@ public class PedidoModel extends NodoModel implements Serializable {
     public void print(){
         System.out.print("coordenadaX " + this.getCoordenadaX());
         System.out.print("  coordenadaY " + this.getCoordenadaY());
-        System.out.print("  idPedido " + this.getIdPedido());
+        System.out.print("  idPedido " + this.getIdNodo());
 
         System.out.print("  hoursLimit " + this.getHorasLimite().getTimeInMillis());
         System.out.println();

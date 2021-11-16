@@ -25,7 +25,14 @@ public class NodoModel implements Comparable<NodoModel>{
     @Column(unique = true)
     private int idNodo;
 
-    
+    @OneToOne
+    @JoinColumn(name = "idVehiculo", nullable = false)
+    private VehiculoModel vehiculo1;
+
+    @ManyToOne
+    @JoinColumn(name = "idVehiculo1", nullable = false)
+    private VehiculoModel vehiculo2;
+
     @ManyToOne
     @JoinColumn(name = "idMapa",nullable = false)
     private MapaModel mapaModel;
@@ -47,6 +54,8 @@ public class NodoModel implements Comparable<NodoModel>{
     @OneToOne
     @JoinColumn(name = "idNodoprevio", nullable = false)
     private NodoModel nodoprevio = null;
+
+
 
     @Builder.Default
     @OneToMany(mappedBy = "idNodoBloqueo")

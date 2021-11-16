@@ -38,7 +38,7 @@ public class Lectura {
                 glpTotal += Integer.parseInt(rowRequest[3]);
                 
                 PedidoModel r = PedidoModel.builder()
-                        .idPedido(num++)
+                        .idNodo(num++)
                         .coordenadaX(Integer.parseInt(rowRequest[1]))
                         .coordenadaY(Integer.parseInt(rowRequest[2]))
                         .fechaPedido(reqDate)

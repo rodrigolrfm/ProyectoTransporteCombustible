@@ -18,12 +18,6 @@ import java.io.Serializable;
 @Table(name = "planta")
 public class PlantaModel extends NodoModel implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(unique = true,nullable = false)
-    private int idPlanta;
-
-
     @OneToOne
     @JoinColumn(name = "idNodo",nullable = false)
     private NodoModel nodo;

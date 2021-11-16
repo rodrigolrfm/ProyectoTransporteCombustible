@@ -50,13 +50,13 @@ public class VehiculoModel implements Serializable {
     private List<PedidoModel> listaPedidos = new ArrayList<>();
 
 
-    @OneToOne(mappedBy = "idNodo")
+    @OneToOne(mappedBy = "vehiculo1")
     @Builder.Default
     NodoModel nodoActual = null;
 
-    @OneToMany(mappedBy = "idNodo")
+    @OneToMany(mappedBy = "vehiculo2")
     @Builder.Default
-    ArrayList<NodoModel> rutaVehiculo = null;
+    List<NodoModel> rutaVehiculo = null;
 
     private double combustible;
 

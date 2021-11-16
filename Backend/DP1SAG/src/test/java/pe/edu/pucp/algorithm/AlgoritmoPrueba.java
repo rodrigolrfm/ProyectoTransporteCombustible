@@ -66,7 +66,7 @@ public class AlgoritmoPrueba {
             int i = 0;
             for(; i < (int)r.getCantidadGLP()/minimo; i++)
                 requestListDesdoblado.add(PedidoModel.builder()
-                    .idPedido(r.getIdPedido())
+                    .idNodo(r.getIdNodo())
                     .idExtendido(i)
                         .clienteModel(r.getClienteModel())
                     .cantidadGLP(minimo)
@@ -76,7 +76,7 @@ public class AlgoritmoPrueba {
                     .horasLimite(r.getHorasLimite()).build());
             if(r.getCantidadGLP()%minimo != 0.0)
                 requestListDesdoblado.add(PedidoModel.builder()
-                    .idPedido(r.getIdPedido())
+                    .idNodo(r.getIdNodo())
                     .idExtendido(++i)
                     .clienteModel(r.getClienteModel())
                     .cantidadGLP(r.getCantidadGLP()%minimo)
@@ -121,7 +121,7 @@ public class AlgoritmoPrueba {
                     if(tiempoLlegadaLimite > 0)
                         requestListArreange.add(new Pair<>((tiempoLlegadaLimite /tiempoAproximado),req));
                     else{
-                        System.out.println("idPedido colapsado: " + req.getIdPedido() + "-" + req.getIdExtendido());
+                        System.out.println("idPedido colapsado: " + req.getIdNodo() + "-" + req.getIdExtendido());
                         colapso++;
                     }
                 }
@@ -135,7 +135,7 @@ public class AlgoritmoPrueba {
                     for(PedidoModel rq : requestList){
                         double aux = 0;
                         aux = auxRequest.stream()
-                                .filter(auxrq -> auxrq.getIdPedido() == rq.getIdPedido())
+                                .filter(auxrq -> auxrq.getIdNodo() == rq.getIdNodo())
                                 .map(auxrq -> auxrq.isAtendido() ? auxrq.getCantidadGLP() : 0)
                                 .reduce(aux, (accumulator, _item) -> accumulator + _item);
                         if(aux == rq.getCantidadGLP())
@@ -210,7 +210,7 @@ public class AlgoritmoPrueba {
         for(PedidoModel rq : requestList){
             double aux = 0;
             aux = auxRequest.stream()
-                    .filter(auxrq -> auxrq.getIdPedido() == rq.getIdPedido())
+                    .filter(auxrq -> auxrq.getIdNodo() == rq.getIdNodo())
                     .map(auxrq -> auxrq.isAtendido() ? auxrq.getCantidadGLP() : 0)
                     .reduce(aux, (accumulator, _item) -> accumulator + _item);
             if(aux == rq.getCantidadGLP())

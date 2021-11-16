@@ -22,7 +22,7 @@ public class SimulacionXPedidoModel implements Serializable {
     private SimulacionModel sxPedido;
 
     @ManyToOne
-    @JoinColumn(name = "idPedido",nullable = false)
+    @JoinColumn(name = "idNodo",nullable = false)
     private PedidoModel pxSimulacion;
 
     @Column(nullable = false)
