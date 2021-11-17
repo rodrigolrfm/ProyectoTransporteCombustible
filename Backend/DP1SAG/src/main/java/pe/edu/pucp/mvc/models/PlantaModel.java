@@ -25,6 +25,7 @@ public class PlantaModel extends NodoModel implements Serializable {
     @Builder.Default
     private boolean esPrincipal=false;
 
+
     @Override
     public String toString(){
         return String.format("[%d,%d]", this.getCoordenadaX(), this.getCoordenadaY());

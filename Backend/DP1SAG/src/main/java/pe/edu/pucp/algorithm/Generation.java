@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import pe.edu.pucp.mvc.controllers.MapaModel;
 import pe.edu.pucp.mvc.models.NodoModel;
 import pe.edu.pucp.mvc.models.PlantaModel;
 import pe.edu.pucp.mvc.models.VehiculoModel;
@@ -137,10 +138,10 @@ public class Generation {
         }
     }
     
-    public void calculateAllFitness(VehiculoModel VehiculoModel, Map mapConfiguration){
+    public void calculateAllFitness(VehiculoModel VehiculoModel, MapaModel mapaModelConfiguration){
         assert !chromosomesList.isEmpty(): "Cromosoma vacio";
         for(Chromosome c : chromosomesList){
-            double fitness = c.getFitness(VehiculoModel, mapConfiguration);
+            double fitness = c.getFitness(VehiculoModel, mapaModelConfiguration);
             assert c.getRoute() !=  null: "GG";
             if(fitness < best_fitness){
                 best_fitness = fitness;
@@ -155,7 +156,7 @@ public class Generation {
         }
     }
     
-    public void setBest_chromosome(Chromosome c, VehiculoModel v, Map m){
+    public void setBest_chromosome(Chromosome c, VehiculoModel v, MapaModel m){
         this.best_chromosome = c;
         this.best_chromosome.getFitness(v, m);
     }

@@ -2,6 +2,7 @@
 package pe.edu.pucp.algorithm;
 
 
+import pe.edu.pucp.mvc.controllers.MapaModel;
 import pe.edu.pucp.mvc.models.NodoModel;
 
 import java.util.Collections;
@@ -15,7 +16,7 @@ import java.util.ArrayList;
 
 public class AStar {
     public static double PESO=1;
-    public static final List<NodoModel> get_shortest_path(NodoModel start, NodoModel target, Map mapConfiguration, Date previousDeliveredDate, int velocity, NodoModel nodoprevio){
+    public static final List<NodoModel> get_shortest_path(NodoModel start, NodoModel target, MapaModel mapaModelConfiguration, Date previousDeliveredDate, int velocity, NodoModel nodoprevio){
         PriorityQueue<NodoModel> closedList = new PriorityQueue<>();
         PriorityQueue<NodoModel> openList = new PriorityQueue<>();
         List<NodoModel> neighbour_list = new ArrayList<>();
@@ -25,7 +26,7 @@ public class AStar {
             return new ArrayList<>();
         }
         
-        mapConfiguration.clearRoute();
+        mapaModelConfiguration.clearRoute();
         start.setNodoprevio(null);
         target.setNodoprevio(null);
         double timeAdvance = (1.0/velocity)*3600;
@@ -42,7 +43,7 @@ public class AStar {
             if(n.isBlocked(previousDeliveredDate)){
                 neighbour_list.add(nodoprevio);
             }else{
-                neighbour_list = graph_adjacentNeighbour(n, mapConfiguration,previousDeliveredDate, target, timeAdvance);
+                neighbour_list = graph_adjacentNeighbour(n, mapaModelConfiguration,previousDeliveredDate, target, timeAdvance);
             }
             for(NodoModel current: neighbour_list){
                 double totalWeight = n.getG() + PESO;
@@ -86,22 +87,22 @@ public class AStar {
         Collections.reverse(movements);
         return movements;
     }
-    private static List<NodoModel> graph_adjacentNeighbour(NodoModel u, Map mapConfiguration,Date now,
-                                                        NodoModel target, double timeAdvance) {
+    private static List<NodoModel> graph_adjacentNeighbour(NodoModel u, MapaModel mapaModelConfiguration, Date now,
+                                                           NodoModel target, double timeAdvance) {
         List<NodoModel> neighbours = new ArrayList<>();
         //Date now = Date.from(Instant.now());
         now = Date.from(now.toInstant().plus(new Double(timeAdvance).longValue(),ChronoUnit.SECONDS));
         int i= u.getCoordenadaX();
         int j = u.getCoordenadaY();
-        int MAX_x = mapConfiguration.getDimensionX();
-        int MAX_y = mapConfiguration.getDimensionY();
+        int MAX_x = mapaModelConfiguration.getDimensionX();
+        int MAX_y = mapaModelConfiguration.getDimensionY();
         NodoModel v1;
         NodoModel v2;
         NodoModel v3;
         NodoModel v4;
         if((i==0) && (j==0)){
-            v1=mapConfiguration.getMap()[i+1][j];
-            v2=mapConfiguration.getMap()[i][j+1];
+            v1= mapaModelConfiguration.getMapa()[i+1][j];
+            v2= mapaModelConfiguration.getMapa()[i][j+1];
             NodoModel n1 = NodoModel.builder().coordenadaX(v1.getCoordenadaX()).coordenadaY(v1.getCoordenadaY())
                     .inicioBloqueo(v1.getInicioBloqueo())
                     .finBloqueo(v1.getFinBloqueo())
@@ -122,8 +123,8 @@ public class AStar {
             }else if(!n2.isBlocked(now))
                 neighbours.add(n2);
         }else if((i==MAX_x-1)&& (j==MAX_y-1)){
-            v1=mapConfiguration.getMap()[i-1][j];
-            v2=mapConfiguration.getMap()[i][j-1];
+            v1= mapaModelConfiguration.getMapa()[i-1][j];
+            v2= mapaModelConfiguration.getMapa()[i][j-1];
             NodoModel n1 = NodoModel.builder().coordenadaX(v1.getCoordenadaX()).coordenadaY(v1.getCoordenadaY())
                     .inicioBloqueo(v1.getInicioBloqueo())
                     .finBloqueo(v1.getFinBloqueo())
@@ -143,8 +144,8 @@ public class AStar {
             }else if(!n2.isBlocked(now))
                 neighbours.add(n2);
         }else if((i==0)&&(j==MAX_y-1)){
-            v1=mapConfiguration.getMap()[i][j-1];
-            v2=mapConfiguration.getMap()[i+1][j];
+            v1= mapaModelConfiguration.getMapa()[i][j-1];
+            v2= mapaModelConfiguration.getMapa()[i+1][j];
             NodoModel n1 = NodoModel.builder().coordenadaX(v1.getCoordenadaX()).coordenadaY(v1.getCoordenadaY())
                     .inicioBloqueo(v1.getInicioBloqueo())
                     .finBloqueo(v1.getFinBloqueo())
@@ -164,8 +165,8 @@ public class AStar {
             }else if(!n2.isBlocked(now))
                 neighbours.add(n2);
         }else if((i==MAX_x-1)&&(j==0)) {
-            v1=mapConfiguration.getMap()[i-1][j];
-            v2=mapConfiguration.getMap()[i][j+1];
+            v1= mapaModelConfiguration.getMapa()[i-1][j];
+            v2= mapaModelConfiguration.getMapa()[i][j+1];
             NodoModel n1 = NodoModel.builder().coordenadaX(v1.getCoordenadaX()).coordenadaY(v1.getCoordenadaY())
                     .inicioBloqueo(v1.getInicioBloqueo())
                     .finBloqueo(v1.getFinBloqueo())
@@ -185,9 +186,9 @@ public class AStar {
             }else if(!n2.isBlocked(now))
                 neighbours.add(n2);
         }else if((i!=0)&&(j==0)) {
-            v1=mapConfiguration.getMap()[i-1][j];
-            v2=mapConfiguration.getMap()[i+1][j];
-            v3=mapConfiguration.getMap()[i][j+1];
+            v1= mapaModelConfiguration.getMapa()[i-1][j];
+            v2= mapaModelConfiguration.getMapa()[i+1][j];
+            v3= mapaModelConfiguration.getMapa()[i][j+1];
             NodoModel n1 = NodoModel.builder().coordenadaX(v1.getCoordenadaX()).coordenadaY(v1.getCoordenadaY())
                     .inicioBloqueo(v1.getInicioBloqueo())
                     .finBloqueo(v1.getFinBloqueo())
@@ -216,9 +217,9 @@ public class AStar {
             }else if(!n3.isBlocked(now))
                 neighbours.add(n3);
         }else if((i==0)&&(j!=0)) {
-            v1=mapConfiguration.getMap()[i+1][j];
-            v2=mapConfiguration.getMap()[i][j-1];
-            v3=mapConfiguration.getMap()[i][j+1];
+            v1= mapaModelConfiguration.getMapa()[i+1][j];
+            v2= mapaModelConfiguration.getMapa()[i][j-1];
+            v3= mapaModelConfiguration.getMapa()[i][j+1];
             NodoModel n1 = NodoModel.builder().coordenadaX(v1.getCoordenadaX()).coordenadaY(v1.getCoordenadaY())
                     .inicioBloqueo(v1.getInicioBloqueo())
                     .finBloqueo(v1.getFinBloqueo())
@@ -247,9 +248,9 @@ public class AStar {
             }else if(!n3.isBlocked(now))
                 neighbours.add(n3);
         }else if((i==MAX_x-1)&&(j!=0)) {
-            v1=mapConfiguration.getMap()[i-1][j];
-            v2=mapConfiguration.getMap()[i][j-1];
-            v3=mapConfiguration.getMap()[i][j+1];
+            v1= mapaModelConfiguration.getMapa()[i-1][j];
+            v2= mapaModelConfiguration.getMapa()[i][j-1];
+            v3= mapaModelConfiguration.getMapa()[i][j+1];
             NodoModel n1 = NodoModel.builder().coordenadaX(v1.getCoordenadaX()).coordenadaY(v1.getCoordenadaY())
                     .inicioBloqueo(v1.getInicioBloqueo())
                     .finBloqueo(v1.getFinBloqueo())
@@ -278,9 +279,9 @@ public class AStar {
             }else if(!n3.isBlocked(now))
                 neighbours.add(n3);
         }else if((i!=0)&&(j==MAX_y-1)) {
-            v1=mapConfiguration.getMap()[i-1][j];
-            v2=mapConfiguration.getMap()[i+1][j];
-            v3=mapConfiguration.getMap()[i][j-1];
+            v1= mapaModelConfiguration.getMapa()[i-1][j];
+            v2= mapaModelConfiguration.getMapa()[i+1][j];
+            v3= mapaModelConfiguration.getMapa()[i][j-1];
             NodoModel n1 = NodoModel.builder().coordenadaX(v1.getCoordenadaX()).coordenadaY(v1.getCoordenadaY())
                     .inicioBloqueo(v1.getInicioBloqueo())
                     .finBloqueo(v1.getFinBloqueo())
@@ -309,10 +310,10 @@ public class AStar {
             }else if(!n3.isBlocked(now))
                 neighbours.add(n3);
         }else if(i<MAX_x-1 && j<MAX_y-1){
-            v1=mapConfiguration.getMap()[i][j+1];
-            v2=mapConfiguration.getMap()[i][j-1];
-            v3=mapConfiguration.getMap()[i+1][j];
-            v4=mapConfiguration.getMap()[i-1][j];
+            v1= mapaModelConfiguration.getMapa()[i][j+1];
+            v2= mapaModelConfiguration.getMapa()[i][j-1];
+            v3= mapaModelConfiguration.getMapa()[i+1][j];
+            v4= mapaModelConfiguration.getMapa()[i-1][j];
             NodoModel n1 = NodoModel.builder().coordenadaX(v1.getCoordenadaX()).coordenadaY(v1.getCoordenadaY())
                     .inicioBloqueo(v1.getInicioBloqueo())
                     .finBloqueo(v1.getFinBloqueo())

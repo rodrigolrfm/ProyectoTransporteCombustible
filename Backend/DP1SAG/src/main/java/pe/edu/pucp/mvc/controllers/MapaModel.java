@@ -1,5 +1,5 @@
 
-package pe.edu.pucp.algorithm;
+package pe.edu.pucp.mvc.controllers;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -18,26 +18,26 @@ import pe.edu.pucp.utils.UtilidadesFechas;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Map {
+public class MapaModel {
     private int dimensionX;
     private int dimensionY;
-    private List<PlantaModel> depots;
-    private NodoModel[][] map;
+    private List<PlantaModel> plantas;
+    private NodoModel[][] mapa;
     
-    public Map(int nColumns, int nRows, ArrayList<PlantaModel> depots) {
-        map = new NodoModel[nColumns][nRows];
+    public MapaModel(int nColumns, int nRows, ArrayList<PlantaModel> depots) {
+        mapa = new NodoModel[nColumns][nRows];
         this.dimensionX = nColumns;
         this.dimensionY = nRows;
-        this.depots = depots;
+        this.plantas = depots;
         for (int i = 0; i < nColumns; i++) {
             for (int j = 0; j < nRows; j++) {
                 Date dateNow = UtilidadesFechas.convertToDateViaInstant(LocalDateTime.now());
                 NodoModel v = NodoModel.builder().coordenadaX(i).coordenadaY(j)
                         .inicioBloqueo(dateNow).finBloqueo(dateNow).build();
-                map[i][j] = v;
+                mapa[i][j] = v;
             }
         }
-        this.depots.forEach(d -> map[d.getCoordenadaX()][d.getCoordenadaY()] = d);
+        this.plantas.forEach(d -> mapa[d.getCoordenadaX()][d.getCoordenadaY()] = d);
     }
     
     public void setBlockList(List<NodoModel> blockList) {
@@ -47,22 +47,22 @@ public class Map {
     }
     
     public void setBlock(final NodoModel v) {
-        map[v.getCoordenadaX()][v.getCoordenadaY()].setEstaBloqueado(true);
-        map[v.getCoordenadaX()][v.getCoordenadaY()].setInicioBloqueo(v.getInicioBloqueo());
-        map[v.getCoordenadaX()][v.getCoordenadaY()].setFinBloqueo(v.getFinBloqueo());
-        map[v.getCoordenadaX()][v.getCoordenadaY()].setBlockList(v.getBlockList());
+        mapa[v.getCoordenadaX()][v.getCoordenadaY()].setEstaBloqueado(true);
+        mapa[v.getCoordenadaX()][v.getCoordenadaY()].setInicioBloqueo(v.getInicioBloqueo());
+        mapa[v.getCoordenadaX()][v.getCoordenadaY()].setFinBloqueo(v.getFinBloqueo());
+        mapa[v.getCoordenadaX()][v.getCoordenadaY()].setBlockList(v.getBlockList());
     }
     
     public void clearRoute(){
         for(int i=0;i<dimensionX;i++)
             for(int j=0;j<dimensionY;j++)
-                map[i][j].setNodoprevio(null);
+                mapa[i][j].setNodoprevio(null);
     }
     
     public void deleteBlocks(){
         for(int i=0;i<dimensionX;i++){
             for(int j=0;j<dimensionY;j++){
-                NodoModel v = map[i][j];
+                NodoModel v = mapa[i][j];
                 v.setEstaBloqueado(false);
                 if(!v.getBlockList().isEmpty()){
                     v.setBlockList(new ArrayList<>());
@@ -74,9 +74,9 @@ public class Map {
     public void printMap(){
         for (int i = 0; i < this.dimensionX; i++) {
             for (int j = 0; j < this.dimensionY; j++) {
-                if(map[i][j].isBlocked())
+                if(mapa[i][j].isBlocked())
                     System.out.print("B ");
-                else if(map[i][j] instanceof PlantaModel)
+                else if(mapa[i][j] instanceof PlantaModel)
                     System.out.print("D ");
                 else
                     System.out.print("  ");

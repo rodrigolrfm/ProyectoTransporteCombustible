@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import pe.edu.pucp.mvc.controllers.MapaModel;
 import pe.edu.pucp.mvc.models.NodoModel;
 import pe.edu.pucp.mvc.models.PedidoModel;
 import pe.edu.pucp.mvc.models.VehiculoModel;
@@ -46,7 +47,7 @@ public class Chromosome {
         fitness += finalDepot.getDistancia(genes.get(i));
     }
     
-    private double computeFitness(VehiculoModel v, Map mapConfiguration) {
+    private double computeFitness(VehiculoModel v, MapaModel mapaModelConfiguration) {
         if(currentStart == null){
             throw new NullPointerException("currentStart es null");
         }
@@ -65,8 +66,8 @@ public class Chromosome {
         
         previousDeliveredDate = v.getFechaInicio().getTime();
         if(!currentStart.equals(new NodoModel(genes.get(0)))){
-            partialRoute = AStar.get_shortest_path(currentStart, genes.get(0), 
-                    mapConfiguration, previousDeliveredDate, (int) v.getVelocidad(), null);
+            partialRoute = AStar.get_shortest_path(currentStart, genes.get(0),
+                    mapaModelConfiguration, previousDeliveredDate, (int) v.getVelocidad(), null);
             partialRoute.removeIf(Objects::isNull);
             this.route.addAll(partialRoute);
             distancia = partialRoute.size();
@@ -89,8 +90,8 @@ public class Chromosome {
             distancia = 0;
             
             if(!req.equals(new NodoModel(genes.get(i+1)))){
-                partialRoute = AStar.get_shortest_path(req, genes.get(i + 1), 
-                        mapConfiguration, previousDeliveredDate, (int) v.getVelocidad(), prevVertex);
+                partialRoute = AStar.get_shortest_path(req, genes.get(i + 1),
+                        mapaModelConfiguration, previousDeliveredDate, (int) v.getVelocidad(), prevVertex);
                 partialRoute.removeIf(Objects::isNull);
                 this.route.addAll(partialRoute);
                 distancia = partialRoute.size();
@@ -109,8 +110,8 @@ public class Chromosome {
 
         req = (PedidoModel) genes.get(i);
         glp -= req.getCantidadGLP()/2;
-        partialRoute = AStar.get_shortest_path(genes.get(i), finalDepot, 
-                mapConfiguration, previousDeliveredDate, (int) v.getVelocidad(), this.route.get(this.route.size() - 1));
+        partialRoute = AStar.get_shortest_path(genes.get(i), finalDepot,
+                mapaModelConfiguration, previousDeliveredDate, (int) v.getVelocidad(), this.route.get(this.route.size() - 1));
         partialRoute.removeIf(Objects::isNull);
         this.route.addAll(partialRoute);
         distancia = partialRoute.size();
@@ -143,9 +144,9 @@ public class Chromosome {
         return fitness == -1 ? Double.MAX_VALUE : fitness;
     }
     
-    public Double getFitness(VehiculoModel VehiculoModel, Map mapConfiguration){
+    public Double getFitness(VehiculoModel VehiculoModel, MapaModel mapaModelConfiguration){
         if(fitness == Double.MAX_VALUE)
-            fitness = computeFitness(VehiculoModel, mapConfiguration);
+            fitness = computeFitness(VehiculoModel, mapaModelConfiguration);
         
         return fitness == -1 ? Double.MAX_VALUE : fitness;
     }

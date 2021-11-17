@@ -33,9 +33,6 @@ public class NodoModel implements Comparable<NodoModel>{
     @JoinColumn(name = "idVehiculo1", nullable = false)
     private VehiculoModel vehiculo2;
 
-    @ManyToOne
-    @JoinColumn(name = "idMapa",nullable = false)
-    private MapaModel mapaModel;
 
     private int coordenadaX;
     private int coordenadaY;
@@ -61,8 +58,7 @@ public class NodoModel implements Comparable<NodoModel>{
     @OneToMany(mappedBy = "idNodoBloqueo")
     List<BloqueModel> blockList = new ArrayList<>();
 
-    public NodoModel(MapaModel mapaModel, int coordenadaX, int coordenadaY, boolean estaBloqueado) {
-        this.mapaModel = mapaModel;
+    public NodoModel(int coordenadaX, int coordenadaY, boolean estaBloqueado) {
         this.coordenadaX = coordenadaX;
         this.coordenadaY = coordenadaY;
         this.estaBloqueado = estaBloqueado;
