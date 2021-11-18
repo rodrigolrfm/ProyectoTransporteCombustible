@@ -4,14 +4,14 @@ package pe.edu.pucp.mvc.controllers;
 import javafx.util.Pair;
 import org.apache.logging.log4j.message.MapMessage;
 import org.json.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import pe.edu.pucp.algorithm.GeneticAlgorithm;
 import pe.edu.pucp.algorithm.Knapsack;
-import pe.edu.pucp.mvc.models.EntidadVehiculo;
-import pe.edu.pucp.mvc.models.NodoModel;
-import pe.edu.pucp.mvc.models.PedidoModel;
-import pe.edu.pucp.mvc.models.PlantaModel;
+import pe.edu.pucp.mvc.models.*;
 import pe.edu.pucp.mvc.planificacion.ScheduledTasks;
 import pe.edu.pucp.utils.Lectura;
 import pe.edu.pucp.utils.LecturaBloques;
@@ -36,12 +36,11 @@ public class EjecucionController {
         return sseEmitter;
     }*/
 
-
     @PostMapping(value = "/simulardias")
-    public JSONObject ejecutarAlgortimo() throws Exception {
+    public EntidadRutas ejecutarAlgortimo() throws Exception {
 
-        JSONObject json = new JSONObject();
-        List<JSONObject> rutasFinal = new ArrayList<>();
+
+        EntidadRutas rutasFinal = EntidadRutas.builder().rutas(new ArrayList<>()).build();
 
         List<PedidoModel> listaPedidos;
 
@@ -205,15 +204,12 @@ public class EjecucionController {
                     totalTime += v.calculateTimeToDispatch();
                     // se guardan las rutas y los pedidos
                     // aquí se podría enviar cada vehículo con su ruta
-                    JSONObject rutaVehiculo = new JSONObject();
                     SimpleDateFormat sdf;
                     sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
                     sdf.setTimeZone(TimeZone.getTimeZone("CET"));
                     String text = sdf.format(v.getFechaInicio().getTime());
-                    rutaVehiculo.put("StartTime", text);
-                    rutaVehiculo.put("ruta", v.getRutaVehiculoPositions(requestListDesdoblado));
-                    rutaVehiculo.put("EndTime", "None");
-                    rutasFinal.add(rutaVehiculo);
+                    EntidadRuta rutaVehiculo = EntidadRuta.builder().startTime(text).ruta(v.getRutaVehiculoPositions(requestListDesdoblado)).endTime("Alap").build();
+                    rutasFinal.agregarRuta(rutaVehiculo);
                 }
                 v.clearVehicle();
             }
@@ -232,7 +228,6 @@ public class EjecucionController {
 
         } while(!requestListDesdoblado.isEmpty());
 
-        json.put("rutas", rutasFinal);
-        return json;
+        return rutasFinal;
     }
 }
