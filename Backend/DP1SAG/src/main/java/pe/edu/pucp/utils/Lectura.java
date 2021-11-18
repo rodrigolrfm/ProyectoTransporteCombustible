@@ -51,10 +51,7 @@ public class Lectura {
             e.printStackTrace();
         }
         
-
-        
         requestList.sort((r1, r2) -> Long.compare(r1.getHorasLimite().getTimeInMillis() , r2.getHorasLimite().getTimeInMillis()));
-        
         
         return requestList;
     }
