@@ -10,8 +10,13 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 
-public class EntidadRuta {
+public class EntidadRuta implements Comparable<EntidadRuta>{
     private List<PositionModel> path;
     private String startTime;
     private String endTime;
+
+    @Override
+    public int compareTo(EntidadRuta ruta) {
+        return this.getStartTime().compareTo(ruta.getStartTime());
+    }
 }
