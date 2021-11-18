@@ -152,34 +152,34 @@ const MapC=(props: simulacion )=>{
           );
         });              
     }, []);   
-    for (let m = 0; m < vectorY; m++) {
+    for (let i = 0; i  < vectorY; i ++) {
       const squareRows = [];
-      for (let n = 0; n < vectorX; n++) {
+      for (let j = 0; j < vectorX; j++) {
         squareRows.push(
           <div
             className={classes.cuadrado}
             style={{
               borderRightColor:
-                ruta?.find(({ x, y, next }) => x === n && y === m - 1 && next === 'down') ||
-                ruta?.find(({ x, y, next }) => x === n && y === m && next === 'up')
+                ruta?.find(({ x, y, next }) => x === j && y === i  - 1 && next === 'down') ||
+                ruta?.find(({ x, y, next }) => x === j && y === i  && next === 'up')
                   ? '#424774'
                   : '#D89F7B',
   
               borderBottomColor:
-                ruta?.find(({ x, y, next }) => x === n - 1 && y === m && next === 'right') ||
-                ruta?.find(({ x, y, next }) => x === n && y === m && next === 'left')
+                ruta?.find(({ x, y, next }) => x === j - 1 && y === i  && next === 'right') ||
+                ruta?.find(({ x, y, next }) => x === j && y === i  && next === 'left')
                   ? '#424774'
                   : '#D89F7B',
             }}
           >
-            {ruta?.find(({ x, y }) => x === n && y === m)?.destino ? (
+            {ruta?.find(({ x, y }) => x === j && y === i )?.destino ? (
             <div className={classes.icon} style={{ transform: 'rotate(0deg)' }}>
               <PersonPinIcon style={{ color: '#424774'}} />
             </div>
           ) : null}
           {paths?.map((path) => {
             // let aux = new Date() - path.date;
-            if (path?.ruta[path.pos] && path?.ruta[path.pos].x === n && path?.ruta[path.pos].y === m) {
+            if (path?.ruta[path.pos] && path?.ruta[path.pos].x === j && path?.ruta[path.pos].y === i) {
               let dir = path.ruta[path.pos].next;
               return (
                 <div
@@ -201,17 +201,17 @@ const MapC=(props: simulacion )=>{
               );
             }
           })}
-            {m === 8 && n === 12 && (
+            {i  === 8 && j === 12 && (
               <div className={classes.icon} style={{ transform: 'rotate(0deg)' }}>
                 <HomeIcon style={{ color: '#35737D' }} />
               </div>
             )}
-            {m === 42 && n === 42 && (
+            {i  === 42 && j === 42 && (
               <div className={classes.icon} style={{ transform: 'rotate(0deg)' }}>
                 <HomeIcon style={{ color: '#35737D' }} />
               </div>
             )}
-            {m === 3 && n === 63 && (
+            {i  === 3 && j === 63 && (
               <div className={classes.icon} style={{ transform: 'rotate(0deg)' }}>
                 <HomeIcon style={{ color: '#35737D' }} />
               </div>
