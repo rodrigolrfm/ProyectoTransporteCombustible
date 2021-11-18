@@ -4,7 +4,7 @@ import { useState } from 'react';
 import PageTitle from 'src/components/PageTitle';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
 import { Container, Grid, Card, CardHeader, CardContent, Divider } from '@mui/material';
-import Footer from 'src/components/Footer';
+
 import CardActions from '@mui/material/CardActions';
 import { styled } from '@mui/material/styles';
 
@@ -216,7 +216,7 @@ function Cards() {
           </Grid>
         </Grid>
       </Container>
-      <Footer />
+      
     </>
   );
 }

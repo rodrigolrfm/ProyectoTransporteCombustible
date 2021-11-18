@@ -3,7 +3,7 @@ import PageTitle from 'src/components/PageTitle';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
 import { Container, Grid, Card, CardHeader, CardContent, Divider } from '@mui/material';
 import { useState } from 'react';
-import Footer from 'src/components/Footer';
+
 
 import ButtonGroup from '@mui/material/ButtonGroup';
 import Button from '@mui/material/Button';
@@ -147,7 +147,7 @@ function Badges() {
           </Grid>
         </Grid>
       </Container>
-      <Footer />
+      
     </>
   );
 }

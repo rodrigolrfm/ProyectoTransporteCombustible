@@ -2,7 +2,7 @@ import { Helmet } from 'react-helmet-async';
 import { useState } from 'react';
 
 import { Container, Grid, Card, CardHeader, CardContent, Divider } from '@mui/material';
-import Footer from 'src/components/Footer';
+
 
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
