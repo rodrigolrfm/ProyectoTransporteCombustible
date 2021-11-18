@@ -6,8 +6,8 @@ import { useEffect, useState } from 'react';
 import EmojiPeopleIcon from '@mui/icons-material/EmojiPeople';
 import url from  'src/utils/constant';
 import axios from 'axios';
-const boardX = 70;
-const boardY = 50;
+const vectorX = 70;
+const vectorY = 50;
 const path = [ ];
 
 
@@ -35,7 +35,7 @@ const implementarFecha = (startTime, dateTime) => {
 };
 
 const useStyles = makeStyles((theme) => ({
-    square: {
+    cuadrado: {
       borderColor: '#D89F7B',
       borderWidth: '0px 1.5px 1.5px 0px',
       border: 'solid',
@@ -154,12 +154,12 @@ const MapR=(props: simulacion )=>{
           );
         });              
     }, []);   
-    for (let i = 0; i < boardY; i++) {
+    for (let i = 0; i < vectorY; i++) {
       const squareRows = [];
-      for (let j = 0; j < boardX; j++) {
+      for (let j = 0; j < vectorX; j++) {
         squareRows.push(
           <div
-            className={classes.square}
+            className={classes.cuadrado}
             style={{
               borderRightColor:
                 ruta?.find(({ x, y, next }) => x === j && y === i - 1 && next === 'down') ||
