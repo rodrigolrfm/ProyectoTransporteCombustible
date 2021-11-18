@@ -5,6 +5,9 @@ import PersonPinIcon from '@mui/icons-material/PersonPin';
 import { useEffect, useState } from 'react';
 import url from  'src/utils/constant';
 import axios from 'axios';
+import BlockIcon from '@mui/icons-material/Block';
+import { IconButton } from '@mui/material';
+
 const vectorX = 70;
 const vectorY = 50;
 const path = [ ];
@@ -66,6 +69,8 @@ const MapO=(props: simulacion )=>{
 
     const [ruta, setRuta] = useState([]);
     const [paths, setPaths] = useState([]);
+    const [bloqueos, setBloqueos] = useState([]);
+
     const classes = useStyles();
     const map = [];
     useEffect(() => {
@@ -151,7 +156,25 @@ const MapO=(props: simulacion )=>{
             })
           );
         });              
-    }, []);   
+    }, []);
+     
+    
+    useEffect(() => {
+      console.log('mostrando bloqueos');
+      const interval = setInterval(() => {
+        axios.get(url+ '/api/roadblock/all').then((e) => { // URL DE BLOQUEOS 
+          setBloqueos(e.data);
+        });
+      }, 20000);
+      return () => clearInterval(interval);
+    }, []);
+    
+    useEffect(() => {
+      axios.get(url + '/api/roadblock/all').then((e) => {
+        setBloqueos(e.data);
+      });
+    }, []);
+
     for (let i = 0; i < vectorY; i++) { //50
       const squareRows = [];
       for (let j = 0; j < vectorX; j++) { //70
@@ -172,12 +195,38 @@ const MapO=(props: simulacion )=>{
                   : '#D89F7B',
             }}
           >
+          {bloqueos?.find(({ nodos }) => nodos.find(({ x, y }) => x === j && y === i)) && (
+            <div className={classes.icon}>
+              <IconButton>
+                <BlockIcon style={{ color: 'red', fontSize: '30px' }} />
+              </IconButton>
+            </div>
+          )}
+          {/*
+            nodos:[
+              {
+                x:12,
+                y:15,
+              },
+              {
+                x: 20,
+                y: 35,
+              },
+              {
+                x:45,
+                y:18,
+              }
+              
+
+            ]
+          */}
+
             {ruta?.find(({ x, y }) => x === j && y === i)?.destino ? (
             <div className={classes.icon} style={{ transform: 'rotate(0deg)' }}>
               <PersonPinIcon style={{ color: '#424774'}} />
             </div>
           ) : null}
-          {paths?.map((path) => {
+          {paths?.map((path) => { 
             // let aux = new Date() - path.date;
             if (path?.ruta[path.pos] && path?.ruta[path.pos].x === j && path?.ruta[path.pos].y ===i) {
               let dir = path.ruta[path.pos].next;
