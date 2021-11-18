@@ -28,7 +28,7 @@ const obtenerRuta = (path) => {
 const implementarFecha = (startTime, dateTime) => {
   const startTimeX = new Date(startTime);
   const dateTimeX = new Date(dateTime);
-  const resultado = startTimeX.getTime() + (dateTimeX.getTime() - startTimeX.getTime())/500;
+  const resultado = startTimeX.getTime() + (dateTimeX.getTime() - startTimeX.getTime())/200;
   return new Date (resultado);
 };
 
@@ -136,7 +136,7 @@ const MapC=(props: simulacion )=>{
       */
         console.log("Mapa Colapso");
         axios
-        .post(url + "/archivos/simularRutasColapso")
+        .post(url + "/ejecutar/simularRutasColapso")
         .then((e) => {
           setPaths(
             e.data.paths.map((path) => {

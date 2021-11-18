@@ -138,7 +138,7 @@ const MapR=(props: simulacion )=>{
       */
        console.log("Mapa 3 días");
         axios
-        .post(url + "/archivos/simularRutas")
+        .post(url + "/ejecutar/simularRutas")
         .then((e) => {
           setPaths(
             e.data.paths.map((path) => {
