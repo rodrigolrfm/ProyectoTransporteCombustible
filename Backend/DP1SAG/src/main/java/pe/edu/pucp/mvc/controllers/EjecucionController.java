@@ -2,6 +2,7 @@ package pe.edu.pucp.mvc.controllers;
 
 
 import javafx.util.Pair;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pe.edu.pucp.algorithm.GeneticAlgorithm;
 import pe.edu.pucp.algorithm.Knapsack;
@@ -15,10 +16,11 @@ import pe.edu.pucp.utils.LecturaVehiculo;
 
 import java.util.*;
 
-/*
+@RestController
+@RequestMapping("/vehiculo")
 public class EjecucionController {
 
-    public  ejecutarAlgortimo(){
+    public void ejecutarAlgortimo() throws Exception {
         List<PedidoModel> listaPedidos;
 
         List<EntidadVehiculo> listaVehiculos;
@@ -203,4 +205,3 @@ public class EjecucionController {
     }
 
 }
-*/
