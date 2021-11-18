@@ -5,6 +5,7 @@ import lombok.experimental.SuperBuilder;
 import pe.edu.pucp.utils.UtilidadesFechas;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
@@ -15,7 +16,7 @@ import java.util.List;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class NodoModel implements Comparable<NodoModel>{
+public class NodoModel implements Comparable<NodoModel>, Serializable {
 
     private int idNodo;
 

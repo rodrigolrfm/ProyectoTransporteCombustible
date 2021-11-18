@@ -2,6 +2,8 @@ package pe.edu.pucp.mvc.controllers;
 
 
 import javafx.util.Pair;
+import org.apache.logging.log4j.message.MapMessage;
+import org.json.*;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pe.edu.pucp.algorithm.GeneticAlgorithm;
@@ -16,19 +18,22 @@ import pe.edu.pucp.utils.LecturaVehiculo;
 
 import java.util.*;
 
-@RestController
-@RequestMapping("/vehiculo")
+//@RestController
+//@RequestMapping("/ejecutar")
 public class EjecucionController {
 
-    public void ejecutarAlgortimo() throws Exception {
+    public static JSONObject ejecutarAlgortimo() throws Exception {
+
+        JSONObject json = new JSONObject();
+        List<JSONObject> rutasFinal = new ArrayList<>();
+
         List<PedidoModel> listaPedidos;
 
         List<EntidadVehiculo> listaVehiculos;
 
         listaVehiculos = LecturaVehiculo.TxtReader("src\\main\\java\\pe\\edu\\pucp\\files\\vehiculos2021.txt");
 
-        listaPedidos = Lectura.TxtReader("src\\main\\java\\pe\\edu\\pucp\\files\\ventas\\ventas202112.txt");
-
+        listaPedidos = Lectura.TxtReader("src\\main\\java\\pe\\edu\\pucp\\files\\ventas\\ventas202201.txt");
 
         ArrayList<NodoModel> blockList = LecturaBloques.TxtReader("src\\main\\java\\pe\\edu\\pucp\\files\\bloqueos\\202112bloqueadas.txt");
 
@@ -41,8 +46,6 @@ public class EjecucionController {
         MapaModel mapaModel = new MapaModel(70, 50, plantas);
         mapaModel.setBlockList(blockList);
 
-        // TODO: agregar restricciones de plantas sin GLP
-        // TODO: agregar mantenimientos y averías
 
         listaVehiculos.forEach(v -> {
             // Fecha de inicio y copia de fecha de inicio
@@ -59,7 +62,7 @@ public class EjecucionController {
 
         // Split request list in minimum capacity
         int totalCapacity = 0;
-        // TODO: Mapear pedidos desdoblados
+
         for(PedidoModel r : listaPedidos){
             int i = 0;
             for(; i < (int)r.getCantidadGLP()/minimo; i++)
@@ -106,7 +109,7 @@ public class EjecucionController {
             });
 
             int colapso;
-            // TODO: filtrar los pedidos que no se han registrado hasta ese momento
+
             for(PedidoModel req : requestListDesdoblado){
                 colapso = 0;
                 for(Pair<EntidadVehiculo, PriorityQueue<Pair<Float, PedidoModel>>> lvc : listaVC){
@@ -156,7 +159,7 @@ public class EjecucionController {
 //                System.out.println("PQ: " + vc.getValue());
                 int assigned = 0;
                 try {
-                    assigned += Knapsack.allocate(vc.getValue(), listaVehiculos, auxRequest); // TODO: refactorizar para no destruir la lista a cada rato
+                    assigned += Knapsack.allocate(vc.getValue(), listaVehiculos, auxRequest);
                     //verificar si entra en el camión los pedidos.
                 }
                 catch (Exception e) {
@@ -185,6 +188,12 @@ public class EjecucionController {
                     v.setNodoActual(v.getRutaVehiculo().get(v.getRutaVehiculo().size() - 1));
                     totalTime += v.calculateTimeToDispatch();
                     // se guardan las rutas y los pedidos
+                    // aquí se podría enviar cada vehículo con su ruta
+                    JSONObject rutaVehiculo = new JSONObject();
+                    rutaVehiculo.put("vehiculo", v);
+                    rutaVehiculo.put("ruta", v.getRutaVehiculo());
+                    rutasFinal.add(rutaVehiculo);
+
                 }
                 v.clearVehicle();
             }
@@ -202,6 +211,8 @@ public class EjecucionController {
             requestListDesdoblado = aux;
 
         } while(!requestListDesdoblado.isEmpty());
-    }
 
+        json.put("rutas", rutasFinal);
+        return json;
+    }
 }
