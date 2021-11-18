@@ -13,6 +13,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import pe.edu.pucp.mvc.controllers.EjecucionController;
+import pe.edu.pucp.mvc.metodos.EjecucionAlgoritmo;
 
 @Component
 public class ScheduledTasks {
@@ -20,14 +21,12 @@ public class ScheduledTasks {
     private static final Logger log = LoggerFactory.getLogger(ScheduledTasks.class);
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
     public static SseEmitter emi;
-    @Autowired
-    EjecucionController ejecucionController;
 
     @Scheduled(fixedRate = 60000)
     public void reportCurrentTime() throws Exception {
         JSONObject json = new JSONObject();
         if (emi!=null){
-            json = ejecucionController.ejecutarAlgortimo();
+            json = EjecucionAlgoritmo.ejecutarAlgortimo();
             emi.send(SseEmitter.event().name("RUTAS").data(json));
         }
     }
