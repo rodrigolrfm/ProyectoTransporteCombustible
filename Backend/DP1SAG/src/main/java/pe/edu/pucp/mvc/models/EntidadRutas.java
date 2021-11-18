@@ -10,9 +10,9 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class EntidadRutas {
-    private List<EntidadRuta> rutas;
+    private List<EntidadRuta> paths;
 
     public void agregarRuta(EntidadRuta rutaVehiculo) {
-        this.rutas.add(rutaVehiculo);
+        this.paths.add(rutaVehiculo);
     }
 }

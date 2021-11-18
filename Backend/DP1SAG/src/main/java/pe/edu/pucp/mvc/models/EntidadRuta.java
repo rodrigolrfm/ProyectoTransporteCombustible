@@ -11,7 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 
 public class EntidadRuta {
-    private List<PositionModel> ruta;
+    private List<PositionModel> path;
     private String startTime;
     private String endTime;
 }

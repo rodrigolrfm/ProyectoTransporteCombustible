@@ -40,7 +40,7 @@ public class EjecucionController {
     public EntidadRutas ejecutarAlgortimo() throws Exception {
 
 
-        EntidadRutas rutasFinal = EntidadRutas.builder().rutas(new ArrayList<>()).build();
+        EntidadRutas rutasFinal = EntidadRutas.builder().paths(new ArrayList<>()).build();
 
         List<PedidoModel> listaPedidos;
 
@@ -208,7 +208,7 @@ public class EjecucionController {
                     sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
                     sdf.setTimeZone(TimeZone.getTimeZone("CET"));
                     String text = sdf.format(v.getFechaInicio().getTime());
-                    EntidadRuta rutaVehiculo = EntidadRuta.builder().startTime(text).ruta(v.getRutaVehiculoPositions(requestListDesdoblado)).endTime("Alap").build();
+                    EntidadRuta rutaVehiculo = EntidadRuta.builder().startTime(text).path(v.getRutaVehiculoPositions(requestListDesdoblado)).endTime("Alap").build();
                     rutasFinal.agregarRuta(rutaVehiculo);
                 }
                 v.clearVehicle();
@@ -236,7 +236,7 @@ public class EjecucionController {
     public EntidadRutas ejecutarAlgortimodias() throws Exception {
 
 
-        EntidadRutas rutasFinal = EntidadRutas.builder().rutas(new ArrayList<>()).build();
+        EntidadRutas rutasFinal = EntidadRutas.builder().paths(new ArrayList<>()).build();
 
         List<PedidoModel> listaPedidos;
 
@@ -404,7 +404,7 @@ public class EjecucionController {
                     sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
                     sdf.setTimeZone(TimeZone.getTimeZone("CET"));
                     String text = sdf.format(v.getFechaInicio().getTime());
-                    EntidadRuta rutaVehiculo = EntidadRuta.builder().startTime(text).ruta(v.getRutaVehiculoPositions(requestListDesdoblado)).endTime("Alap").build();
+                    EntidadRuta rutaVehiculo = EntidadRuta.builder().startTime(text).path(v.getRutaVehiculoPositions(requestListDesdoblado)).endTime("Alap").build();
                     rutasFinal.agregarRuta(rutaVehiculo);
                 }
                 v.clearVehicle();
