@@ -7,6 +7,7 @@ import pe.edu.pucp.utils.TipoVehiculo;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
@@ -61,4 +62,18 @@ public class EntidadVehiculo implements Serializable {
         return ((float) this.rutaVehiculo.size() / (float) this.velocidad)*60;
     }
 
+    public List<PositionModel> getRutaVehiculoPositions(List<PedidoModel> pedidos) {
+        List<PositionModel> ruta = new ArrayList<>();
+        this.getRutaVehiculo().forEach(nodo -> {
+            int esDestino = 0;
+            for(PedidoModel pedido : pedidos) {
+                if (nodo.getCoordenadaX() == pedido.getCoordenadaX() && nodo.getCoordenadaY() == pedido.getCoordenadaY()) {
+                    esDestino = 1;
+                    break;
+                }
+            }
+            ruta.add(PositionModel.builder().x(nodo.getCoordenadaX()).y(nodo.getCoordenadaY()).destino(Integer.valueOf(esDestino)).build());
+        });
+        return ruta;
+    }
 }

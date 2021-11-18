@@ -45,10 +45,7 @@ public class AlgoritmoPrueba {
         
         MapaModel mapaModel = new MapaModel(70, 50, plantas);
         mapaModel.setBlockList(blockList);
-        
-        // TODO: agregar restricciones de plantas sin GLP
-        // TODO: agregar mantenimientos y averías
-        
+
         listaVehiculos.forEach(v -> {
             // Fecha de inicio y copia de fecha de inicio
             Calendar init = Calendar.getInstance(); 
@@ -64,7 +61,7 @@ public class AlgoritmoPrueba {
 
         // Split request list in minimum capacity
         int totalCapacity = 0;
-        // TODO: Mapear pedidos desdoblados
+
         for(PedidoModel r : listaPedidos){
             int i = 0;
             for(; i < (int)r.getCantidadGLP()/minimo; i++)
@@ -111,7 +108,7 @@ public class AlgoritmoPrueba {
             });
             
             int colapso;
-            // TODO: filtrar los pedidos que no se han registrado hasta ese momento
+
             for(PedidoModel req : requestListDesdoblado){
                 colapso = 0;
                 for(Pair<EntidadVehiculo, PriorityQueue<Pair<Float, PedidoModel>>> lvc : listaVC){
@@ -161,7 +158,7 @@ public class AlgoritmoPrueba {
 //                System.out.println("PQ: " + vc.getValue());
                 int assigned = 0;
                 try {
-                    assigned += Knapsack.allocate(vc.getValue(), listaVehiculos, auxRequest); // TODO: refactorizar para no destruir la lista a cada rato
+                    assigned += Knapsack.allocate(vc.getValue(), listaVehiculos, auxRequest);
                     //verificar si entra en el camión los pedidos.
                 }
                 catch (Exception e) {
@@ -220,9 +217,8 @@ public class AlgoritmoPrueba {
                 pedidoCompletado++;
         }
                 
-        System.out.println("Pedidos recibidos = " + listaPedidos.size());
-        System.out.println("Pedidos completados = " + pedidoCompletado);
-        System.out.println("C logró :D");
+        System.out.println("Cantidad de pedidos procesados = " + listaPedidos.size());
+        System.out.println("Cantidad de pedidos completados = " + pedidoCompletado);
         
       }
 

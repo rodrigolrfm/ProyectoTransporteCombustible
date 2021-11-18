@@ -16,6 +16,7 @@ import pe.edu.pucp.utils.Lectura;
 import pe.edu.pucp.utils.LecturaBloques;
 import pe.edu.pucp.utils.LecturaVehiculo;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 //@RestController
@@ -190,10 +191,14 @@ public class EjecucionController {
                     // se guardan las rutas y los pedidos
                     // aquí se podría enviar cada vehículo con su ruta
                     JSONObject rutaVehiculo = new JSONObject();
-                    rutaVehiculo.put("vehiculo", v);
-                    rutaVehiculo.put("ruta", v.getRutaVehiculo());
+                    SimpleDateFormat sdf;
+                    sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
+                    sdf.setTimeZone(TimeZone.getTimeZone("CET"));
+                    String text = sdf.format(v.getFechaInicio().getTime());
+                    rutaVehiculo.put("StartTime", text);
+                    rutaVehiculo.put("ruta", v.getRutaVehiculoPositions(requestListDesdoblado));
+                    rutaVehiculo.put("EndTime", "None");
                     rutasFinal.add(rutaVehiculo);
-
                 }
                 v.clearVehicle();
             }
