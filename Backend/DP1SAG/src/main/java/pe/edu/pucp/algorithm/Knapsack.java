@@ -6,13 +6,13 @@ import java.util.List;
 import java.util.PriorityQueue;
 import javafx.util.Pair;
 import pe.edu.pucp.mvc.models.PedidoModel;
-import pe.edu.pucp.mvc.models.VehiculoModel;
+import pe.edu.pucp.mvc.models.EntidadVehiculo;
 import pe.edu.pucp.utils.EstadoVehiculo;
 
 
 public class Knapsack {
     
-    public static int allocate(PriorityQueue<Pair<Float, PedidoModel>> requestList, List<VehiculoModel> vehicles, List<PedidoModel> listaDesdoblada) throws Exception {
+    public static int allocate(PriorityQueue<Pair<Float, PedidoModel>> requestList, List<EntidadVehiculo> vehicles, List<PedidoModel> listaDesdoblada) throws Exception {
         boolean assign = false;
         int assigned = 0;
         for (Pair<Float, PedidoModel> par: requestList){ 
@@ -29,12 +29,12 @@ public class Knapsack {
         return assigned;
     }
 
-    public static boolean assignToAvailableVehicle(PedidoModel r, List<VehiculoModel> vehicles, List<PedidoModel> listaDesdoblada) throws Exception {
+    public static boolean assignToAvailableVehicle(PedidoModel r, List<EntidadVehiculo> vehicles, List<PedidoModel> listaDesdoblada) throws Exception {
         boolean flat = false;
         if (vehicles.isEmpty()) {
             throw new Exception("Vehiculos no aptos");
         }
-        for (VehiculoModel v : vehicles) {
+        for (EntidadVehiculo v : vehicles) {
             if ((v.getEstadoVehiculo()==0) &&
                 r.getCantidadGLP() + v.getCantidadPedidos() <= v.getCargaGLP()) {
                 v.setCantidadPedidos(r.getCantidadGLP()+ v.getCantidadPedidos());

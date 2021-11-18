@@ -1,6 +1,6 @@
 package pe.edu.pucp.utils;
 
-import pe.edu.pucp.mvc.models.VehiculoModel;
+import pe.edu.pucp.mvc.models.EntidadVehiculo;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -11,8 +11,8 @@ import java.util.List;
 
 
 public class LecturaVehiculo {
-    public static List<VehiculoModel> TxtReader(String path) throws IOException , Exception{
-        List<VehiculoModel> vehicleList = new ArrayList<>();
+    public static List<EntidadVehiculo> TxtReader(String path) throws IOException , Exception{
+        List<EntidadVehiculo> vehicleList = new ArrayList<>();
 
             File file = new File(path);
             final BufferedReader br = new BufferedReader(new FileReader(file));
@@ -23,7 +23,7 @@ public class LecturaVehiculo {
                 rowRequest = line.split(",");
                 type = rowRequest[0].charAt(1);
                 
-                VehiculoModel r = VehiculoModel.builder()
+                EntidadVehiculo r = EntidadVehiculo.builder()
                         .velocidad(50)
                         .pesoTara(Double.parseDouble(rowRequest[1]))
                         .cargaGLP(Integer.parseInt(rowRequest[2]))

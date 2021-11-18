@@ -14,17 +14,12 @@ import java.io.Serializable;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table(name = "planta")
+
 public class PlantaModel extends NodoModel implements Serializable {
 
-    @OneToOne
-    @JoinColumn(name = "idNodo",nullable = false)
-    private NodoModel nodo;
 
     @Builder.Default
     private boolean esPrincipal=false;
-
 
     @Override
     public String toString(){

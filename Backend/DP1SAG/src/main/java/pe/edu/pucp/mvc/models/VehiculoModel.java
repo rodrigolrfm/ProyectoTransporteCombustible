@@ -1,5 +1,4 @@
 package pe.edu.pucp.mvc.models;
-
 import lombok.*;
 import pe.edu.pucp.utils.EstadoVehiculo;
 import pe.edu.pucp.utils.TipoVehiculo;
@@ -24,10 +23,6 @@ public class VehiculoModel implements Serializable {
     @Column(unique = true,nullable = false)
     private int idVehiculo;
 
-    @OneToOne
-    @JoinColumn(name = "idConductor",nullable = false)
-    private ConductorModel conductor;
-
     @Column(nullable = false, length = 50)
     private String estado;
 
@@ -49,15 +44,6 @@ public class VehiculoModel implements Serializable {
     @Builder.Default
     private List<PedidoModel> listaPedidos = new ArrayList<>();
 
-
-    @OneToOne(mappedBy = "vehiculo1")
-    @Builder.Default
-    NodoModel nodoActual = null;
-
-    @OneToMany(mappedBy = "vehiculo2")
-    @Builder.Default
-    List<NodoModel> rutaVehiculo = null;
-
     private double combustible;
 
     @Column(nullable = false)
@@ -66,15 +52,20 @@ public class VehiculoModel implements Serializable {
     @Column(nullable = false)
     private int tieneAveria;
 
-    public void clearVehicle(){
-        cantidadPedidos = 0;
-        listaPedidos.clear();
-        estadoVehiculo = 0;
-    }
 
-    public float calculateTimeToDispatch(){
-        return ((float) this.rutaVehiculo.size() / (float) this.velocidad)*60;
+    public VehiculoModel(EntidadVehiculo vehiculo){
+        this.cantidadPedidos=vehiculo.getCantidadPedidos();
+        this.capacidad = vehiculo.getCapacidad();
+        this.cargaGLP = vehiculo.getCargaGLP();
+        this.estadoVehiculo = vehiculo.getEstadoVehiculo();
+        this.estado = vehiculo.getEstado();
+        this.fechaInicio = vehiculo.getFechaInicio();
+        this.velocidad = vehiculo.getVelocidad();
+        this.tieneAveria = vehiculo.getTieneAveria();
+        this.tipoVehiculo = vehiculo.getTipoVehiculo();
+        this.pesoTotal = vehiculo.getPesoTotal();
+        this.pesoTara = vehiculo.getPesoTara();
+        this.combustible =vehiculo.getCombustible();
     }
-
 
 }

@@ -1,5 +1,5 @@
 package pe.edu.pucp.mvc.controllers;
-
+/*
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -130,3 +130,4 @@ public class BloqueoController {
 
 
 }
+*/

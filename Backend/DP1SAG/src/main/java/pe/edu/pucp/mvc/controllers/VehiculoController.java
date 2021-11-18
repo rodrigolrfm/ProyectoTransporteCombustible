@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import pe.edu.pucp.mvc.models.EntidadVehiculo;
 import pe.edu.pucp.mvc.models.VehiculoModel;
 import pe.edu.pucp.mvc.services.VehiculoService;
 
@@ -28,7 +29,7 @@ public class VehiculoController {
     @PostMapping(value = "/cargaMasivaVehiculos", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public void cargaMasivaVehiculos(@RequestParam("file") MultipartFile file) throws IOException{
 
-        List<VehiculoModel> vehicleList = new ArrayList<>();
+        List<EntidadVehiculo> vehicleList = new ArrayList<>();
 
         File convertFile = new File("/home/ubuntu/resources/" + file.getOriginalFilename());
         //File convertFile = new File("D:/work/" + file.getOriginalFilename());
@@ -41,7 +42,7 @@ public class VehiculoController {
             rowRequest = line.split(",");
             type = rowRequest[0].charAt(1);
 
-            VehiculoModel vehiculo = VehiculoModel.builder()
+            EntidadVehiculo vehiculo = EntidadVehiculo.builder()
                     .velocidad(50)
                     .pesoTara(Double.parseDouble(rowRequest[1]))
                     .cargaGLP(Integer.parseInt(rowRequest[2]))
@@ -59,7 +60,8 @@ public class VehiculoController {
                     break;
             }
             vehicleList.add(vehiculo);
-            this.vehiculoService.guardarVehiculo(vehiculo);
+
+            this.vehiculoService.guardarVehiculo( new VehiculoModel(vehiculo));
         }
     }
 

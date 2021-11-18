@@ -23,10 +23,4 @@ public class ClienteModel implements Serializable {
     @Column(nullable = false,length = 100)
     private String apellidos;
 
-
-    @OneToOne
-    @JoinColumn(name = "idNodo",nullable = false)
-    private NodoModel lugarNodo;
-
-
 }

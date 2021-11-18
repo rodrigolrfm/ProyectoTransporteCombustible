@@ -14,7 +14,7 @@ import pe.edu.pucp.mvc.models.NodoModel;
 //import pe.edu.pucp.mvc.models.NodoModel;
 import pe.edu.pucp.mvc.models.PedidoModel;
 import pe.edu.pucp.mvc.models.PlantaModel;
-import pe.edu.pucp.mvc.models.VehiculoModel;
+import pe.edu.pucp.mvc.models.EntidadVehiculo;
 import pe.edu.pucp.utils.LecturaBloques;
 import pe.edu.pucp.utils.Lectura;
 import pe.edu.pucp.utils.LecturaVehiculo;
@@ -28,7 +28,7 @@ public class AlgoritmoPrueba {
 
         List<PedidoModel> listaPedidos;
 
-        List<VehiculoModel> listaVehiculos;
+        List<EntidadVehiculo> listaVehiculos;
 
         listaVehiculos = LecturaVehiculo.TxtReader("src\\main\\java\\pe\\edu\\pucp\\files\\vehiculos2021.txt");
 
@@ -92,7 +92,7 @@ public class AlgoritmoPrueba {
     
         System.out.println("Total Capacity: " + totalCapacity);
         // lista que tendrá los vehículos y sus listas de pedidos ordenados por indice
-        ArrayList<Pair<VehiculoModel, PriorityQueue<Pair<Float, PedidoModel>>>> listaVC = new ArrayList<>();
+        ArrayList<Pair<EntidadVehiculo, PriorityQueue<Pair<Float, PedidoModel>>>> listaVC = new ArrayList<>();
         
         List<PedidoModel> auxRequest = new ArrayList<>();
         requestListDesdoblado.forEach(r -> {
@@ -114,8 +114,8 @@ public class AlgoritmoPrueba {
             // TODO: filtrar los pedidos que no se han registrado hasta ese momento
             for(PedidoModel req : requestListDesdoblado){
                 colapso = 0;
-                for(Pair<VehiculoModel, PriorityQueue<Pair<Float, PedidoModel>>> lvc : listaVC){
-                    VehiculoModel v = lvc.getKey();
+                for(Pair<EntidadVehiculo, PriorityQueue<Pair<Float, PedidoModel>>> lvc : listaVC){
+                    EntidadVehiculo v = lvc.getKey();
                     PriorityQueue<Pair<Float, PedidoModel>> requestListArreange = lvc.getValue();
                     float distance = v.getNodoActual().getDistancia(req),
                           tiempoAproximado = (float)(distance/v.getVelocidad()),
@@ -154,7 +154,7 @@ public class AlgoritmoPrueba {
                 }
             }          
             
-            for(Pair<VehiculoModel, PriorityQueue<Pair<Float, PedidoModel>>> vc : listaVC){
+            for(Pair<EntidadVehiculo, PriorityQueue<Pair<Float, PedidoModel>>> vc : listaVC){
                 //Assign request to vehicles
                 listaVehiculos.clear(); // se puede quitar esta lista intermedia
                 listaVehiculos.add(vc.getKey());
@@ -176,7 +176,7 @@ public class AlgoritmoPrueba {
 
             //Algoritmo Genetico
             ArrayList<NodoModel> vertices = new ArrayList<>(); // se puede quitar esta lista intermedia
-            for(VehiculoModel v : listaVehiculos){
+            for(EntidadVehiculo v : listaVehiculos){
                 vertices.clear();
                 v.getListaPedidos().forEach(p -> { vertices.add(p); });
                 System.out.println(v.getListaPedidos());
@@ -184,7 +184,7 @@ public class AlgoritmoPrueba {
                     GeneticAlgorithm.GA(v, vertices, mapaModel);
                     
             }
-            for(VehiculoModel v : listaVehiculos){
+            for(EntidadVehiculo v : listaVehiculos){
                 if(v.getRutaVehiculo() != null && !v.getRutaVehiculo().isEmpty()) { // si encontró una buana ruta.
                     v.getFechaInicio().add(Calendar.MINUTE, Math.round((float) Math.ceil(v.calculateTimeToDispatch())));
                     v.setNodoActual(v.getRutaVehiculo().get(v.getRutaVehiculo().size() - 1));

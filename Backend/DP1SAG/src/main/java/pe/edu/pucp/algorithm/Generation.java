@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 import pe.edu.pucp.mvc.controllers.MapaModel;
 import pe.edu.pucp.mvc.models.NodoModel;
 import pe.edu.pucp.mvc.models.PlantaModel;
-import pe.edu.pucp.mvc.models.VehiculoModel;
+import pe.edu.pucp.mvc.models.EntidadVehiculo;
 import pe.edu.pucp.utils.Utilidades;
 
 import java.util.*;
@@ -138,10 +138,10 @@ public class Generation {
         }
     }
     
-    public void calculateAllFitness(VehiculoModel VehiculoModel, MapaModel mapaModelConfiguration){
+    public void calculateAllFitness(EntidadVehiculo EntidadVehiculo, MapaModel mapaModelConfiguration){
         assert !chromosomesList.isEmpty(): "Cromosoma vacio";
         for(Chromosome c : chromosomesList){
-            double fitness = c.getFitness(VehiculoModel, mapaModelConfiguration);
+            double fitness = c.getFitness(EntidadVehiculo, mapaModelConfiguration);
             assert c.getRoute() !=  null: "GG";
             if(fitness < best_fitness){
                 best_fitness = fitness;
@@ -156,7 +156,7 @@ public class Generation {
         }
     }
     
-    public void setBest_chromosome(Chromosome c, VehiculoModel v, MapaModel m){
+    public void setBest_chromosome(Chromosome c, EntidadVehiculo v, MapaModel m){
         this.best_chromosome = c;
         this.best_chromosome.getFitness(v, m);
     }

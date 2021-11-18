@@ -15,24 +15,9 @@ import java.util.List;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Inheritance(strategy = InheritanceType.JOINED)
-@Table(name="nodo")
 public class NodoModel implements Comparable<NodoModel>{
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(unique = true)
     private int idNodo;
-
-    @OneToOne
-    @JoinColumn(name = "idVehiculo", nullable = false)
-    private VehiculoModel vehiculo1;
-
-    @ManyToOne
-    @JoinColumn(name = "idVehiculo1", nullable = false)
-    private VehiculoModel vehiculo2;
-
 
     private int coordenadaX;
     private int coordenadaY;
@@ -48,14 +33,10 @@ public class NodoModel implements Comparable<NodoModel>{
     private Date inicioBloqueo;
     private Date finBloqueo;
 
-    @OneToOne
-    @JoinColumn(name = "idNodoprevio", nullable = false)
+    @Builder.Default
     private NodoModel nodoprevio = null;
 
-
-
     @Builder.Default
-    @OneToMany(mappedBy = "idNodoBloqueo")
     List<BloqueModel> blockList = new ArrayList<>();
 
     public NodoModel(int coordenadaX, int coordenadaY, boolean estaBloqueado) {

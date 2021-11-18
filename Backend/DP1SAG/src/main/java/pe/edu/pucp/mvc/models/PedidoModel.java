@@ -16,6 +16,10 @@ import java.util.Calendar;
 @Table(name="pedido")
 public class PedidoModel extends NodoModel implements Serializable {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(unique = true,nullable = false)
+    private int idPedido;
 
     private int idExtendido;
 

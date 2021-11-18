@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 import pe.edu.pucp.mvc.controllers.MapaModel;
 import pe.edu.pucp.mvc.models.NodoModel;
-import pe.edu.pucp.mvc.models.VehiculoModel;
+import pe.edu.pucp.mvc.models.EntidadVehiculo;
 
 
 public class GeneticAlgorithm {
@@ -21,15 +21,15 @@ public class GeneticAlgorithm {
     public static final int NUMBER_OF_PARENTS = 20;
     public static final int NUMBER_OF_DIRECT_CHROMOSOMES = 25;
     
-    public static void GA(VehiculoModel VehiculoModel, ArrayList<NodoModel> pedidos, MapaModel mapaModelConfiguration){ //podriamos poner el mapa como parametro
+    public static void GA(EntidadVehiculo EntidadVehiculo, ArrayList<NodoModel> pedidos, MapaModel mapaModelConfiguration){ //podriamos poner el mapa como parametro
         int i=0;
-        Chromosome chromosome = Chromosome.builder().currentStart(VehiculoModel.getNodoActual())
-                .genes(pedidos).finalDepot(VehiculoModel.getNodoActual()) //este ultimo puede cambiar
+        Chromosome chromosome = Chromosome.builder().currentStart(EntidadVehiculo.getNodoActual())
+                .genes(pedidos).finalDepot(EntidadVehiculo.getNodoActual()) //este ultimo puede cambiar
                 .build();
         
         if(pedidos.size() == 1){
-            chromosome.getFitness(VehiculoModel, mapaModelConfiguration);
-            VehiculoModel.setRutaVehiculo(new ArrayList<>(chromosome.getRoute()));
+            chromosome.getFitness(EntidadVehiculo, mapaModelConfiguration);
+            EntidadVehiculo.setRutaVehiculo(new ArrayList<>(chromosome.getRoute()));
             return;
         }
         
@@ -37,8 +37,8 @@ public class GeneticAlgorithm {
         generation.initPopulation(chromosome, mapaModelConfiguration.getPlantas(), POPULATION_SIZE);
         generation.setN_parents(NUMBER_OF_PARENTS);
         generation.setN_directs(NUMBER_OF_DIRECT_CHROMOSOMES);
-        generation.setBest_chromosome(chromosome, VehiculoModel, mapaModelConfiguration);
-        generation.calculateAllFitness(VehiculoModel, mapaModelConfiguration);
+        generation.setBest_chromosome(chromosome, EntidadVehiculo, mapaModelConfiguration);
+        generation.calculateAllFitness(EntidadVehiculo, mapaModelConfiguration);
         
         double menor = generation.getBest_fitness();
         Chromosome route = generation.getBest_chromosome();
@@ -48,7 +48,7 @@ public class GeneticAlgorithm {
         while(i < GENERATIONS){
             try {
                 generation.generateNewGeneration(TOURNAMENT_PARTICIPANTS);
-                generation.calculateAllFitness(VehiculoModel, mapaModelConfiguration);
+                generation.calculateAllFitness(EntidadVehiculo, mapaModelConfiguration);
                 if (generation.getBest_fitness() < menor){
                     route = generation.getBest_chromosome();
                     menor = generation.getBest_fitness();
@@ -60,6 +60,6 @@ public class GeneticAlgorithm {
             }
         }
         System.out.println("Ruta final: " + route.getRoute());
-        VehiculoModel.setRutaVehiculo(new ArrayList<>(route.getRoute()));
+        EntidadVehiculo.setRutaVehiculo(new ArrayList<>(route.getRoute()));
     }
 }

@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 import pe.edu.pucp.mvc.controllers.MapaModel;
 import pe.edu.pucp.mvc.models.NodoModel;
 import pe.edu.pucp.mvc.models.PedidoModel;
-import pe.edu.pucp.mvc.models.VehiculoModel;
+import pe.edu.pucp.mvc.models.EntidadVehiculo;
 import pe.edu.pucp.utils.UtilidadesCuenta;
 
 
@@ -47,7 +47,7 @@ public class Chromosome {
         fitness += finalDepot.getDistancia(genes.get(i));
     }
     
-    private double computeFitness(VehiculoModel v, MapaModel mapaModelConfiguration) {
+    private double computeFitness(EntidadVehiculo v, MapaModel mapaModelConfiguration) {
         if(currentStart == null){
             throw new NullPointerException("currentStart es null");
         }
@@ -137,16 +137,16 @@ public class Chromosome {
         finalDepot = finalD;
     }
     
-    public Double getFitness(BiFunction<VehiculoModel, Chromosome, Double> fn, VehiculoModel VehiculoModel){
+    public Double getFitness(BiFunction<EntidadVehiculo, Chromosome, Double> fn, EntidadVehiculo EntidadVehiculo){
         if(fitness == Double.MAX_VALUE)
-            fitness = fn.apply(VehiculoModel, this);
+            fitness = fn.apply(EntidadVehiculo, this);
         
         return fitness == -1 ? Double.MAX_VALUE : fitness;
     }
     
-    public Double getFitness(VehiculoModel VehiculoModel, MapaModel mapaModelConfiguration){
+    public Double getFitness(EntidadVehiculo EntidadVehiculo, MapaModel mapaModelConfiguration){
         if(fitness == Double.MAX_VALUE)
-            fitness = computeFitness(VehiculoModel, mapaModelConfiguration);
+            fitness = computeFitness(EntidadVehiculo, mapaModelConfiguration);
         
         return fitness == -1 ? Double.MAX_VALUE : fitness;
     }
