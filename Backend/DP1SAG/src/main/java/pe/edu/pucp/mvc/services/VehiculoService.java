@@ -10,9 +10,7 @@ import pe.edu.pucp.mvc.repositories.VehiculoRepository;
 public class VehiculoService {
     @Autowired
     VehiculoRepository vehiculoRepository;
-
     public VehiculoModel guardarVehiculo(VehiculoModel vehiculo){
         return vehiculoRepository.save(vehiculo);
     }
-
 }
