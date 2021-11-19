@@ -28,7 +28,7 @@ const obtenerRuta = (path) => {
 const implementarFecha = (startTime, dateTime) => {
   const startTimeX = new Date(startTime);
   const dateTimeX = new Date(dateTime);
-  const resultado = startTimeX.getTime() + (dateTimeX.getTime() - startTimeX.getTime())/200;
+  const resultado = startTimeX.getTime() + (dateTimeX.getTime() - startTimeX.getTime())/500;
   return new Date (resultado);
 };
 

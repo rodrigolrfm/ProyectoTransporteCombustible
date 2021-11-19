@@ -141,7 +141,7 @@ const MapO=(props: simulacion )=>{
       */
         console.log("Mapa Colapso");
         axios
-        .post(url + "/archivos/simularRutasColapso")
+        .post(url + "/ejecutar/simularRutas")
         .then((e) => {
           setPaths(
             e.data.paths.map((path) => {
