@@ -30,14 +30,15 @@ public class AlgoritmoPrueba {
 
         List<EntidadVehiculo> listaVehiculos;
 
-        listaVehiculos = LecturaVehiculo.TxtReader("src\\main\\java\\pe\\edu\\pucp\\files\\vehiculos2021.txt");
+        listaVehiculos = LecturaVehiculo.lectura("src\\main\\java\\pe\\edu\\pucp\\files\\vehiculos2021.txt");
 
-        listaPedidos = Lectura.TxtReader("src\\main\\java\\pe\\edu\\pucp\\files\\ventas\\ventas202112.txt");
+        listaPedidos = Lectura.lectura("src\\main\\java\\pe\\edu\\pucp\\files\\ventas\\ventas202112.txt");
 
         
-        ArrayList<NodoModel> blockList = LecturaBloques.TxtReader("src\\main\\java\\pe\\edu\\pucp\\files\\bloqueos\\202112bloqueadas.txt");
+        ArrayList<NodoModel> blockList = LecturaBloques.lectura("src\\main\\java\\pe\\edu\\pucp\\files\\bloqueos\\202112bloqueadas.txt");
         
-        // Depositos iniciales
+        // Inicializar plantas
+
         ArrayList<PlantaModel> plantas = new ArrayList<>();
         plantas.add(PlantaModel.builder().coordenadaX(12).coordenadaY(8).esPrincipal(true).build());
         plantas.add(PlantaModel.builder().coordenadaX(42).coordenadaY(42).build());
@@ -46,8 +47,8 @@ public class AlgoritmoPrueba {
         MapaModel mapaModel = new MapaModel(70, 50, plantas);
         mapaModel.setBlockList(blockList);
 
+        // Inicializar vehículos
         listaVehiculos.forEach(v -> {
-            // Fecha de inicio y copia de fecha de inicio
             Calendar init = Calendar.getInstance(); 
             init.set(2021, 11, 1, 0, 0, 0);
             v.setFechaInicio(init);
@@ -88,9 +89,10 @@ public class AlgoritmoPrueba {
         }      
     
         System.out.println("Total Capacity: " + totalCapacity);
-        // lista que tendrá los vehículos y sus listas de pedidos ordenados por indice
+
         ArrayList<Pair<EntidadVehiculo, PriorityQueue<Pair<Float, PedidoModel>>>> listaVC = new ArrayList<>();
-        
+
+        // Lista de pedidos auxiliar
         List<PedidoModel> auxRequest = new ArrayList<>();
         requestListDesdoblado.forEach(r -> {
             auxRequest.add(r);
@@ -143,46 +145,46 @@ public class AlgoritmoPrueba {
                     }
                             
                     System.out.println("Total de glp entregado = " + (totalCapacity - totalGLP));
-                    System.out.println("Total de glp que falta entregar = " + totalGLP);
+                    System.out.println("Total de glp por entregar = " + totalGLP);
                     System.out.println("Total de tiempo = " + totalTime/60);
                     System.out.println("Pedidos recibidos = " + listaPedidos.size());
                     System.out.println("Pedidos completados = " + pedidoCompletado);
-                    throw new Exception("Llegó al colapso logístico");
+                    throw new Exception("COLAPSO LOGÍSTICO!!");
                 }
             }          
             
             for(Pair<EntidadVehiculo, PriorityQueue<Pair<Float, PedidoModel>>> vc : listaVC){
                 //Assign request to vehicles
-                listaVehiculos.clear(); // se puede quitar esta lista intermedia
+                listaVehiculos.clear();
                 listaVehiculos.add(vc.getKey());
-//                System.out.println("PQ: " + vc.getValue());
                 int assigned = 0;
                 try {
                     assigned += Knapsack.allocate(vc.getValue(), listaVehiculos, auxRequest);
-                    //verificar si entra en el camión los pedidos.
                 }
                 catch (Exception e) {
                     System.out.println(e.getMessage());
                 }
             }
             
-            listaVehiculos.clear(); // se puede eliminar esta lista intermedia
+            listaVehiculos.clear();
             listaVC.forEach(vc -> {
                listaVehiculos.add(vc.getKey());
             });
 
-            //Algoritmo Genetico
-            ArrayList<NodoModel> vertices = new ArrayList<>(); // se puede quitar esta lista intermedia
+            //Algoritmo Genético
+            ArrayList<NodoModel> vertices = new ArrayList<>();
             for(EntidadVehiculo v : listaVehiculos){
                 vertices.clear();
-                v.getListaPedidos().forEach(p -> { vertices.add(p); });
+                v.getListaPedidos().forEach(p -> {
+                    vertices.add(p);
+                });
                 System.out.println(v.getListaPedidos());
                 if(!v.getListaPedidos().isEmpty())
-                    GeneticAlgorithm.GA(v, vertices, mapaModel);
+                    GeneticAlgorithm.Genetic(v, vertices, mapaModel);
                     
             }
             for(EntidadVehiculo v : listaVehiculos){
-                if(v.getRutaVehiculo() != null && !v.getRutaVehiculo().isEmpty()) { // si encontró una buana ruta.
+                if(v.getRutaVehiculo() != null && !v.getRutaVehiculo().isEmpty()) {
                     v.getFechaInicio().add(Calendar.MINUTE, Math.round((float) Math.ceil(v.calculateTimeToDispatch())));
                     v.setNodoActual(v.getRutaVehiculo().get(v.getRutaVehiculo().size() - 1));
                     totalTime += v.calculateTimeToDispatch();
@@ -191,7 +193,7 @@ public class AlgoritmoPrueba {
                 v.clearVehicle();
             }
 
-            // Se hace sort para las capacidadades
+            // Ordenar por capacidad
             listaVehiculos.sort((v1, v2) -> Long.compare(v1.getFechaInicio().getTimeInMillis() , v2.getFechaInicio().getTimeInMillis()));
 
             List<PedidoModel> aux = new ArrayList<>();
@@ -222,12 +224,6 @@ public class AlgoritmoPrueba {
         
       }
 
-      /*
-    private static void printCalendar(Calendar cal){
-        System.out.println("Año: " + cal.get(Calendar.YEAR) + " - Mes: " + cal.get(Calendar.MONTH) + " - Día: " + cal.get(Calendar.DATE)
-                + " - Hora: " + cal.get(Calendar.HOUR) + " - Minuto: " + cal.get(Calendar.MINUTE) + " - Segundo: " + cal.get(Calendar.SECOND));
-    }
-    */
 }
 
 

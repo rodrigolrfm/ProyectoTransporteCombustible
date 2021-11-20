@@ -26,11 +26,11 @@ public class EjecucionAlgoritmo {
 
         List<EntidadVehiculo> listaVehiculos;
 
-        listaVehiculos = LecturaVehiculo.TxtReader("src\\main\\java\\pe\\edu\\pucp\\files\\vehiculos2021.txt");
+        listaVehiculos = LecturaVehiculo.lectura("src\\main\\java\\pe\\edu\\pucp\\files\\vehiculos2021.txt");
 
-        listaPedidos = Lectura.TxtReader("src\\main\\java\\pe\\edu\\pucp\\files\\ventas\\ventas202201.txt");
+        listaPedidos = Lectura.lectura("src\\main\\java\\pe\\edu\\pucp\\files\\ventas\\ventas202201.txt");
 
-        ArrayList<NodoModel> blockList = LecturaBloques.TxtReader("src\\main\\java\\pe\\edu\\pucp\\files\\bloqueos\\202112bloqueadas.txt");
+        ArrayList<NodoModel> blockList = LecturaBloques.lectura("src\\main\\java\\pe\\edu\\pucp\\files\\bloqueos\\202112bloqueadas.txt");
 
         // Depositos iniciales
         ArrayList<PlantaModel> plantas = new ArrayList<>();
@@ -174,7 +174,7 @@ public class EjecucionAlgoritmo {
                 v.getListaPedidos().forEach(p -> { vertices.add(p); });
                 System.out.println(v.getListaPedidos());
                 if(!v.getListaPedidos().isEmpty())
-                    GeneticAlgorithm.GA(v, vertices, mapaModel);
+                    GeneticAlgorithm.Genetic(v, vertices, mapaModel);
 
             }
             for(EntidadVehiculo v : listaVehiculos){

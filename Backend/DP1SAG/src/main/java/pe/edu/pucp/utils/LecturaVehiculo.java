@@ -11,7 +11,7 @@ import java.util.List;
 
 
 public class LecturaVehiculo {
-    public static List<EntidadVehiculo> TxtReader(String path) throws IOException , Exception{
+    public static List<EntidadVehiculo> lectura(String path) throws IOException , Exception{
         List<EntidadVehiculo> vehicleList = new ArrayList<>();
 
             File file = new File(path);

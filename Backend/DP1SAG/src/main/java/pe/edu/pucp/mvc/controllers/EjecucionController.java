@@ -2,17 +2,11 @@ package pe.edu.pucp.mvc.controllers;
 
 
 import javafx.util.Pair;
-import org.apache.logging.log4j.message.MapMessage;
-import org.json.*;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import pe.edu.pucp.algorithm.GeneticAlgorithm;
 import pe.edu.pucp.algorithm.Knapsack;
 import pe.edu.pucp.mvc.models.*;
-import pe.edu.pucp.mvc.planificacion.ScheduledTasks;
 import pe.edu.pucp.utils.Lectura;
 import pe.edu.pucp.utils.LecturaBloques;
 import pe.edu.pucp.utils.LecturaVehiculo;
@@ -37,20 +31,19 @@ public class EjecucionController {
     }*/
 
     @PostMapping(value = "/simularRutasColapso")
-    public EntidadRutas ejecutarAlgortimo() throws Exception {
+    public EntidadRutas ejecutarAlgortimo(List<PedidoModel> listaPedidos) throws Exception {
 
 
         EntidadRutas rutasFinal = EntidadRutas.builder().paths(new ArrayList<>()).build();
 
-        List<PedidoModel> listaPedidos;
 
         List<EntidadVehiculo> listaVehiculos;
 
-        listaVehiculos = LecturaVehiculo.TxtReader("/home/ubuntu/Grupo2/Download/vehiculos2021.txt");
+        listaVehiculos = LecturaVehiculo.lectura("/home/ubuntu/Grupo2/Download/vehiculos2021.txt");
 
-        listaPedidos = Lectura.TxtReader("/home/ubuntu/Grupo2/Download/ventas/ventas202202.txt");
+        //listaPedidos = Lectura.TxtReader("/home/ubuntu/Grupo2/Download/ventas/ventas202202.txt");
 
-        ArrayList<NodoModel> blockList = LecturaBloques.TxtReader("/home/ubuntu/Grupo2/Download/bloqueos/202112bloqueadas.txt");
+        ArrayList<NodoModel> blockList = LecturaBloques.lectura("/home/ubuntu/Grupo2/Download/bloqueos/202112bloqueadas.txt");
 
         // Depositos iniciales
         ArrayList<PlantaModel> plantas = new ArrayList<>();
@@ -104,7 +97,7 @@ public class EjecucionController {
         }
 
         System.out.println("Total Capacity: " + totalCapacity);
-        // lista que tendrá los vehículos y sus listas de pedidos ordenados por indice
+
         ArrayList<Pair<EntidadVehiculo, PriorityQueue<Pair<Float, PedidoModel>>>> listaVC = new ArrayList<>();
 
         List<PedidoModel> auxRequest = new ArrayList<>();
@@ -163,26 +156,24 @@ public class EjecucionController {
                     System.out.println("Total de tiempo = " + totalTime/60);
                     System.out.println("Pedidos recibidos = " + listaPedidos.size());
                     System.out.println("Pedidos completados = " + pedidoCompletado);
-                    throw new Exception("Llegó al colapso logístico");
+                    throw new Exception("COLAPSO LOGÍSCTICO!!");
                 }
             }
 
             for(Pair<EntidadVehiculo, PriorityQueue<Pair<Float, PedidoModel>>> vc : listaVC){
-                //Assign request to vehicles
-                listaVehiculos.clear(); // se puede quitar esta lista intermedia
+
+                listaVehiculos.clear();
                 listaVehiculos.add(vc.getKey());
-//                System.out.println("PQ: " + vc.getValue());
                 int assigned = 0;
                 try {
                     assigned += Knapsack.allocate(vc.getValue(), listaVehiculos, auxRequest);
-                    //verificar si entra en el camión los pedidos.
                 }
                 catch (Exception e) {
                     System.out.println(e.getMessage());
                 }
             }
 
-            listaVehiculos.clear(); // se puede eliminar esta lista intermedia
+            listaVehiculos.clear();
             listaVC.forEach(vc -> {
                 listaVehiculos.add(vc.getKey());
             });
@@ -191,14 +182,16 @@ public class EjecucionController {
             ArrayList<NodoModel> vertices = new ArrayList<>(); // se puede quitar esta lista intermedia
             for(EntidadVehiculo v : listaVehiculos){
                 vertices.clear();
-                v.getListaPedidos().forEach(p -> { vertices.add(p); });
+                v.getListaPedidos().forEach(p -> {
+                    vertices.add(p);
+                });
                 System.out.println(v.getListaPedidos());
                 if(!v.getListaPedidos().isEmpty())
-                    GeneticAlgorithm.GA(v, vertices, mapaModel);
+                    GeneticAlgorithm.Genetic(v, vertices, mapaModel);
 
             }
             for(EntidadVehiculo v : listaVehiculos){
-                if(v.getRutaVehiculo() != null && !v.getRutaVehiculo().isEmpty()) { // si encontró una buana ruta.
+                if(v.getRutaVehiculo() != null && !v.getRutaVehiculo().isEmpty()) {
                     v.getFechaInicio().add(Calendar.MINUTE, Math.round((float) Math.ceil(v.calculateTimeToDispatch())));
                     v.setNodoActual(v.getRutaVehiculo().get(v.getRutaVehiculo().size() - 1));
                     totalTime += v.calculateTimeToDispatch();
@@ -214,7 +207,7 @@ public class EjecucionController {
                 v.clearVehicle();
             }
 
-            // Se hace sort para las capacidadades
+            //Ordenar por capacidades
             listaVehiculos.sort((v1, v2) -> Long.compare(v1.getFechaInicio().getTimeInMillis() , v2.getFechaInicio().getTimeInMillis()));
 
             List<PedidoModel> aux = new ArrayList<>();
@@ -227,7 +220,7 @@ public class EjecucionController {
             requestListDesdoblado = aux;
 
         } while(!requestListDesdoblado.isEmpty());
-
+        //ordenar por fecha de inicio de la ruta
         Collections.sort(rutasFinal.getPaths());
 
         return rutasFinal;
@@ -244,11 +237,11 @@ public class EjecucionController {
 
         List<EntidadVehiculo> listaVehiculos;
 
-        listaVehiculos = LecturaVehiculo.TxtReader("/home/ubuntu/Grupo2/Download/vehiculos2021.txt");
+        listaVehiculos = LecturaVehiculo.lectura("/home/ubuntu/Grupo2/Download/vehiculos2021.txt");
 
-        listaPedidos = Lectura.TxtReader("/home/ubuntu/Grupo2/Download/ventas/ventas202201.txt");
+        listaPedidos = Lectura.lectura("/home/ubuntu/Grupo2/Download/ventas/ventas202201.txt");
 
-        ArrayList<NodoModel> blockList = LecturaBloques.TxtReader("/home/ubuntu/Grupo2/Download/bloqueos/202112bloqueadas.txt");
+        ArrayList<NodoModel> blockList = LecturaBloques.lectura("/home/ubuntu/Grupo2/Download/bloqueos/202112bloqueadas.txt");
 
         // Depositos iniciales
         ArrayList<PlantaModel> plantas = new ArrayList<>();
@@ -392,7 +385,7 @@ public class EjecucionController {
                 v.getListaPedidos().forEach(p -> { vertices.add(p); });
                 System.out.println(v.getListaPedidos());
                 if(!v.getListaPedidos().isEmpty())
-                    GeneticAlgorithm.GA(v, vertices, mapaModel);
+                    GeneticAlgorithm.Genetic(v, vertices, mapaModel);
 
             }
             for(EntidadVehiculo v : listaVehiculos){

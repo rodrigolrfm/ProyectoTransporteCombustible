@@ -7,7 +7,6 @@ import java.util.PriorityQueue;
 import javafx.util.Pair;
 import pe.edu.pucp.mvc.models.PedidoModel;
 import pe.edu.pucp.mvc.models.EntidadVehiculo;
-import pe.edu.pucp.utils.EstadoVehiculo;
 
 
 public class Knapsack {

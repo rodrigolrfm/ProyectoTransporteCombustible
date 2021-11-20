@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.io.*;
 
 public class Lectura {
-    public static List<PedidoModel> TxtReader(String path) throws IOException , Exception{
+    public static List<PedidoModel> lectura(String path) throws IOException , Exception{
         List<PedidoModel> requestList = new ArrayList<PedidoModel>();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm");
         int glpTotal = 0;

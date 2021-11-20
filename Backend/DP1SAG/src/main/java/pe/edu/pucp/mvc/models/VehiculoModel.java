@@ -1,7 +1,5 @@
 package pe.edu.pucp.mvc.models;
 import lombok.*;
-import pe.edu.pucp.utils.EstadoVehiculo;
-import pe.edu.pucp.utils.TipoVehiculo;
 
 import javax.persistence.*;
 import java.io.Serializable;
