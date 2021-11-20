@@ -419,6 +419,8 @@ public class EjecucionController {
 
         } while(!requestListDesdoblado.isEmpty());
 
+        Collections.sort(rutasFinal.getPaths());
+
         return rutasFinal;
     }
 
