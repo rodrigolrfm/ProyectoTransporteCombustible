@@ -25,6 +25,7 @@ public class SimulacionXPedidoModel implements Serializable {
     @JoinColumn(name = "idNodo",nullable = false)
     private PedidoModel pxSimulacion;
 
+
     @Column(nullable = false)
     private int setCompleto;
 

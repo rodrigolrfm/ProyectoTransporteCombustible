@@ -63,8 +63,8 @@ public class AlgoritmoPrueba {
         int totalCapacity = 0;
 
         for(PedidoModel r : listaPedidos){
-            int i = 0;
-            for(; i < (int)r.getCantidadGLP()/minimo; i++)
+            int i = 1;
+            for(; i < (int)r.getCantidadGLP()/minimo + 1; i++)
                 requestListDesdoblado.add(PedidoModel.builder()
                     .idNodo(r.getIdNodo())
                     .idExtendido(i)
@@ -77,7 +77,7 @@ public class AlgoritmoPrueba {
             if(r.getCantidadGLP()%minimo != 0.0)
                 requestListDesdoblado.add(PedidoModel.builder()
                     .idNodo(r.getIdNodo())
-                    .idExtendido(++i)
+                    .idExtendido(i)
                     .clienteModel(r.getClienteModel())
                     .cantidadGLP(r.getCantidadGLP()%minimo)
                     .coordenadaX(r.getCoordenadaX())

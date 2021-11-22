@@ -12,10 +12,7 @@ import pe.edu.pucp.mvc.models.PedidoModel;
 import pe.edu.pucp.mvc.services.PedidoService;
 import pe.edu.pucp.mvc.services.VehiculoService;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -32,13 +29,18 @@ public class PedidoController {
     PedidoService pedidoService;
 
     @PostMapping(value = "/cargaMasivaPedidos", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public List<PedidoModel> cargaMasivaNodos(@RequestParam("file") MultipartFile file) throws IOException {
+    public List<PedidoModel> cargaMasivaNodos(@RequestParam("filear") MultipartFile file) throws IOException {
+
+        int glpTotal = 0;
         List<PedidoModel> listaPedidos = new ArrayList<PedidoModel>();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm");
-        int glpTotal = 0;
+
         try {
-            File convertFile = new File("/home/ubuntu/resources/" + file.getOriginalFilename());
-            final BufferedReader br = new BufferedReader(new FileReader(convertFile));
+            //File convertFile = new File("/home/ubuntu/resources/" + file.getOriginalFilename());
+            File convertFile = new File("D:\\CICLO10\\Trabajo\\" + file.getOriginalFilename());
+            convertFile.createNewFile();
+            //FileOutputStream fout = new FileOutputStream(convertFile);
+            BufferedReader br = new BufferedReader(new FileReader(convertFile));
             String line;
             String strDate;
             String[] rowRequest, day;
@@ -48,7 +50,7 @@ public class PedidoController {
             while ((line = br.readLine()) != null) {
                 rowRequest = line.split(",");
                 day = rowRequest[0].split(":");
-                strDate = file.getName().substring(6,10) + "/" + file.getName().substring(10,12) + "/" + day[0] + " " + day[1] + ":" + day[2];
+                strDate = file.getOriginalFilename().substring(6,10) + "/" + file.getOriginalFilename().substring(10,12) + "/" + day[0] + " " + day[1] + ":" + day[2];
                 date = sdf.parse(strDate);
 
                 Calendar cal = Calendar.getInstance(), reqDate = Calendar.getInstance();

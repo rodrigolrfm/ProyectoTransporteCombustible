@@ -25,14 +25,13 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @RequestMapping("/ejecutar")
 public class EjecucionController {
 
-    public List<SseEmitter> emitters = new CopyOnWriteArrayList<>();
-
     /*
     @GetMapping(value = "/obtenerRutas")
     public SseEmitter devolverRutas(){
         SseEmitter sseEmitter = new SseEmitter();
+        sseEmitter.onCompletion(() -> ScheduledTasks.emi = null);
+        sseEmitter.onTimeout(() -> ScheduledTasks.emi = null);
         ScheduledTasks.emi = sseEmitter;
-        emitters.add(sseEmitter);
         return sseEmitter;
     }*/
 
@@ -79,8 +78,8 @@ public class EjecucionController {
         int totalCapacity = 0;
 
         for(PedidoModel r : listaPedidos){
-            int i = 0;
-            for(; i < (int)r.getCantidadGLP()/minimo; i++)
+            int i = 1;
+            for(; i < (int)r.getCantidadGLP()/minimo + 1; i++)
                 requestListDesdoblado.add(PedidoModel.builder()
                         .idNodo(r.getIdNodo())
                         .idExtendido(i)
@@ -93,7 +92,7 @@ public class EjecucionController {
             if(r.getCantidadGLP()%minimo != 0.0)
                 requestListDesdoblado.add(PedidoModel.builder()
                         .idNodo(r.getIdNodo())
-                        .idExtendido(++i)
+                        .idExtendido(i)
                         .clienteModel(r.getClienteModel())
                         .cantidadGLP(r.getCantidadGLP()%minimo)
                         .coordenadaX(r.getCoordenadaX())
@@ -277,8 +276,8 @@ public class EjecucionController {
         int totalCapacity = 0;
 
         for(PedidoModel r : listaPedidos){
-            int i = 0;
-            for(; i < (int)r.getCantidadGLP()/minimo; i++)
+            int i = 1;
+            for(; i < (int)r.getCantidadGLP()/minimo + 1; i++)
                 requestListDesdoblado.add(PedidoModel.builder()
                         .idNodo(r.getIdNodo())
                         .idExtendido(i)
@@ -291,7 +290,7 @@ public class EjecucionController {
             if(r.getCantidadGLP()%minimo != 0.0)
                 requestListDesdoblado.add(PedidoModel.builder()
                         .idNodo(r.getIdNodo())
-                        .idExtendido(++i)
+                        .idExtendido(i)
                         .clienteModel(r.getClienteModel())
                         .cantidadGLP(r.getCantidadGLP()%minimo)
                         .coordenadaX(r.getCoordenadaX())

@@ -5,10 +5,7 @@ import org.json.JSONObject;
 import pe.edu.pucp.algorithm.GeneticAlgorithm;
 import pe.edu.pucp.algorithm.Knapsack;
 import pe.edu.pucp.mvc.controllers.MapaModel;
-import pe.edu.pucp.mvc.models.EntidadVehiculo;
-import pe.edu.pucp.mvc.models.NodoModel;
-import pe.edu.pucp.mvc.models.PedidoModel;
-import pe.edu.pucp.mvc.models.PlantaModel;
+import pe.edu.pucp.mvc.models.*;
 import pe.edu.pucp.utils.Lectura;
 import pe.edu.pucp.utils.LecturaBloques;
 import pe.edu.pucp.utils.LecturaVehiculo;
@@ -16,21 +13,23 @@ import pe.edu.pucp.utils.LecturaVehiculo;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class EjecucionAlgoritmo {
-    public static JSONObject ejecutarAlgortimo() throws Exception {
 
-        JSONObject json = new JSONObject();
-        List<JSONObject> rutasFinal = new ArrayList<>();
+public class EjecucionAlgoritmo {
+
+    public static EntidadRutas ejecutarAlgortimoColapso() throws Exception {
+
+        EntidadRutas rutasFinal = EntidadRutas.builder().paths(new ArrayList<>()).build();
 
         List<PedidoModel> listaPedidos;
 
         List<EntidadVehiculo> listaVehiculos;
 
-        listaVehiculos = LecturaVehiculo.TxtReader("src\\main\\java\\pe\\edu\\pucp\\files\\vehiculos2021.txt");
-
-        listaPedidos = Lectura.TxtReader("src\\main\\java\\pe\\edu\\pucp\\files\\ventas\\ventas202201.txt");
-
-        ArrayList<NodoModel> blockList = LecturaBloques.TxtReader("src\\main\\java\\pe\\edu\\pucp\\files\\bloqueos\\202112bloqueadas.txt");
+        //listaVehiculos = LecturaVehiculo.TxtReader("/home/ubuntu/Grupo2/Download/vehiculos2021.txt");
+        listaVehiculos = LecturaVehiculo.TxtReader("D:\\CICLO10\\Trabajo\\Grupo2\\Download\\vehiculos2021.txt");
+        //listaPedidos = Lectura.TxtReader("/home/ubuntu/Grupo2/Download/ventas/ventas202202.txt");
+        listaPedidos = Lectura.TxtReader("D:\\CICLO10\\Trabajo\\Grupo2\\Download\\ventas\\ventas202202.txt");
+        //ArrayList<NodoModel> blockList = LecturaBloques.TxtReader("/home/ubuntu/Grupo2/Download/bloqueos/202112bloqueadas.txt");
+        ArrayList<NodoModel> blockList = LecturaBloques.TxtReader("D:\\CICLO10\\Trabajo\\Grupo2\\Download\\bloqueos\\202112bloqueadas.txt");
 
         // Depositos iniciales
         ArrayList<PlantaModel> plantas = new ArrayList<>();
@@ -59,8 +58,8 @@ public class EjecucionAlgoritmo {
         int totalCapacity = 0;
 
         for(PedidoModel r : listaPedidos){
-            int i = 0;
-            for(; i < (int)r.getCantidadGLP()/minimo; i++)
+            int i = 1;
+            for(; i < (int)r.getCantidadGLP()/minimo + 1; i++)
                 requestListDesdoblado.add(PedidoModel.builder()
                         .idNodo(r.getIdNodo())
                         .idExtendido(i)
@@ -73,7 +72,7 @@ public class EjecucionAlgoritmo {
             if(r.getCantidadGLP()%minimo != 0.0)
                 requestListDesdoblado.add(PedidoModel.builder()
                         .idNodo(r.getIdNodo())
-                        .idExtendido(++i)
+                        .idExtendido(i)
                         .clienteModel(r.getClienteModel())
                         .cantidadGLP(r.getCantidadGLP()%minimo)
                         .coordenadaX(r.getCoordenadaX())
@@ -184,15 +183,12 @@ public class EjecucionAlgoritmo {
                     totalTime += v.calculateTimeToDispatch();
                     // se guardan las rutas y los pedidos
                     // aquí se podría enviar cada vehículo con su ruta
-                    JSONObject rutaVehiculo = new JSONObject();
                     SimpleDateFormat sdf;
                     sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
                     sdf.setTimeZone(TimeZone.getTimeZone("CET"));
                     String text = sdf.format(v.getFechaInicio().getTime());
-                    rutaVehiculo.put("StartTime", text);
-                    rutaVehiculo.put("ruta", v.getRutaVehiculoPositions(requestListDesdoblado));
-                    rutaVehiculo.put("EndTime", "None");
-                    rutasFinal.add(rutaVehiculo);
+                    EntidadRuta rutaVehiculo = EntidadRuta.builder().startTime(text).path(v.getRutaVehiculoPositions(requestListDesdoblado)).endTime("Alap").build();
+                    rutasFinal.agregarRuta(rutaVehiculo);
                 }
                 v.clearVehicle();
             }
@@ -211,7 +207,8 @@ public class EjecucionAlgoritmo {
 
         } while(!requestListDesdoblado.isEmpty());
 
-        json.put("rutas", rutasFinal);
-        return json;
+        Collections.sort(rutasFinal.getPaths());
+
+        return rutasFinal;
     }
 }

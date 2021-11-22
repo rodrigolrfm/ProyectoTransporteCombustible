@@ -17,29 +17,35 @@ import java.util.Calendar;
 public class PedidoModel extends NodoModel implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(unique = true,nullable = false)
-    private int idPedido;
+    private int idNodo;
 
+    @Column(name = "idExtendido",nullable = true)
     private int idExtendido;
 
+    @Column(name = "fechaPedido",nullable = true)
     private Calendar fechaPedido;
+
+    @Column(name = "horasLimite",nullable = true)
     private Calendar horasLimite;
 
+    @Column(name = "cantidadGLP",nullable = true)
     private double cantidadGLP;
+
+    @Column(name = "costoOperativo",nullable = true)
     private double costoOperativo;
+
+    @Column(name = "horaPedido",nullable = true)
     private double horaPedido;
 
     @ManyToOne
-    @JoinColumn(name = "idVehiculo",nullable = false)
+    @JoinColumn(name = "idVehiculo",nullable = true)
     private VehiculoModel vehiculoModel;
 
     @Builder.Default
     private boolean atendido = false;
 
-    @ManyToOne
-    @JoinColumn(name = "idCliente",nullable = false)
-    private ClienteModel clienteModel;
+    @Column(name = "cliente",nullable = true,length = 200)
+    private String clienteModel;
 
 
     public boolean merge(PedidoModel PedidoModel){

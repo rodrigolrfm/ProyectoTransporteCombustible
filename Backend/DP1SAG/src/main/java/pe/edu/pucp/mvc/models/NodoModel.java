@@ -2,7 +2,7 @@ package pe.edu.pucp.mvc.models;
 
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import pe.edu.pucp.utils.UtilidadesFechas;
+import pe.edu.pucp.utils.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
