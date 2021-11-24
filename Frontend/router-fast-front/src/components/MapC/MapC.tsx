@@ -20,6 +20,7 @@ const obtenerRuta = (path) => {
         else ruta.push({ ...path[i], next: 'right' });
       }
     }
+    ruta.push({ ...path[path.length - 1], next: 'end' });
     return ruta;
   };
   
@@ -93,6 +94,7 @@ const MapC=(props: simulacion )=>{
           } else return { ...path, pos: posAux };
         });
         setPaths(arr.filter((el) => el != null));
+        console.log(paths);
         // setPaths(...paths, pos)
       }, intervalTime);
       return () => clearInterval(interval);

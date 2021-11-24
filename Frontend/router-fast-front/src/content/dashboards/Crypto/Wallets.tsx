@@ -64,14 +64,8 @@ function Wallets() {
         justifyContent="space-between"
         sx={{ pb: 3 }}
       >
-        <Typography variant="h3">Wallets</Typography>
-        <Button
-          size="small"
-          variant="outlined"
-          startIcon={<AddTwoToneIcon fontSize="small" />}
-        >
-          Add new wallet
-        </Button>
+        <Typography variant="h3">Datos Relevantes</Typography>
+       
       </Box>
       <Grid container spacing={3}>
         <Grid xs={12} sm={6} md={3} item>
@@ -84,17 +78,15 @@ function Wallets() {
                 />
               </AvatarWrapper>
               <Typography variant="h5" noWrap>
-                Bitcoin
+                Flota de Camiones
               </Typography>
-              <Typography variant="subtitle1" noWrap>
-                BTC
-              </Typography>
+              
               <Box sx={{ pt: 3 }}>
                 <Typography variant="h3" gutterBottom noWrap>
-                  $3,586.22
+                  20
                 </Typography>
                 <Typography variant="subtitle2" noWrap>
-                  1.25843 BTC
+                  Disponibles
                 </Typography>
               </Box>
             </CardContent>
@@ -110,17 +102,17 @@ function Wallets() {
                 />
               </AvatarWrapper>
               <Typography variant="h5" noWrap>
-                Ripple
+                Tamaño del mapa
               </Typography>
               <Typography variant="subtitle1" noWrap>
-                XRP
+                
               </Typography>
               <Box sx={{ pt: 3 }}>
                 <Typography variant="h3" gutterBottom noWrap>
-                  $586.83
+                  50 x 70
                 </Typography>
                 <Typography variant="subtitle2" noWrap>
-                  5,783 XRP
+                  ancho x largo
                 </Typography>
               </Box>
             </CardContent>
@@ -136,17 +128,17 @@ function Wallets() {
                 />
               </AvatarWrapper>
               <Typography variant="h5" noWrap>
-                Cardano
+                Horario de trabajo
               </Typography>
               <Typography variant="subtitle1" noWrap>
-                ADA
+              
               </Typography>
               <Box sx={{ pt: 3 }}>
                 <Typography variant="h3" gutterBottom noWrap>
-                  $54,985.00
+                  24 horas
                 </Typography>
                 <Typography variant="subtitle2" noWrap>
-                  34,985 ADA
+                  7 dias
                 </Typography>
               </Box>
             </CardContent>

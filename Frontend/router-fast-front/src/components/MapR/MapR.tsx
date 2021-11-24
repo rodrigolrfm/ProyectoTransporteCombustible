@@ -6,9 +6,19 @@ import { useEffect, useState } from 'react';
 import EmojiPeopleIcon from '@mui/icons-material/EmojiPeople';
 import url from  'src/utils/constant';
 import axios from 'axios';
+import BlockIcon from '@mui/icons-material/Block';
+import { IconButton } from '@mui/material';
+
+
 const vectorX = 70;
 const vectorY = 50;
 const path = [ ];
+
+const bloqueosData = [
+  {x: 20, y: 30},
+  {x: 25, y: 30},
+  {x: 30, y: 30}
+]
 
 
 const obtenerRuta = (path) => {
@@ -68,6 +78,9 @@ const MapR=(props: simulacion )=>{
 
     const [ruta, setRuta] = useState([]);
     const [paths, setPaths] = useState([]);
+    const [bloqueos, setBloqueos] = useState([]);
+
+
     const classes = useStyles();
     const map = [];
     useEffect(() => {
@@ -154,6 +167,12 @@ const MapR=(props: simulacion )=>{
           );
         });              
     }, []);   
+
+    useEffect(() => {
+      console.log(bloqueosData);
+      setBloqueos(bloqueosData);
+    }, []);
+
     for (let i = 0; i < vectorY; i++) { //50
       const squareRows = [];
       for (let j = 0; j < vectorX; j++) { //70
@@ -174,6 +193,14 @@ const MapR=(props: simulacion )=>{
                   : '#D89F7B',
             }}
           >
+            {bloqueos?.find(({ x, y }) => x === j && y === i) && (
+            <div className={classes.icon}>
+              <IconButton>
+                <BlockIcon style={{ color: 'red', fontSize: '20px' }} />
+              </IconButton>
+            </div>
+          )}
+
             {ruta?.find(({ x, y }) => x === j && y === i)?.destino ? (
             <div className={classes.icon} style={{ transform: 'rotate(0deg)' }}>
               <EmojiPeopleIcon style={{ color: '#424774'}} />

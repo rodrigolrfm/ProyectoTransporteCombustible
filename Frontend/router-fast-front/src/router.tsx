@@ -128,6 +128,10 @@ const routes: PartialRouteObject[] = [
         path: 'operacion',
         element: <Forms/>
       },
+      {
+        path: 'reportes',
+        element: <Crypto/>
+      },
     ]
   },
   {

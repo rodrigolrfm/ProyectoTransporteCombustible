@@ -5,6 +5,11 @@ import TableChartTwoToneIcon from '@mui/icons-material/TableChartTwoTone';
 import AccountCircleTwoToneIcon from '@mui/icons-material/AccountCircleTwoTone';
 import BallotTwoToneIcon from '@mui/icons-material/BallotTwoTone';
 import VerifiedUserTwoToneIcon from '@mui/icons-material/VerifiedUserTwoTone';
+import BrightnessLowTwoToneIcon from '@mui/icons-material/BrightnessLowTwoTone';
+import AnalyticsIcon from '@mui/icons-material/Analytics';
+
+
+
 
 export interface MenuItem {
   link?: string;
@@ -33,6 +38,11 @@ const menuItems: MenuItems[] = [
         name: 'Simulación',
         icon: TableChartTwoToneIcon,
         link: '/logistica/simulacion'
+      },
+      {
+        name: 'Reporteria',
+        link: '/logistica/reportes',
+        icon: AnalyticsIcon
       },
       
     ]

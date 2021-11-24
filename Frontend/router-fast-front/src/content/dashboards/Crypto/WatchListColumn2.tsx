@@ -47,10 +47,10 @@ function WatchListColumn2() {
           </AvatarWrapper>
           <Box>
             <Typography variant="h4" noWrap>
-              Ethereum
+              Pedidos Entregados
             </Typography>
             <Typography variant="subtitle1" noWrap>
-              ETH
+              Simulación de Colapso
             </Typography>
           </Box>
         </Box>
@@ -63,10 +63,10 @@ function WatchListColumn2() {
           }}
         >
           <Typography variant="h2" sx={{ pr: 1, mb: 1 }}>
-            $1,968.00
+            5000
           </Typography>
           <Text color="error">
-            <b>-3.24%</b>
+            <b>pedidos</b>
           </Text>
         </Box>
         <Box
@@ -76,9 +76,9 @@ function WatchListColumn2() {
             justifyContent: 'flex-start'
           }}
         >
-          <Label color="error">-$90</Label>
+          <Label color="error">Dia de prueba</Label>
           <Typography variant="body2" color="text.secondary" sx={{ pl: 1 }}>
-            last 24h
+            25/11/2021
           </Typography>
         </Box>
       </Box>

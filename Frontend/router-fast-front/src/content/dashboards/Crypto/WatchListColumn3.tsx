@@ -44,10 +44,10 @@ function WatchListColumn3() {
           </AvatarWrapper>
           <Box>
             <Typography variant="h4" noWrap>
-              Cardano
+              Cantidad de GLP entregada
             </Typography>
             <Typography variant="subtitle1" noWrap>
-              ADA
+              Operación dia a dia
             </Typography>
           </Box>
         </Box>
@@ -60,10 +60,10 @@ function WatchListColumn3() {
           }}
         >
           <Typography variant="h2" sx={{ pr: 1, mb: 1 }}>
-            $23.00
+            25000
           </Typography>
           <Text color="error">
-            <b>-0.33%</b>
+            <b>m3</b>
           </Text>
         </Box>
         <Box
@@ -73,9 +73,9 @@ function WatchListColumn3() {
             justifyContent: 'flex-start'
           }}
         >
-          <Label color="error">-$5</Label>
+          <Label color="error">Dia de prueba</Label>
           <Typography variant="body2" color="text.secondary" sx={{ pl: 1 }}>
-            last 24h
+            25/10/2021
           </Typography>
         </Box>
       </Box>

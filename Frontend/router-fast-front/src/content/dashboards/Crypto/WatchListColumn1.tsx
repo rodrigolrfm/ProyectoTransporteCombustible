@@ -44,10 +44,10 @@ function WatchListColumn1() {
           </AvatarWrapper>
           <Box>
             <Typography variant="h4" noWrap>
-              Bitcoin
+              Pedidos Entregados
             </Typography>
             <Typography variant="subtitle1" noWrap>
-              BTC
+              Simulación 3 dias
             </Typography>
           </Box>
         </Box>
@@ -60,10 +60,10 @@ function WatchListColumn1() {
           }}
         >
           <Typography variant="h2" sx={{ pr: 1, mb: 1 }}>
-            $56,475.99
+            1000
           </Typography>
           <Text color="success">
-            <b>+12.5%</b>
+            <b>pedidos</b>
           </Text>
         </Box>
         <Box
@@ -73,9 +73,9 @@ function WatchListColumn1() {
             justifyContent: 'flex-start'
           }}
         >
-          <Label color="success">+$500</Label>
+          <Label color="success">Dia de prueba</Label>
           <Typography variant="body2" color="text.secondary" sx={{ pl: 1 }}>
-            last 24h
+            25/11/2021
           </Typography>
         </Box>
       </Box>

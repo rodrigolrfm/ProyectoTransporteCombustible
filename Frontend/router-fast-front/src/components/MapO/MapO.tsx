@@ -12,6 +12,13 @@ const vectorX = 70;
 const vectorY = 50;
 const path = [ ];
 
+const bloqueosData = [
+    {x: 20, y: 30},
+    {x: 25, y: 30},
+    {x: 30, y: 30}
+  ]
+
+
 const obtenerRuta = (path) => {
     const ruta = [];
     for (let i = 0; i < path.length - 1; i++) {
@@ -159,20 +166,20 @@ const MapO=(props: simulacion )=>{
     }, []);
      
     
-    useEffect(() => {
-      console.log('mostrando bloqueos');
-      const interval = setInterval(() => {
-        axios.get(url+ '/api/roadblock/all').then((e) => { // URL DE BLOQUEOS 
-          setBloqueos(e.data);
-        });
-      }, 20000);
-      return () => clearInterval(interval);
-    }, []);
+    // useEffect(() => {
+    //   console.log('mostrando bloqueos');
+
+    //   const interval = setInterval(() => {
+    //     axios.get(url+ '/api/roadblock/all').then((e) => { // URL DE BLOQUEOS 
+    //       setBloqueos(e.data);
+    //     });
+    //   }, 20000);
+    //   return () => clearInterval(interval);
+    // }, []);
     
     useEffect(() => {
-      axios.get(url + '/api/roadblock/all').then((e) => {
-        setBloqueos(e.data);
-      });
+      console.log(bloqueosData);
+      setBloqueos(bloqueosData);
     }, []);
 
     for (let i = 0; i < vectorY; i++) { //50
@@ -195,10 +202,10 @@ const MapO=(props: simulacion )=>{
                   : '#D89F7B',
             }}
           >
-          {bloqueos?.find(({ nodos }) => nodos.find(({ x, y }) => x === j && y === i)) && (
+          {bloqueos?.find(({ x, y }) => x === j && y === i) && (
             <div className={classes.icon}>
               <IconButton>
-                <BlockIcon style={{ color: 'red', fontSize: '30px' }} />
+                <BlockIcon style={{ color: 'red', fontSize: '20px' }} />
               </IconButton>
             </div>
           )}

@@ -16,7 +16,7 @@ function DashboardCrypto() {
         <title>Crypto Dashboard</title>
       </Helmet>
       <PageTitleWrapper>
-        <PageHeader />
+        
       </PageTitleWrapper>
       <Container maxWidth="lg">
         <Grid
@@ -26,15 +26,11 @@ function DashboardCrypto() {
           alignItems="stretch"
           spacing={3}
         >
-          <Grid item xs={12}>
-            <AccountBalance />
-          </Grid>
-          <Grid item lg={8} xs={12}>
+          
+          <Grid item lg={12} xs={12}>
             <Wallets />
           </Grid>
-          <Grid item lg={4} xs={12}>
-            <AccountSecurity />
-          </Grid>
+          
           <Grid item xs={12}>
             <WatchList />
           </Grid>
