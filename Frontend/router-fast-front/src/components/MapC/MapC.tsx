@@ -5,9 +5,10 @@ import PersonPinIcon from '@mui/icons-material/PersonPin';
 import { useEffect, useState } from 'react';
 import url from  'src/utils/constant';
 import axios from 'axios';
+import ModalMonitoreo from '../Custom/ModalMonitoreo';
+import { Dialog } from '@mui/material';
 const vectorX = 70;
 const vectorY = 50;
-const path = [ ];
 
 const obtenerRuta = (path) => {
     const ruta = [];
@@ -64,7 +65,7 @@ const useStyles = makeStyles((theme) => ({
 interface simulacion{simulacion : number}; // Integer
 
 const MapC=(props: simulacion )=>{
-
+    const [openInfo, setOpenInfo] = useState(false);
     const [ruta, setRuta] = useState([]);
     const [paths, setPaths] = useState([]);
     const classes = useStyles();
@@ -154,6 +155,16 @@ const MapC=(props: simulacion )=>{
           );
         });              
     }, []);   
+
+    const handleClose = () => {
+      setOpenInfo(false);
+    };
+
+    const handleClickOpen = (ruta) => {
+      setRuta(ruta);
+      setOpenInfo(true);
+    }
+
     for (let i = 0; i  < vectorY; i ++) {
       const squareRows = [];
       for (let j = 0; j < vectorX; j++) {
@@ -198,7 +209,7 @@ const MapC=(props: simulacion )=>{
                   }}
                   
                 >
-                  <LocalShippingIcon style={{ color: '#35737D' }} onClick={() => setRuta(path.ruta)} />
+                  <LocalShippingIcon style={{ color: '#35737D' }} onClick={() => handleClickOpen(path.ruta)} />
                 </div>
               );
             }
@@ -225,7 +236,12 @@ const MapC=(props: simulacion )=>{
     }
 
     return (
+      <>
         <div className={classes.map}>{map}</div>
+        <Dialog onClose={handleClose} open={openInfo} >
+          <ModalMonitoreo onClose={handleClose} ruta={ruta}/>
+        </Dialog>
+      </>
     );
   }
   
