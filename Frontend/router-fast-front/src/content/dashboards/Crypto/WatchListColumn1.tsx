@@ -31,7 +31,7 @@ function WatchListColumn1() {
         'Saturday',
         'Sunday'
       ],
-      data: [55.701, 57.598, 48.607, 46.439, 58.755, 46.978, 58.16]
+      data: [10, 20, 42, 51, 15, 25, 37]
     }
   };
 
@@ -40,7 +40,7 @@ function WatchListColumn1() {
       <Box sx={{ p: 3 }}>
         <Box display="flex" alignItems="center">
           <AvatarWrapper>
-            <img alt="BTC" src="/static/images/placeholders/logo/bitcoin.png" />
+            <img alt="BTC" src="/static/images/placeholders/logo/simulacion.png" />
           </AvatarWrapper>
           <Box>
             <Typography variant="h4" noWrap>
@@ -60,9 +60,9 @@ function WatchListColumn1() {
           }}
         >
           <Typography variant="h2" sx={{ pr: 1, mb: 1 }}>
-            1000
+            109
           </Typography>
-          <Text color="success">
+          <Text color="primary">
             <b>pedidos</b>
           </Text>
         </Box>
@@ -73,7 +73,7 @@ function WatchListColumn1() {
             justifyContent: 'flex-start'
           }}
         >
-          <Label color="success">Dia de prueba</Label>
+          <Label color="primary">Dia de prueba</Label>
           <Typography variant="body2" color="text.secondary" sx={{ pl: 1 }}>
             25/11/2021
           </Typography>

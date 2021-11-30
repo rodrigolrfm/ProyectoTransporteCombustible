@@ -29,9 +29,23 @@ function WatchListColumn2() {
         'Thursday',
         'Friday',
         'Saturday',
+        'Sunday',
+        'Monday',
+        'Tueday',
+        'Wednesday',
+        'Thursday',
+        'Friday',
+        'Saturday',
+        'Sunday',
+        'Monday',
+        'Tueday',
+        'Wednesday',
+        'Thursday',
+        'Friday',
+        'Saturday',
         'Sunday'
       ],
-      data: [1.854, 1.773, 2.092, 2.009, 1.909, 1.842, 1.884]
+      data: [12, 13, 15, 18, 23,13, 15, 18, 23, 18, 21, 18, 23, 15,18,16,0,0,0,0,0]
     }
   };
 
@@ -42,7 +56,7 @@ function WatchListColumn2() {
           <AvatarWrapper>
             <img
               alt="ETH"
-              src="/static/images/placeholders/logo/ethereum.png"
+              src="/static/images/placeholders/logo/simulacion.png"
             />
           </AvatarWrapper>
           <Box>
@@ -50,7 +64,7 @@ function WatchListColumn2() {
               Pedidos Entregados
             </Typography>
             <Typography variant="subtitle1" noWrap>
-              Simulación de Colapso
+              Simulación hasta el Colapso Logístico
             </Typography>
           </Box>
         </Box>
@@ -63,7 +77,7 @@ function WatchListColumn2() {
           }}
         >
           <Typography variant="h2" sx={{ pr: 1, mb: 1 }}>
-            5000
+            2420
           </Typography>
           <Text color="error">
             <b>pedidos</b>
@@ -76,7 +90,7 @@ function WatchListColumn2() {
             justifyContent: 'flex-start'
           }}
         >
-          <Label color="error">Dia de prueba</Label>
+          <Label color="error">775 pedidos faltantes</Label>
           <Typography variant="body2" color="text.secondary" sx={{ pl: 1 }}>
             25/11/2021
           </Typography>

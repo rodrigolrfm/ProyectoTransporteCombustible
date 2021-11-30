@@ -2,6 +2,7 @@ import { FC } from 'react';
 import PropTypes from 'prop-types';
 import { Line } from 'react-chartjs-2';
 import { alpha, useTheme } from '@mui/material';
+import { Typography } from '@mui/material';
 
 interface WatchListColumn1ChartProps {
   data: any[];
@@ -88,7 +89,8 @@ const WatchListColumn1Chart: FC<WatchListColumn1ChartProps> = ({
       callbacks: {
         title: () => { },
         label: (tooltipItem: any) => {
-          return `Price: $${tooltipItem.yLabel}`;
+          return ` ${tooltipItem.yLabel} m3 (10/12/2021)` ;
+         // return `N° Pedidos: ${tooltipItem.yLabel}, 26/11/2021`;
         }
       }
     }
@@ -97,9 +99,12 @@ const WatchListColumn1Chart: FC<WatchListColumn1ChartProps> = ({
   return (
     <div {...rest}>
       <Line data={data} options={options} />
+      <Typography>hola</Typography>
     </div>
   );
 };
+
+
 
 WatchListColumn1Chart.propTypes = {
   data: PropTypes.array.isRequired,

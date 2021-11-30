@@ -68,13 +68,13 @@ function Wallets() {
        
       </Box>
       <Grid container spacing={3}>
-        <Grid xs={12} sm={6} md={3} item>
+        <Grid xs={12} sm={6} md={4} item>
           <Card sx={{ px: 1 }}>
             <CardContent>
               <AvatarWrapper>
                 <img
                   alt="BTC"
-                  src="/static/images/placeholders/logo/bitcoin.png"
+                  src="/static/images/placeholders/logo/camionnuevo.png"
                 />
               </AvatarWrapper>
               <Typography variant="h5" noWrap>
@@ -98,7 +98,7 @@ function Wallets() {
               <AvatarWrapper>
                 <img
                   alt="Ripple"
-                  src="/static/images/placeholders/logo/ripple.png"
+                  src="/static/images/placeholders/logo/mapanuevo.png"
                 />
               </AvatarWrapper>
               <Typography variant="h5" noWrap>
@@ -124,7 +124,7 @@ function Wallets() {
               <AvatarWrapper>
                 <img
                   alt="Cardano"
-                  src="/static/images/placeholders/logo/cardano.png"
+                  src="/static/images/placeholders/logo/reloj.png"
                 />
               </AvatarWrapper>
               <Typography variant="h5" noWrap>
@@ -144,19 +144,7 @@ function Wallets() {
             </CardContent>
           </Card>
         </Grid>
-        <Grid xs={12} sm={6} md={3} item>
-          <Tooltip arrow title="Click to add a new wallet">
-            <CardAddAction>
-              <CardActionArea sx={{ px: 1 }}>
-                <CardContent>
-                  <AvatarAddWrapper>
-                    <AddTwoToneIcon fontSize="large" />
-                  </AvatarAddWrapper>
-                </CardContent>
-              </CardActionArea>
-            </CardAddAction>
-          </Tooltip>
-        </Grid>
+        
       </Grid>
     </>
   );

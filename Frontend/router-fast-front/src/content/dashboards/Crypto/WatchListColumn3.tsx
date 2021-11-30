@@ -25,13 +25,11 @@ function WatchListColumn3() {
       labels: [
         'Monday',
         'Tueday',
-        'Wednesday',
-        'Thursday',
-        'Friday',
-        'Saturday',
-        'Sunday'
+        'Wednesday'
+    
+        
       ],
-      data: [13, 16, 14, 21, 8, 11, 20]
+      data: [190,206,180]
     }
   };
 
@@ -40,14 +38,14 @@ function WatchListColumn3() {
       <Box sx={{ p: 3 }}>
         <Box display="flex" alignItems="center">
           <AvatarWrapper>
-            <img alt="ADA" src="/static/images/placeholders/logo/cardano.png" />
+            <img alt="ADA" src="/static/images/placeholders/logo/GLP.png" />
           </AvatarWrapper>
           <Box>
             <Typography variant="h4" noWrap>
               Cantidad de GLP entregada
             </Typography>
             <Typography variant="subtitle1" noWrap>
-              Operación dia a dia
+              Simulación 3 dias
             </Typography>
           </Box>
         </Box>
@@ -60,9 +58,9 @@ function WatchListColumn3() {
           }}
         >
           <Typography variant="h2" sx={{ pr: 1, mb: 1 }}>
-            25000
+            576
           </Typography>
-          <Text color="error">
+          <Text color="primary">
             <b>m3</b>
           </Text>
         </Box>
@@ -73,7 +71,7 @@ function WatchListColumn3() {
             justifyContent: 'flex-start'
           }}
         >
-          <Label color="error">Dia de prueba</Label>
+          <Label color="primary">Dia de prueba</Label>
           <Typography variant="body2" color="text.secondary" sx={{ pl: 1 }}>
             25/10/2021
           </Typography>

@@ -73,9 +73,10 @@ function WatchList() {
             <Grid item lg={4} xs={12}>
               <WatchListColumn2 />
             </Grid>
-            <Grid item lg={4} xs={12}>
+            <Grid mb={5} item lg={4} xs={12}>
               <WatchListColumn3 />
             </Grid>
+
           </>
         )}
 
