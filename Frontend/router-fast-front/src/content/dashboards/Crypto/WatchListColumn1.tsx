@@ -5,6 +5,7 @@ import Label from 'src/components/Label';
 import Text from 'src/components/Text';
 import WatchListColumn1Chart from './WatchListColumn1Chart';
 
+
 const AvatarWrapper = styled(Avatar)(
   ({ theme }) => `
         background: transparent;
@@ -19,7 +20,16 @@ const WatchListColumn1ChartWrapper = styled(WatchListColumn1Chart)(
 );
 
 function WatchListColumn1() {
-
+  let nped=145;
+  let fecha="25/11/2021";
+  let a = new Array(7); for (let i=0; i<7; ++i) a[i] = 0; 
+  const price = {
+    week: {
+      labels: a,
+      data: [10, 20, 42, 51, 15, 25, 37]
+    }
+  };
+  /*
   const price = {
     week: {
       labels: [
@@ -34,7 +44,7 @@ function WatchListColumn1() {
       data: [10, 20, 42, 51, 15, 25, 37]
     }
   };
-
+  */
   return (
     <Card>
       <Box sx={{ p: 3 }}>
@@ -47,7 +57,7 @@ function WatchListColumn1() {
               Pedidos Entregados
             </Typography>
             <Typography variant="subtitle1" noWrap>
-              Simulación 3 dias
+              Última Simulación de 3 dias
             </Typography>
           </Box>
         </Box>
@@ -60,7 +70,7 @@ function WatchListColumn1() {
           }}
         >
           <Typography variant="h2" sx={{ pr: 1, mb: 1 }}>
-            109
+            {nped}
           </Typography>
           <Text color="primary">
             <b>pedidos</b>
@@ -75,7 +85,7 @@ function WatchListColumn1() {
         >
           <Label color="primary">Dia de prueba</Label>
           <Typography variant="body2" color="text.secondary" sx={{ pl: 1 }}>
-            25/11/2021
+            {fecha}
           </Typography>
         </Box>
       </Box>

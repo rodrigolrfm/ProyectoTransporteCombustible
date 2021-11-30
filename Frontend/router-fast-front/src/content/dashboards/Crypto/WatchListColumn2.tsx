@@ -20,6 +20,17 @@ const WatchListColumn1ChartWrapper = styled(WatchListColumn1Chart)(
 
 function WatchListColumn2() {
 
+  let  nped=2420;
+  let  fecha="25/11/2021";
+
+  let a = new Array(7); for (let i=0; i<7; ++i) a[i] = 0; 
+  const price = {
+    week: {
+      labels: a,
+      data: [10, 20, 42, 51, 15, 0, 0]
+    }
+  };
+  /*
   const price = {
     week: {
       labels: [
@@ -48,7 +59,7 @@ function WatchListColumn2() {
       data: [12, 13, 15, 18, 23,13, 15, 18, 23, 18, 21, 18, 23, 15,18,16,0,0,0,0,0]
     }
   };
-
+  */
   return (
     <Card>
       <Box sx={{ p: 3 }}>
@@ -77,7 +88,7 @@ function WatchListColumn2() {
           }}
         >
           <Typography variant="h2" sx={{ pr: 1, mb: 1 }}>
-            2420
+            {nped}
           </Typography>
           <Text color="error">
             <b>pedidos</b>
@@ -92,7 +103,7 @@ function WatchListColumn2() {
         >
           <Label color="error">775 pedidos faltantes</Label>
           <Typography variant="body2" color="text.secondary" sx={{ pl: 1 }}>
-            25/11/2021
+            {fecha}
           </Typography>
         </Box>
       </Box>
