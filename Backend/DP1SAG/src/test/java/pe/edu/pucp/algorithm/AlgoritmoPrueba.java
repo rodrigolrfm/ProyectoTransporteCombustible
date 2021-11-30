@@ -16,7 +16,7 @@ import pe.edu.pucp.mvc.models.PedidoModel;
 import pe.edu.pucp.mvc.models.PlantaModel;
 import pe.edu.pucp.mvc.models.EntidadVehiculo;
 import pe.edu.pucp.utils.LecturaBloques;
-import pe.edu.pucp.utils.Lectura;
+import pe.edu.pucp.utils.LecturaPedido;
 import pe.edu.pucp.utils.LecturaVehiculo;
 
 
@@ -32,7 +32,7 @@ public class AlgoritmoPrueba {
 
         listaVehiculos = LecturaVehiculo.lectura("src\\main\\java\\pe\\edu\\pucp\\files\\vehiculos2021.txt");
 
-        listaPedidos = Lectura.lectura("src\\main\\java\\pe\\edu\\pucp\\files\\ventas\\ventas202112.txt");
+        listaPedidos = LecturaPedido.lectura("src\\main\\java\\pe\\edu\\pucp\\files\\ventas\\ventas202112.txt");
 
         
         ArrayList<NodoModel> blockList = LecturaBloques.lectura("src\\main\\java\\pe\\edu\\pucp\\files\\bloqueos\\202112bloqueadas.txt");

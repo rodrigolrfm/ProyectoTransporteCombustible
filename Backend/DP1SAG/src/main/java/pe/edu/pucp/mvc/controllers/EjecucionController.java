@@ -7,7 +7,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import pe.edu.pucp.algorithm.GeneticAlgorithm;
 import pe.edu.pucp.algorithm.Knapsack;
 import pe.edu.pucp.mvc.models.*;
-import pe.edu.pucp.utils.Lectura;
+import pe.edu.pucp.utils.LecturaPedido;
 import pe.edu.pucp.utils.LecturaBloques;
 import pe.edu.pucp.utils.LecturaVehiculo;
 
@@ -31,7 +31,7 @@ public class EjecucionController {
     }*/
 
     @PostMapping(value = "/simularRutasColapso")
-    public EntidadRutas ejecutarAlgortimo(List<PedidoModel> listaPedidos) throws Exception {
+    public EntidadRutas ejecutarAlgortimo() throws Exception {
 
 
         EntidadRutas rutasFinal = EntidadRutas.builder().paths(new ArrayList<>()).build();
@@ -41,7 +41,7 @@ public class EjecucionController {
 
         listaVehiculos = LecturaVehiculo.lectura("/home/ubuntu/Grupo2/Download/vehiculos2021.txt");
 
-        //listaPedidos = Lectura.TxtReader("/home/ubuntu/Grupo2/Download/ventas/ventas202202.txt");
+        List<PedidoModel> listaPedidos = LecturaPedido.lectura("/home/ubuntu/Grupo2/Download/ventas/ventas202202.txt");
 
         ArrayList<NodoModel> blockList = LecturaBloques.lectura("/home/ubuntu/Grupo2/Download/bloqueos/202112bloqueadas.txt");
 
@@ -239,7 +239,7 @@ public class EjecucionController {
 
         listaVehiculos = LecturaVehiculo.lectura("/home/ubuntu/Grupo2/Download/vehiculos2021.txt");
 
-        listaPedidos = Lectura.lectura("/home/ubuntu/Grupo2/Download/ventas/ventas202201.txt");
+        listaPedidos = LecturaPedido.lectura("/home/ubuntu/Grupo2/Download/ventas/ventas202201.txt");
 
         ArrayList<NodoModel> blockList = LecturaBloques.lectura("/home/ubuntu/Grupo2/Download/bloqueos/202112bloqueadas.txt");
 

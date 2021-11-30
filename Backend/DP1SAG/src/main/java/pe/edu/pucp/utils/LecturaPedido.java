@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.io.*;
 
-public class Lectura {
+public class LecturaPedido {
     public static List<PedidoModel> lectura(String path) throws IOException , Exception{
         List<PedidoModel> requestList = new ArrayList<PedidoModel>();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm");
