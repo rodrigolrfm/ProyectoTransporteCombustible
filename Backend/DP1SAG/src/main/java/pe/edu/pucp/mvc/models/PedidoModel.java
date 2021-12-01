@@ -14,13 +14,19 @@ import java.util.Calendar;
 @AllArgsConstructor
 @Entity
 @Table(name="pedido")
+@IdClass(PedidoIdentidad.class)
 public class PedidoModel extends NodoModel implements Serializable {
-
+    /*
     @Id
     @Column(unique = false)
     private int idNodo;
 
     @Column(name = "idExtendido",nullable = true)
+    private int idExtendido;
+    */
+    @Id
+    private int idNodo;
+    @Id
     private int idExtendido;
 
     @Column(name = "fechaPedido",nullable = true)
