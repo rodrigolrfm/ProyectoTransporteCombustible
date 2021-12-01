@@ -4,6 +4,7 @@ package pe.edu.pucp.mvc.controllers;
 import javafx.util.Pair;
 import org.apache.logging.log4j.message.MapMessage;
 import org.json.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,9 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import pe.edu.pucp.algorithm.GeneticAlgorithm;
 import pe.edu.pucp.algorithm.Knapsack;
 import pe.edu.pucp.mvc.models.*;
+import pe.edu.pucp.mvc.planificacion.ControlTarea;
+import pe.edu.pucp.mvc.planificacion.PlanificacionTareas;
+import pe.edu.pucp.mvc.planificacion.PlanificadorTareasServicios;
 import pe.edu.pucp.mvc.planificacion.ScheduledTasks;
 import pe.edu.pucp.utils.Lectura;
 import pe.edu.pucp.utils.LecturaBloques;
@@ -25,7 +29,9 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @RequestMapping("/ejecutar")
 public class EjecucionController {
 
-    /*
+    @Autowired
+    private PlanificadorTareasServicios planificadorTareasServicios;
+
     @GetMapping(value = "/obtenerRutas")
     public SseEmitter devolverRutas(){
         SseEmitter sseEmitter = new SseEmitter();
@@ -33,7 +39,28 @@ public class EjecucionController {
         sseEmitter.onTimeout(() -> ScheduledTasks.emi = null);
         ScheduledTasks.emi = sseEmitter;
         return sseEmitter;
-    }*/
+    }
+
+    @GetMapping(value = "/obtenerTresDias")
+    public SseEmitter devolverRutasTresDias(){
+        ControlTarea planificador = ControlTarea.builder()
+                .tipoAction("PrintDataTask")
+                .datos("Datos que deberías ver")
+                .controlCron("*/10 * * * * ?")
+                .build();
+        PlanificacionTareas planificadorTareas = new PlanificacionTareas();
+        String uuid = UUID.randomUUID().toString();
+        SseEmitter emitter = new SseEmitter(Long.MAX_VALUE);
+        emitter.onCompletion(() -> planificadorTareasServicios.eliminarPlanificadorTareas(uuid));
+        emitter.onTimeout(() -> planificadorTareasServicios.eliminarPlanificadorTareas(uuid));
+        planificadorTareas.setControlTarea(planificador);
+        planificadorTareas.setEmitter(emitter);
+        planificadorTareas.setUuid(uuid);
+        planificadorTareas.setPlanificadorTareasServicios(planificadorTareasServicios);
+        planificadorTareasServicios.planificarTareas(uuid, planificadorTareas, planificador.getControlCron());
+        return emitter;
+    }
+
 
     @PostMapping(value = "/simularRutasColapso")
     public EntidadRutas ejecutarAlgortimo() throws Exception {
@@ -243,12 +270,12 @@ public class EjecucionController {
 
         List<EntidadVehiculo> listaVehiculos;
 
-        listaVehiculos = LecturaVehiculo.TxtReader("/home/ubuntu/Grupo2/Download/vehiculos2021.txt");
-
-        listaPedidos = Lectura.TxtReader("/home/ubuntu/Grupo2/Download/ventas/ventas202201.txt");
-
-        ArrayList<NodoModel> blockList = LecturaBloques.TxtReader("/home/ubuntu/Grupo2/Download/bloqueos/202112bloqueadas.txt");
-
+        //listaVehiculos = LecturaVehiculo.TxtReader("/home/ubuntu/Grupo2/Download/vehiculos2021.txt");
+        listaVehiculos = LecturaVehiculo.TxtReader("D:\\CICLO10\\Trabajo\\Grupo2\\Download\\vehiculos2021.txt");
+        //listaPedidos = Lectura.TxtReader("/home/ubuntu/Grupo2/Download/ventas/ventas202201.txt");
+        listaPedidos = Lectura.TxtReader("D:\\CICLO10\\Trabajo\\Grupo2\\Download\\ventas\\ventas202201.txt");
+        //ArrayList<NodoModel> blockList = LecturaBloques.TxtReader("/home/ubuntu/Grupo2/Download/bloqueos/202112bloqueadas.txt");
+        ArrayList<NodoModel> blockList = LecturaBloques.TxtReader("D:\\CICLO10\\Trabajo\\Grupo2\\Download\\bloqueos\\202112bloqueadas.txt");
         // Depositos iniciales
         ArrayList<PlantaModel> plantas = new ArrayList<>();
         plantas.add(PlantaModel.builder().coordenadaX(12).coordenadaY(8).esPrincipal(true).build());

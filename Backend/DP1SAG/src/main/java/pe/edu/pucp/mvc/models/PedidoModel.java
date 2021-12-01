@@ -17,6 +17,7 @@ import java.util.Calendar;
 public class PedidoModel extends NodoModel implements Serializable {
 
     @Id
+    @Column(unique = false)
     private int idNodo;
 
     @Column(name = "idExtendido",nullable = true)

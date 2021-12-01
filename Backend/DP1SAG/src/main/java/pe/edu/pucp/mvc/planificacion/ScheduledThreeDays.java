@@ -18,21 +18,21 @@ import pe.edu.pucp.mvc.metodos.EjecucionAlgoritmo;
 import pe.edu.pucp.mvc.models.EntidadRutas;
 
 @Component
-public class ScheduledTasks {
+public class ScheduledThreeDays {
 
     private static final Logger log = LoggerFactory.getLogger(ScheduledTasks.class);
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
     public static SseEmitter emi = null;
     EntidadRutas rutasFinal = EntidadRutas.builder().paths(new ArrayList<>()).build();
-    //@Scheduled(fixedRate = 45000)
-    @Scheduled(cron="40 * * * * *")
-    public void reportCurrentTime() throws Exception {
-        //JSONObject json = new JSONObject();
-        rutasFinal = EjecucionAlgoritmo.ejecutarAlgortimoColapso();
-        if (emi!=null){
-            emi.send(SseEmitter.event().name("RUTAS").data(rutasFinal));
-        }
+
+
+    public void planificaciondias() throws Exception {
+        //rutasFinal = EjecucionAlgoritmo.ejecutarAlgortimoColapso();
+        //if (emi!=null){
+        //    emi.send(SseEmitter.event().name("TRESDIAS").data(rutasFinal));
+        //}
+
     }
 
 }

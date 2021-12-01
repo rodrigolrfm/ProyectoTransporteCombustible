@@ -32,7 +32,7 @@ public class PedidoController {
     public List<PedidoModel> cargaMasivaNodos(@RequestParam("filear") MultipartFile file) throws IOException {
 
         int glpTotal = 0;
-        List<PedidoModel> listaPedidos = new ArrayList<PedidoModel>();
+        List<PedidoModel> listaPedidos = new ArrayList<>();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm");
 
         try {
@@ -48,6 +48,8 @@ public class PedidoController {
 
             int num = 0;
             while ((line = br.readLine()) != null) {
+                int minimo = 5;
+                int totalCapacity = 0;
                 rowRequest = line.split(",");
                 day = rowRequest[0].split(":");
                 strDate = file.getOriginalFilename().substring(6,10) + "/" + file.getOriginalFilename().substring(10,12) + "/" + day[0] + " " + day[1] + ":" + day[2];
@@ -68,8 +70,34 @@ public class PedidoController {
                         .cantidadGLP(Integer.parseInt(rowRequest[3]))
                         .horasLimite(cal).build();
                 listaPedidos.add(pedido);
-                pedidoService.guardarPedido(pedido);
+                pedido = pedidoService.guardarPedido(pedido);
+                int i = 1;
+                PedidoModel pedidoPartido= new PedidoModel();
+                for(; i < (int)pedido.getCantidadGLP()/minimo + 1; i++)
+                    pedidoPartido = PedidoModel.builder()
+                            .idNodo(pedido.getIdNodo())
+                            .idExtendido(i)
+                            .clienteModel(pedido.getClienteModel())
+                            .cantidadGLP(minimo)
+                            .coordenadaX(pedido.getCoordenadaX())
+                            .coordenadaY(pedido.getCoordenadaY())
+                            .fechaPedido(pedido.getFechaPedido())
+                            .horasLimite(pedido.getHorasLimite()).build();
+                    pedidoService.guardarPedido(pedidoPartido);
 
+                if(pedido.getCantidadGLP()%minimo != 0.0) {
+                    pedidoPartido = PedidoModel.builder()
+                            .idNodo(pedido.getIdNodo())
+                            .idExtendido(i)
+                            .clienteModel(pedido.getClienteModel())
+                            .cantidadGLP(pedido.getCantidadGLP() % minimo)
+                            .coordenadaX(pedido.getCoordenadaX())
+                            .coordenadaY(pedido.getCoordenadaY())
+                            .fechaPedido(pedido.getFechaPedido())
+                            .horasLimite(pedido.getHorasLimite()).build();
+                    pedidoService.guardarPedido(pedidoPartido);
+                }
+                totalCapacity += pedido.getCantidadGLP();
             }
         } catch (IOException | ParseException | NumberFormatException e) {
             e.printStackTrace();

@@ -69,16 +69,17 @@ public class EjecucionAlgoritmo {
                         .coordenadaY(r.getCoordenadaY())
                         .fechaPedido(r.getFechaPedido())
                         .horasLimite(r.getHorasLimite()).build());
-            if(r.getCantidadGLP()%minimo != 0.0)
+            if(r.getCantidadGLP()%minimo != 0.0) {
                 requestListDesdoblado.add(PedidoModel.builder()
                         .idNodo(r.getIdNodo())
                         .idExtendido(i)
                         .clienteModel(r.getClienteModel())
-                        .cantidadGLP(r.getCantidadGLP()%minimo)
+                        .cantidadGLP(r.getCantidadGLP() % minimo)
                         .coordenadaX(r.getCoordenadaX())
                         .coordenadaY(r.getCoordenadaY())
                         .fechaPedido(r.getFechaPedido())
                         .horasLimite(r.getHorasLimite()).build());
+            }
             totalCapacity += r.getCantidadGLP();
         }
 
