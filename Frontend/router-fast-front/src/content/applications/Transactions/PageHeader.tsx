@@ -1,7 +1,7 @@
 import { Typography, Button, Grid, FormControl, InputLabel, MenuItem} from '@mui/material';
 import axios from 'axios';
 import CustomSnackbar from 'src/components/Custom/CustomSnackbar';
-import { useEffect, useState } from 'react';
+import { useEffect, useState,useRef } from 'react';
 import { styled } from '@mui/material/styles';
 import UploadTwoToneIcon from '@mui/icons-material/UploadTwoTone';
 import MapR from 'src/components/MapR/MapR';
@@ -9,11 +9,15 @@ import MapC from 'src/components/MapC/MapC';
 import url from  'src/utils/constant';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 
+
+
 const Input = styled('input')({
   display: 'none',
 });
 
 function PageHeader() {
+  const myRef = useRef(null)
+  const executeScroll = () => myRef.current.scrollIntoView()   
   const [alert, setAlert] = useState({isOpen: false, message: '', type: ''})
   const [filesCheck, setFilesCheck] = useState(0)
   const [start, setStart] = useState(false)
@@ -26,14 +30,17 @@ function PageHeader() {
     setTipo(event.target.value);
   };
   const sendFiles= ()=>{
+    
     setStart(true);
     // a 3 días  -> true -> 1
     if( tipo == "1"){
       setSimulacion(1);
     }
     if( tipo == "2"){
-      setSimulacion(2);
+      setSimulacion(2);      
     }
+    setTimeout(() => {executeScroll()}, 1000);
+    
   }
 
   useEffect(()=>{
@@ -139,10 +146,10 @@ function PageHeader() {
         </Grid>
       </Grid>
       <CustomSnackbar alert={alert} setAlert={setAlert}/>
-      {simulacion===1? <MapR simulacion={simulacion}></MapR>:<div>
+      {simulacion===1? <div ref={myRef}> <MapR simulacion={simulacion}></MapR></div>:<div>
       </div>
       }
-      {simulacion===2? <MapC simulacion={simulacion}></MapC>:<div>
+      {simulacion===2? <div ref={myRef}> <MapC simulacion={simulacion}></MapC></div>:<div>
       </div>
       }
       
