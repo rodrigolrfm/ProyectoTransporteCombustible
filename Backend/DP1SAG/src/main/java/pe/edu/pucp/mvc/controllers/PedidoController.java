@@ -72,7 +72,7 @@ public class PedidoController {
                 listaPedidos.add(pedido);
                 pedido = pedidoService.guardarPedido(pedido);
                 int i = 1;
-                PedidoModel pedidoPartido= new PedidoModel();
+                PedidoModel pedidoPartido = new PedidoModel();
                 for(; i < (int)pedido.getCantidadGLP()/minimo + 1; i++)
                     pedidoPartido = PedidoModel.builder()
                             .idNodo(pedido.getIdNodo())
@@ -83,7 +83,7 @@ public class PedidoController {
                             .coordenadaY(pedido.getCoordenadaY())
                             .fechaPedido(pedido.getFechaPedido())
                             .horasLimite(pedido.getHorasLimite()).build();
-                    pedidoService.guardarPedido(pedidoPartido);
+                pedidoService.guardarPedido(pedidoPartido);
 
                 if(pedido.getCantidadGLP()%minimo != 0.0) {
                     pedidoPartido = PedidoModel.builder()
