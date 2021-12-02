@@ -2,11 +2,16 @@ package pe.edu.pucp.mvc.controllers;
 
 
 import javafx.util.Pair;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import pe.edu.pucp.algorithm.GeneticAlgorithm;
 import pe.edu.pucp.algorithm.Knapsack;
 import pe.edu.pucp.mvc.models.*;
+import pe.edu.pucp.mvc.planificacion.ControlTarea;
+import pe.edu.pucp.mvc.planificacion.PlanificacionTareas;
+import pe.edu.pucp.mvc.planificacion.PlanificadorTareasServicios;
+import pe.edu.pucp.mvc.planificacion.ScheduledTasks;
 import pe.edu.pucp.utils.LecturaPedido;
 import pe.edu.pucp.utils.LecturaBloques;
 import pe.edu.pucp.utils.LecturaVehiculo;
@@ -19,16 +24,38 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @RequestMapping("/ejecutar")
 public class EjecucionController {
 
-    public List<SseEmitter> emitters = new CopyOnWriteArrayList<>();
+    @Autowired
+    private PlanificadorTareasServicios planificadorTareasServicios;
 
-    /*
     @GetMapping(value = "/obtenerRutas")
     public SseEmitter devolverRutas(){
         SseEmitter sseEmitter = new SseEmitter();
+        sseEmitter.onCompletion(() -> ScheduledTasks.emi = null);
+        sseEmitter.onTimeout(() -> ScheduledTasks.emi = null);
         ScheduledTasks.emi = sseEmitter;
-        emitters.add(sseEmitter);
         return sseEmitter;
-    }*/
+    }
+
+    @GetMapping(value = "/obtenerTresDias")
+    public SseEmitter devolverRutasTresDias(){
+        ControlTarea planificador = ControlTarea.builder()
+                .tipoAction("PrintDataTask")
+                .datos("Datos que deberías ver")
+                .controlCron("*/10 * * * * ?")
+                .build();
+        PlanificacionTareas planificadorTareas = new PlanificacionTareas();
+        String uuid = UUID.randomUUID().toString();
+        SseEmitter emitter = new SseEmitter(Long.MAX_VALUE);
+        emitter.onCompletion(() -> planificadorTareasServicios.eliminarPlanificadorTareas(uuid));
+        emitter.onTimeout(() -> planificadorTareasServicios.eliminarPlanificadorTareas(uuid));
+        planificadorTareas.setControlTarea(planificador);
+        planificadorTareas.setEmitter(emitter);
+        planificadorTareas.setUuid(uuid);
+        planificadorTareas.setPlanificadorTareasServicios(planificadorTareasServicios);
+        planificadorTareasServicios.planificarTareas(uuid, planificadorTareas, planificador.getControlCron());
+        return emitter;
+    }
+
 
     @PostMapping(value = "/simularRutasColapso")
     public EntidadRutas ejecutarAlgortimo() throws Exception {
@@ -36,12 +63,13 @@ public class EjecucionController {
 
         EntidadRutas rutasFinal = EntidadRutas.builder().paths(new ArrayList<>()).build();
 
+        List<PedidoModel> listaPedidos;
 
         List<EntidadVehiculo> listaVehiculos;
 
         listaVehiculos = LecturaVehiculo.lectura("/home/ubuntu/Grupo2/Download/vehiculos2021.txt");
 
-        List<PedidoModel> listaPedidos = LecturaPedido.lectura("/home/ubuntu/Grupo2/Download/ventas/ventas202202.txt");
+        listaPedidos = LecturaPedido.lectura("/home/ubuntu/Grupo2/Download/ventas/ventas202202.txt");
 
         ArrayList<NodoModel> blockList = LecturaBloques.lectura("/home/ubuntu/Grupo2/Download/bloqueos/202112bloqueadas.txt");
 
@@ -72,8 +100,8 @@ public class EjecucionController {
         int totalCapacity = 0;
 
         for(PedidoModel r : listaPedidos){
-            int i = 0;
-            for(; i < (int)r.getCantidadGLP()/minimo; i++)
+            int i = 1;
+            for(; i < (int)r.getCantidadGLP()/minimo + 1; i++)
                 requestListDesdoblado.add(PedidoModel.builder()
                         .idNodo(r.getIdNodo())
                         .idExtendido(i)
@@ -86,7 +114,7 @@ public class EjecucionController {
             if(r.getCantidadGLP()%minimo != 0.0)
                 requestListDesdoblado.add(PedidoModel.builder()
                         .idNodo(r.getIdNodo())
-                        .idExtendido(++i)
+                        .idExtendido(i)
                         .clienteModel(r.getClienteModel())
                         .cantidadGLP(r.getCantidadGLP()%minimo)
                         .coordenadaX(r.getCoordenadaX())
@@ -97,7 +125,7 @@ public class EjecucionController {
         }
 
         System.out.println("Total Capacity: " + totalCapacity);
-
+        // lista que tendrá los vehículos y sus listas de pedidos ordenados por indice
         ArrayList<Pair<EntidadVehiculo, PriorityQueue<Pair<Float, PedidoModel>>>> listaVC = new ArrayList<>();
 
         List<PedidoModel> auxRequest = new ArrayList<>();
@@ -151,29 +179,26 @@ public class EjecucionController {
                             pedidoCompletado++;
                     }
 
-                    System.out.println("Total de glp entregado = " + (totalCapacity - totalGLP));
-                    System.out.println("Total de glp que falta entregar = " + totalGLP);
-                    System.out.println("Total de tiempo = " + totalTime/60);
-                    System.out.println("Pedidos recibidos = " + listaPedidos.size());
-                    System.out.println("Pedidos completados = " + pedidoCompletado);
-                    throw new Exception("COLAPSO LOGÍSCTICO!!");
+                    throw new Exception("Llegó al colapso logístico");
                 }
             }
 
             for(Pair<EntidadVehiculo, PriorityQueue<Pair<Float, PedidoModel>>> vc : listaVC){
-
-                listaVehiculos.clear();
+                //Assign request to vehicles
+                listaVehiculos.clear(); // se puede quitar esta lista intermedia
                 listaVehiculos.add(vc.getKey());
+//                System.out.println("PQ: " + vc.getValue());
                 int assigned = 0;
                 try {
                     assigned += Knapsack.allocate(vc.getValue(), listaVehiculos, auxRequest);
+                    //verificar si entra en el camión los pedidos.
                 }
                 catch (Exception e) {
                     System.out.println(e.getMessage());
                 }
             }
 
-            listaVehiculos.clear();
+            listaVehiculos.clear(); // se puede eliminar esta lista intermedia
             listaVC.forEach(vc -> {
                 listaVehiculos.add(vc.getKey());
             });
@@ -182,16 +207,14 @@ public class EjecucionController {
             ArrayList<NodoModel> vertices = new ArrayList<>(); // se puede quitar esta lista intermedia
             for(EntidadVehiculo v : listaVehiculos){
                 vertices.clear();
-                v.getListaPedidos().forEach(p -> {
-                    vertices.add(p);
-                });
+                v.getListaPedidos().forEach(p -> { vertices.add(p); });
                 System.out.println(v.getListaPedidos());
                 if(!v.getListaPedidos().isEmpty())
                     GeneticAlgorithm.Genetic(v, vertices, mapaModel);
 
             }
             for(EntidadVehiculo v : listaVehiculos){
-                if(v.getRutaVehiculo() != null && !v.getRutaVehiculo().isEmpty()) {
+                if(v.getRutaVehiculo() != null && !v.getRutaVehiculo().isEmpty()) { // si encontró una buana ruta.
                     v.getFechaInicio().add(Calendar.MINUTE, Math.round((float) Math.ceil(v.calculateTimeToDispatch())));
                     v.setNodoActual(v.getRutaVehiculo().get(v.getRutaVehiculo().size() - 1));
                     totalTime += v.calculateTimeToDispatch();
@@ -207,7 +230,7 @@ public class EjecucionController {
                 v.clearVehicle();
             }
 
-            //Ordenar por capacidades
+            // Se hace sort para las capacidadades
             listaVehiculos.sort((v1, v2) -> Long.compare(v1.getFechaInicio().getTimeInMillis() , v2.getFechaInicio().getTimeInMillis()));
 
             List<PedidoModel> aux = new ArrayList<>();
@@ -220,7 +243,7 @@ public class EjecucionController {
             requestListDesdoblado = aux;
 
         } while(!requestListDesdoblado.isEmpty());
-        //ordenar por fecha de inicio de la ruta
+
         Collections.sort(rutasFinal.getPaths());
 
         return rutasFinal;
@@ -237,12 +260,12 @@ public class EjecucionController {
 
         List<EntidadVehiculo> listaVehiculos;
 
-        listaVehiculos = LecturaVehiculo.lectura("/home/ubuntu/Grupo2/Download/vehiculos2021.txt");
-
-        listaPedidos = LecturaPedido.lectura("/home/ubuntu/Grupo2/Download/ventas/ventas202201.txt");
-
-        ArrayList<NodoModel> blockList = LecturaBloques.lectura("/home/ubuntu/Grupo2/Download/bloqueos/202112bloqueadas.txt");
-
+        //listaVehiculos = LecturaVehiculo.TxtReader("/home/ubuntu/Grupo2/Download/vehiculos2021.txt");
+        listaVehiculos = LecturaVehiculo.lectura("D:\\CICLO10\\Trabajo\\Grupo2\\Download\\vehiculos2021.txt");
+        //listaPedidos = Lectura.TxtReader("/home/ubuntu/Grupo2/Download/ventas/ventas202201.txt");
+        listaPedidos = LecturaPedido.lectura("D:\\CICLO10\\Trabajo\\Grupo2\\Download\\ventas\\ventas202201.txt");
+        //ArrayList<NodoModel> blockList = LecturaBloques.TxtReader("/home/ubuntu/Grupo2/Download/bloqueos/202112bloqueadas.txt");
+        ArrayList<NodoModel> blockList = LecturaBloques.lectura("D:\\CICLO10\\Trabajo\\Grupo2\\Download\\bloqueos\\202112bloqueadas.txt");
         // Depositos iniciales
         ArrayList<PlantaModel> plantas = new ArrayList<>();
         plantas.add(PlantaModel.builder().coordenadaX(12).coordenadaY(8).esPrincipal(true).build());
@@ -270,8 +293,8 @@ public class EjecucionController {
         int totalCapacity = 0;
 
         for(PedidoModel r : listaPedidos){
-            int i = 0;
-            for(; i < (int)r.getCantidadGLP()/minimo; i++)
+            int i = 1;
+            for(; i < (int)r.getCantidadGLP()/minimo + 1; i++)
                 requestListDesdoblado.add(PedidoModel.builder()
                         .idNodo(r.getIdNodo())
                         .idExtendido(i)
@@ -284,7 +307,7 @@ public class EjecucionController {
             if(r.getCantidadGLP()%minimo != 0.0)
                 requestListDesdoblado.add(PedidoModel.builder()
                         .idNodo(r.getIdNodo())
-                        .idExtendido(++i)
+                        .idExtendido(i)
                         .clienteModel(r.getClienteModel())
                         .cantidadGLP(r.getCantidadGLP()%minimo)
                         .coordenadaX(r.getCoordenadaX())

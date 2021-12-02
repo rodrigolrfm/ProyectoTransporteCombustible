@@ -29,7 +29,7 @@ public class ScheduledTasks {
     @Scheduled(cron="40 * * * * *")
     public void reportCurrentTime() throws Exception {
         //JSONObject json = new JSONObject();
-        rutasFinal = EjecucionAlgoritmo.ejecutarAlgortimoColapso();
+        rutasFinal = EjecucionAlgoritmo.ejecutarAlgoritmoColapso();
         if (emi!=null){
             emi.send(SseEmitter.event().name("RUTAS").data(rutasFinal));
         }
