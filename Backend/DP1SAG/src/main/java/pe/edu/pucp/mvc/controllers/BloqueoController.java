@@ -62,6 +62,7 @@ public class BloqueoController {
                     // Se crea la clase bloqueo
                     BloqueoModel block = BloqueoModel.builder().inicioBloqueo(initDate).finBloqueo(endDate).build();
                     bloqueoService.guardarBloqueo(block);
+
                     try{
                         int x = Integer.parseInt(rowRequest[i+2]);
                         int y = Integer.parseInt(rowRequest[i+3]);
