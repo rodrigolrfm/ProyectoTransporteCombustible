@@ -11,7 +11,7 @@ import java.util.Date;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BloqueModel implements Serializable {
+public class EntidadBloqueo implements Serializable {
 
     private Date inicioBloqueo;
 

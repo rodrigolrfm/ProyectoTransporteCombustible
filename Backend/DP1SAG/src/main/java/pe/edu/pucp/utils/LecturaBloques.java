@@ -1,6 +1,6 @@
 package pe.edu.pucp.utils;
 
-import pe.edu.pucp.mvc.models.BloqueModel;
+import pe.edu.pucp.mvc.models.BloqueoModel;
 import pe.edu.pucp.mvc.models.NodoModel;
 
 import java.io.File;
@@ -11,8 +11,6 @@ import java.io.IOException;
 import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.text.ParseException;
-
-
 
 public class LecturaBloques {
     public static ArrayList<NodoModel> lectura(String path) throws Exception{
@@ -40,7 +38,7 @@ public class LecturaBloques {
                 endDate = sdf.parse(strEndDate);
                 for(int i = 1; i<rowRequest.length; i+=2){
                     NodoModel p = null;
-                    BloqueModel block = BloqueModel.builder().inicioBloqueo(initDate).finBloqueo(endDate).build();
+                    BloqueoModel block = BloqueoModel.builder().inicioBloqueo(initDate).finBloqueo(endDate).build();
                     try{
                         int x = Integer.parseInt(rowRequest[i+2]);
                         int y = Integer.parseInt(rowRequest[i+3]);

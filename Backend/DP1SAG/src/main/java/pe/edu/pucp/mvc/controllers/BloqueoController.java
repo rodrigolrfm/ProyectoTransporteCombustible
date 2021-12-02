@@ -1,5 +1,5 @@
 package pe.edu.pucp.mvc.controllers;
-/*
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import pe.edu.pucp.mvc.models.BloqueModel;
+import pe.edu.pucp.mvc.models.BloqueoModel;
 import pe.edu.pucp.mvc.models.NodoModel;
 import pe.edu.pucp.mvc.services.BloqueoService;
 import pe.edu.pucp.mvc.services.VehiculoService;
@@ -29,13 +29,15 @@ public class BloqueoController {
     @Autowired
     BloqueoService bloqueoService;
 
+
     @PostMapping(value = "/cargaMasivaBloqueos", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public void cargaMasivaBloqueo(@RequestParam("file") MultipartFile file) throws IOException {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm");
 
         ArrayList<NodoModel> blockedList = new ArrayList<>();
         try{
-            File convertFile = new File("/home/ubuntu/resources/" + file.getOriginalFilename());
+            //File convertFile = new File("/home/ubuntu/resources/" + file.getOriginalFilename());
+            File convertFile = new File("D:\\CICLO10\\Trabajo\\Grupo2\\Download\\bloqueos\\" + file.getOriginalFilename());
             final BufferedReader br = new BufferedReader(new FileReader(convertFile));
 
             String line;
@@ -47,18 +49,20 @@ public class BloqueoController {
                 splitStrDate = rowRequest[0].split("-");
                 initSplitDate = splitStrDate[0].split(":"); //dd hh mm
                 endSplitDate = splitStrDate[1].split(":");
-                strInitDate = file.getName().substring(0,4) + "/" +
-                        file.getName().substring(4,6) + "/" +
+                strInitDate = file.getOriginalFilename().substring(0,4) + "/" +
+                        file.getOriginalFilename().substring(4,6) + "/" +
                         initSplitDate[0]+ " " + initSplitDate[1] + ":" + initSplitDate[2];
-                strEndDate = file.getName().substring(0,4) + "/" +
-                        file.getName().substring(4,6) + "/" +
+                strEndDate = file.getOriginalFilename().substring(0,4) + "/" +
+                        file.getOriginalFilename().substring(4,6) + "/" +
                         endSplitDate[0]+ " " + endSplitDate[1] + ":" + endSplitDate[2];
                 initDate = sdf.parse(strInitDate);
                 endDate = sdf.parse(strEndDate);
                 for(int i = 1; i<rowRequest.length; i+=2){
                     NodoModel nodo = null;
                     // Se crea la clase bloqueo
-                    BloqueModel block = BloqueModel.builder().inicioBloqueo(initDate).finBloqueo(endDate).build();
+                    BloqueoModel block = BloqueoModel.builder().inicioBloqueo(initDate).finBloqueo(endDate).build();
+                    bloqueoService.guardarBloqueo(block);
+
                     try{
                         int x = Integer.parseInt(rowRequest[i+2]);
                         int y = Integer.parseInt(rowRequest[i+3]);
@@ -71,7 +75,7 @@ public class BloqueoController {
 
                         //Agregar bloqueo en la base de datos
                         blockedList.add(nodo);
-
+                        bloqueoService.guardarBloqueo(block);
                         break;
                     }
                     int canty=0;
@@ -90,6 +94,7 @@ public class BloqueoController {
                                     .coordenadaY(Integer.parseInt(rowRequest[i+1])+j).build();
                             nodo.getBlockList().add(block);
                             blockedList.add(nodo);
+                            bloqueoService.guardarBloqueo(block);
                         }
 
                     }else{
@@ -99,6 +104,7 @@ public class BloqueoController {
                                     .coordenadaY(Integer.parseInt(rowRequest[i+1])-j).build();
                             nodo.getBlockList().add(block);
                             blockedList.add(nodo);
+                            bloqueoService.guardarBloqueo(block);
                         }
                     }
                     if(cantx>0){
@@ -108,6 +114,7 @@ public class BloqueoController {
                                     .coordenadaY(Integer.parseInt(rowRequest[i+1])).build();
                             nodo.getBlockList().add(block);
                             blockedList.add(nodo);
+                            bloqueoService.guardarBloqueo(block);
                         }
                     }else{
                         for(int j =0 ;j<Math.abs(cantx);j++) {
@@ -119,7 +126,6 @@ public class BloqueoController {
                             bloqueoService.guardarBloqueo(block);
                         }
                     }
-
                 }
             }
         } catch (IOException | ParseException | NumberFormatException e) {
@@ -130,4 +136,3 @@ public class BloqueoController {
 
 
 }
-*/

@@ -31,7 +31,8 @@ public class VehiculoController {
 
         List<EntidadVehiculo> vehicleList = new ArrayList<>();
 
-        File convertFile = new File("/home/ubuntu/resources/" + file.getOriginalFilename());
+        //File convertFile = new File("/home/ubuntu/resources/" + file.getOriginalFilename());
+        File convertFile = new File("D:\\CICLO10\\Trabajo\\" + file.getOriginalFilename());
         //File convertFile = new File("D:/work/" + file.getOriginalFilename());
 
         final BufferedReader br = new BufferedReader(new FileReader(convertFile));

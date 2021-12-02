@@ -2,9 +2,8 @@ package pe.edu.pucp.mvc.models;
 
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import pe.edu.pucp.utils.UtilidadesFechas;
+import pe.edu.pucp.utils.*;
 
-import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -38,7 +37,7 @@ public class NodoModel implements Comparable<NodoModel>, Serializable {
     private NodoModel nodoprevio = null;
 
     @Builder.Default
-    List<BloqueModel> blockList = new ArrayList<>();
+    List<BloqueoModel> blockList = new ArrayList<>();
 
     public NodoModel(int coordenadaX, int coordenadaY, boolean estaBloqueado) {
         this.coordenadaX = coordenadaX;
