@@ -6,8 +6,10 @@ Requisitos
 -    Instalar la versión de Java JDK 11.
 -    Instalar Maven versión 3.8.1
 Procedimientos
-1.    Ejecutar el siguiente comando en terminal de tu sistema operativo
-java -jar mvc-0.0.1-SNAPSHOT.war
+1.    Extraer el archivo(mvc-0.0.1-SNAPSHOT.war) de la carpeta Download
+2.    Ejecutar el siguiente comando en terminal de tu sistema operativo  
+
+            java -jar mvc-0.0.1-SNAPSHOT.war
 
 
 FRONT-END:
