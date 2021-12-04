@@ -72,8 +72,8 @@ public class PedidoController {
                 listaPedidos.add(pedido);
                 pedido = pedidoService.guardarPedido(pedido);
                 int i = 1;
-                PedidoModel pedidoPartido = new PedidoModel();
-                for(; i < (int)pedido.getCantidadGLP()/minimo + 1; i++)
+                PedidoModel pedidoPartido=null;
+                for(; i < (int)pedido.getCantidadGLP()/minimo + 1; i++) {
                     pedidoPartido = PedidoModel.builder()
                             .idNodo(pedido.getIdNodo())
                             .idExtendido(i)
@@ -83,7 +83,8 @@ public class PedidoController {
                             .coordenadaY(pedido.getCoordenadaY())
                             .fechaPedido(pedido.getFechaPedido())
                             .horasLimite(pedido.getHorasLimite()).build();
-                pedidoService.guardarPedido(pedidoPartido);
+                    pedidoService.guardarPedido(pedidoPartido);
+                }
 
                 if(pedido.getCantidadGLP()%minimo != 0.0) {
                     pedidoPartido = PedidoModel.builder()
@@ -106,4 +107,12 @@ public class PedidoController {
         listaPedidos.sort((r1, r2) -> Long.compare(r1.getHorasLimite().getTimeInMillis() , r2.getHorasLimite().getTimeInMillis()));
         return listaPedidos;
     }
+
+    @PostMapping(value = "/listaPedidos")
+    public List<PedidoModel> devolverListaPedidos(){
+        List<PedidoModel> listaPedidos = new ArrayList<>();
+        listaPedidos = pedidoService.listaPedidosSinAtender();
+        return listaPedidos;
+    }
+
 }

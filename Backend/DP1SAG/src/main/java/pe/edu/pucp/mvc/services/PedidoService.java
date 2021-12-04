@@ -7,6 +7,8 @@ import pe.edu.pucp.mvc.models.NodoModel;
 import pe.edu.pucp.mvc.models.PedidoModel;
 import pe.edu.pucp.mvc.repositories.PedidoRepository;
 
+import java.util.List;
+
 @Service
 public class PedidoService {
 
@@ -14,6 +16,10 @@ public class PedidoService {
     PedidoRepository pedidoRepository;
     public PedidoModel guardarPedido(PedidoModel pedido){
         return pedidoRepository.save(pedido);
+    }
+
+    public List<PedidoModel> listaPedidosSinAtender(){
+        return pedidoRepository.findPedidosSinAtender();
     }
 
 
