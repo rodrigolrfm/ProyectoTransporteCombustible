@@ -2,10 +2,12 @@ package pe.edu.pucp.mvc.metodos;
 
 import javafx.util.Pair;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import pe.edu.pucp.algorithm.GeneticAlgorithm;
 import pe.edu.pucp.algorithm.Knapsack;
 import pe.edu.pucp.mvc.controllers.MapaModel;
 import pe.edu.pucp.mvc.models.*;
+import pe.edu.pucp.mvc.services.PedidoService;
 import pe.edu.pucp.utils.LecturaPedido;
 import pe.edu.pucp.utils.LecturaBloques;
 import pe.edu.pucp.utils.LecturaVehiculo;
@@ -15,7 +17,10 @@ import java.util.*;
 
 public class EjecucionAlgoritmo {
 
-    public static EntidadRutas ejecutarAlgoritmoColapso() throws Exception {
+    @Autowired
+    private PedidoService pedidoService;
+
+    public EntidadRutas ejecutarAlgoritmoDiaDia() throws Exception {
 
         EntidadRutas rutasFinal = EntidadRutas.builder().paths(new ArrayList<>()).build();
 
@@ -23,11 +28,10 @@ public class EjecucionAlgoritmo {
 
         List<EntidadVehiculo> listaVehiculos;
 
-        //listaVehiculos = LecturaVehiculo.TxtReader("/home/ubuntu/Grupo2/Download/vehiculos2021.txt");
+        //listaVehiculos = LecturaVehiculo.lectura("/home/ubuntu/Grupo2/Download/vehiculos2021.txt");
         listaVehiculos = LecturaVehiculo.lectura("D:\\CICLO10\\Trabajo\\Grupo2\\Download\\vehiculos2021.txt");
-        //listaPedidos = Lectura.TxtReader("/home/ubuntu/Grupo2/Download/ventas/ventas202202.txt");
-        listaPedidos = LecturaPedido.lectura("D:\\CICLO10\\Trabajo\\Grupo2\\Download\\ventas\\ventas202202.txt");
-        //ArrayList<NodoModel> blockList = LecturaBloques.TxtReader("/home/ubuntu/Grupo2/Download/bloqueos/202112bloqueadas.txt");
+        //listaPedidos = LecturaPedido.lectura("/home/ubuntu/Grupo2/Download/ventas/ventas202202.txt");
+
         ArrayList<NodoModel> blockList = LecturaBloques.lectura("D:\\CICLO10\\Trabajo\\Grupo2\\Download\\bloqueos\\202112bloqueadas.txt");
 
         // Depositos iniciales
@@ -56,30 +60,10 @@ public class EjecucionAlgoritmo {
         // Split request list in minimum capacity
         int totalCapacity = 0;
 
-        for(PedidoModel r : listaPedidos){
-            int i = 1;
-            for(; i < (int)r.getCantidadGLP()/minimo + 1; i++)
-                requestListDesdoblado.add(PedidoModel.builder()
-                        .idNodo(r.getIdNodo())
-                        .idExtendido(i)
-                        .clienteModel(r.getClienteModel())
-                        .cantidadGLP(minimo)
-                        .coordenadaX(r.getCoordenadaX())
-                        .coordenadaY(r.getCoordenadaY())
-                        .fechaPedido(r.getFechaPedido())
-                        .horasLimite(r.getHorasLimite()).build());
-            if(r.getCantidadGLP()%minimo != 0.0) {
-                requestListDesdoblado.add(PedidoModel.builder()
-                        .idNodo(r.getIdNodo())
-                        .idExtendido(i)
-                        .clienteModel(r.getClienteModel())
-                        .cantidadGLP(r.getCantidadGLP() % minimo)
-                        .coordenadaX(r.getCoordenadaX())
-                        .coordenadaY(r.getCoordenadaY())
-                        .fechaPedido(r.getFechaPedido())
-                        .horasLimite(r.getHorasLimite()).build());
-            }
-            totalCapacity += r.getCantidadGLP();
+        requestListDesdoblado = pedidoService.listaPedidosSinAtender();
+
+        for(PedidoModel pedido: requestListDesdoblado){
+            totalCapacity += pedido.getCantidadGLP();
         }
 
         System.out.println("Total Capacity: " + totalCapacity);
@@ -127,7 +111,7 @@ public class EjecucionAlgoritmo {
                         totalGLP += r.getCantidadGLP();
 
                     int pedidoCompletado = 0;
-                    for(PedidoModel rq : listaPedidos){
+                    for(PedidoModel rq : requestListDesdoblado){
                         double aux = 0;
                         aux = auxRequest.stream()
                                 .filter(auxrq -> auxrq.getIdNodo() == rq.getIdNodo())
@@ -137,11 +121,6 @@ public class EjecucionAlgoritmo {
                             pedidoCompletado++;
                     }
 
-                    System.out.println("Total de glp entregado = " + (totalCapacity - totalGLP));
-                    System.out.println("Total de glp que falta entregar = " + totalGLP);
-                    System.out.println("Total de tiempo = " + totalTime/60);
-                    System.out.println("Pedidos recibidos = " + listaPedidos.size());
-                    System.out.println("Pedidos completados = " + pedidoCompletado);
                     throw new Exception("Llegó al colapso logístico");
                 }
             }
@@ -196,7 +175,7 @@ public class EjecucionAlgoritmo {
             // Se hace sort para las capacidadades
             listaVehiculos.sort((v1, v2) -> Long.compare(v1.getFechaInicio().getTimeInMillis() , v2.getFechaInicio().getTimeInMillis()));
 
-            List<PedidoModel> aux = new ArrayList<>();
+            /*List<PedidoModel> aux = new ArrayList<>();
             requestListDesdoblado.forEach(r -> {
                 if(!r.isAtendido()) {
                     aux.add(r);
@@ -204,7 +183,7 @@ public class EjecucionAlgoritmo {
             });
 
             requestListDesdoblado = aux;
-
+            */
         } while(!requestListDesdoblado.isEmpty());
 
         Collections.sort(rutasFinal.getPaths());

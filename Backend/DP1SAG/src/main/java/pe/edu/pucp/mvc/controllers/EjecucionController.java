@@ -12,6 +12,7 @@ import pe.edu.pucp.mvc.planificacion.ControlTarea;
 import pe.edu.pucp.mvc.planificacion.PlanificacionTareas;
 import pe.edu.pucp.mvc.planificacion.PlanificadorTareasServicios;
 import pe.edu.pucp.mvc.planificacion.ScheduledTasks;
+import pe.edu.pucp.mvc.services.PedidoService;
 import pe.edu.pucp.utils.LecturaPedido;
 import pe.edu.pucp.utils.LecturaBloques;
 import pe.edu.pucp.utils.LecturaVehiculo;
@@ -26,6 +27,9 @@ public class EjecucionController {
 
     @Autowired
     private PlanificadorTareasServicios planificadorTareasServicios;
+
+    @Autowired
+    private PedidoService pedidoService;
 
     @GetMapping(value = "/obtenerRutas")
     public SseEmitter devolverRutas(){
@@ -60,7 +64,6 @@ public class EjecucionController {
     @PostMapping(value = "/simularRutasColapso")
     public EntidadRutas ejecutarAlgortimo() throws Exception {
 
-
         EntidadRutas rutasFinal = EntidadRutas.builder().paths(new ArrayList<>()).build();
 
         List<PedidoModel> listaPedidos;
@@ -69,7 +72,7 @@ public class EjecucionController {
 
         listaVehiculos = LecturaVehiculo.lectura("/home/ubuntu/Grupo2/Download/vehiculos2021.txt");
 
-        listaPedidos = LecturaPedido.lectura("/home/ubuntu/Grupo2/Download/ventas/ventas202202.txt");
+        //listaPedidos = LecturaPedido.lectura("/home/ubuntu/Grupo2/Download/ventas/ventas202202.txt");
 
         ArrayList<NodoModel> blockList = LecturaBloques.lectura("/home/ubuntu/Grupo2/Download/bloqueos/202112bloqueadas.txt");
 
@@ -99,29 +102,10 @@ public class EjecucionController {
         // Split request list in minimum capacity
         int totalCapacity = 0;
 
-        for(PedidoModel r : listaPedidos){
-            int i = 1;
-            for(; i < (int)r.getCantidadGLP()/minimo + 1; i++)
-                requestListDesdoblado.add(PedidoModel.builder()
-                        .idNodo(r.getIdNodo())
-                        .idExtendido(i)
-                        .clienteModel(r.getClienteModel())
-                        .cantidadGLP(minimo)
-                        .coordenadaX(r.getCoordenadaX())
-                        .coordenadaY(r.getCoordenadaY())
-                        .fechaPedido(r.getFechaPedido())
-                        .horasLimite(r.getHorasLimite()).build());
-            if(r.getCantidadGLP()%minimo != 0.0)
-                requestListDesdoblado.add(PedidoModel.builder()
-                        .idNodo(r.getIdNodo())
-                        .idExtendido(i)
-                        .clienteModel(r.getClienteModel())
-                        .cantidadGLP(r.getCantidadGLP()%minimo)
-                        .coordenadaX(r.getCoordenadaX())
-                        .coordenadaY(r.getCoordenadaY())
-                        .fechaPedido(r.getFechaPedido())
-                        .horasLimite(r.getHorasLimite()).build());
-            totalCapacity += r.getCantidadGLP();
+        requestListDesdoblado = pedidoService.listaPedidosSinAtender();
+
+        for(PedidoModel pedido: requestListDesdoblado){
+            totalCapacity += pedido.getCantidadGLP();
         }
 
         System.out.println("Total Capacity: " + totalCapacity);
@@ -169,7 +153,7 @@ public class EjecucionController {
                         totalGLP += r.getCantidadGLP();
 
                     int pedidoCompletado = 0;
-                    for(PedidoModel rq : listaPedidos){
+                    for(PedidoModel rq : requestListDesdoblado){
                         double aux = 0;
                         aux = auxRequest.stream()
                                 .filter(auxrq -> auxrq.getIdNodo() == rq.getIdNodo())
@@ -233,7 +217,7 @@ public class EjecucionController {
             // Se hace sort para las capacidadades
             listaVehiculos.sort((v1, v2) -> Long.compare(v1.getFechaInicio().getTimeInMillis() , v2.getFechaInicio().getTimeInMillis()));
 
-            List<PedidoModel> aux = new ArrayList<>();
+            /*List<PedidoModel> aux = new ArrayList<>();
             requestListDesdoblado.forEach(r -> {
                 if(!r.isAtendido()) {
                     aux.add(r);
@@ -241,7 +225,7 @@ public class EjecucionController {
             });
 
             requestListDesdoblado = aux;
-
+            */
         } while(!requestListDesdoblado.isEmpty());
 
         Collections.sort(rutasFinal.getPaths());

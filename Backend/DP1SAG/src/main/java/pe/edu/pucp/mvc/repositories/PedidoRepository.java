@@ -1,5 +1,6 @@
 package pe.edu.pucp.mvc.repositories;
 
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
@@ -13,6 +14,6 @@ import java.util.Optional;
 public interface PedidoRepository extends CrudRepository<PedidoModel, Integer> {
     public abstract Optional<PedidoModel> findById(Integer id);
 
-    @Procedure(value="OBTENER_PEDIDOS_SIN_ATENDER();")
+    @Query(value ="CALL OBTENER_PEDIDOS_SIN_ATENDER();",nativeQuery = true)
     List<PedidoModel> findPedidosSinAtender();
 }
