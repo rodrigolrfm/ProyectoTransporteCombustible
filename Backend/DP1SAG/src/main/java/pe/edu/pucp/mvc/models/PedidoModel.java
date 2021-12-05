@@ -16,18 +16,19 @@ import java.util.Calendar;
 @Table(name="pedido")
 @IdClass(PedidoIdentidad.class)
 public class PedidoModel extends NodoModel implements Serializable {
-    /*
-    @Id
-    @Column(unique = false)
-    private int idNodo;
 
-    @Column(name = "idExtendido",nullable = true)
-    private int idExtendido;
-    */
     @Id
     private int idNodo;
     @Id
     private int idExtendido;
+
+    @Column(name = "coordenadaX",nullable = true)
+    private int coordenadaX;
+
+    @Column(name = "coordenadaY",nullable = true)
+    private int coordenadaY;
+
+
 
     @Column(name = "fechaPedido",nullable = true)
     private Calendar fechaPedido;

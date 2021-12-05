@@ -66,7 +66,7 @@ public class ScheduledTasks {
         listaVehiculos.forEach(v -> {
             // Fecha de inicio y copia de fecha de inicio
             Calendar init = Calendar.getInstance();
-            init.set(2021, 11, 1, 0, 0, 0);
+            init.set(2021, 0, 0, 0, 0, 0);
             v.setFechaInicio(init);
             v.setNodoActual(plantas.get(0));
             v.setCombustible(25);
@@ -112,8 +112,13 @@ public class ScheduledTasks {
                 for(Pair<EntidadVehiculo, PriorityQueue<Pair<Float, PedidoModel>>> lvc : listaVC){
                     EntidadVehiculo v = lvc.getKey();
                     PriorityQueue<Pair<Float, PedidoModel>> requestListArreange = lvc.getValue();
+                    //System.out.println(req.getHorasLimite());
+                    //System.out.println(req.getHorasLimite().getTimeInMillis());
+                    //System.out.println(v.getFechaInicio());
+                    //System.out.println(v.getFechaInicio().getTimeInMillis());
                     float distance = v.getNodoActual().getDistancia(req),
                             tiempoAproximado = (float)(distance/v.getVelocidad()),
+
                             tiempoLlegadaLimite = req.getHorasLimite().getTimeInMillis() - v.getFechaInicio().getTimeInMillis();
 
                     if(tiempoLlegadaLimite > 0)
@@ -194,7 +199,7 @@ public class ScheduledTasks {
             // Se hace sort para las capacidadades
             listaVehiculos.sort((v1, v2) -> Long.compare(v1.getFechaInicio().getTimeInMillis() , v2.getFechaInicio().getTimeInMillis()));
 
-            /*List<PedidoModel> aux = new ArrayList<>();
+            List<PedidoModel> aux = new ArrayList<>();
             requestListDesdoblado.forEach(r -> {
                 if(!r.isAtendido()) {
                     aux.add(r);
@@ -202,7 +207,7 @@ public class ScheduledTasks {
             });
 
             requestListDesdoblado = aux;
-            */
+
         } while(!requestListDesdoblado.isEmpty());
 
         Collections.sort(rutasFinal.getPaths());
