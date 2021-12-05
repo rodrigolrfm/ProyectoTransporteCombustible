@@ -1,23 +1,35 @@
 package pe.edu.pucp.mvc.models;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
-@Entity
-@Table(name = "planta")
-public class PlantaModel implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(unique = true,nullable = false)
-    private int idPlanta;
+@Data
+@SuperBuilder
+@NoArgsConstructor
+@AllArgsConstructor
 
-
-    @OneToOne
-    @JoinColumn(name = "idNodo",nullable = false)
-    private NodoModel nodo;
+public class PlantaModel extends NodoModel implements Serializable {
 
 
-    private int esPrincipal;
+    @Builder.Default
+    private boolean esPrincipal=false;
+
+    @Override
+    public String toString(){
+        return String.format("[%d,%d]", this.getCoordenadaX(), this.getCoordenadaY());
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        NodoModel v = (NodoModel) obj;
+        return this.getCoordenadaX() == v.getCoordenadaX() && this.getCoordenadaY() == v.getCoordenadaY();
+    }
 
 }

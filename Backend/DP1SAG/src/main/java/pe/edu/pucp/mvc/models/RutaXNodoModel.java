@@ -19,10 +19,6 @@ public class RutaXNodoModel implements Serializable {
     private int idRutaxNodo;
 
     @ManyToOne
-    @JoinColumn(name = "idNodo",nullable = false)
-    private NodoModel nodo;
-
-    @ManyToOne
     @JoinColumn(name = "idRuta",nullable = false)
     private RutaModel ruta;
 

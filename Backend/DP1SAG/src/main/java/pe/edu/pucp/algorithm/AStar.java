@@ -2,6 +2,9 @@
 package pe.edu.pucp.algorithm;
 
 
+import pe.edu.pucp.mvc.controllers.MapaModel;
+import pe.edu.pucp.mvc.models.NodoModel;
+
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -12,56 +15,55 @@ import java.util.ArrayList;
 
 
 public class AStar {
-    public static double PESO=1;
-    public static final List<Node> get_shortest_path(Node start, Node target,Map mapConfiguration,Date previousDeliveredDate,int velocity, Node previousVertex){
-        PriorityQueue<Node> closedList = new PriorityQueue<>();
-        PriorityQueue<Node> openList = new PriorityQueue<>();
-        List<Node> neighbour_list = new ArrayList<>();
+    public static double peso = 1;
+    public static final List<NodoModel> get_shortest_path(NodoModel start, NodoModel target, MapaModel mapaModelConfiguration, Date previousDeliveredDate, int velocity, NodoModel nodoprevio){
+        PriorityQueue<NodoModel> closedList = new PriorityQueue<>();
+        PriorityQueue<NodoModel> openList = new PriorityQueue<>();
+        List<NodoModel> neighbourList = new ArrayList<>();
         
         if(start == null || target == null){
-            System.err.println("Valores Nulos de los Argumentos");
+            System.err.println("Valores nulos de inicio o fin");
             return new ArrayList<>();
         }
         
-        mapConfiguration.clearRoute();
-        start.setPreviousVertex(null);
-        target.setPreviousVertex(null);
+        mapaModelConfiguration.clearRoute();
+        start.setNodoprevio(null);
+        target.setNodoprevio(null);
         double timeAdvance = (1.0/velocity)*3600;
-        
+                      
         start.setF(start.getG() + start.getDistancia(target));
         openList.add(start);
                 
         while(!openList.isEmpty()){
-            Node n = openList.peek();
+            NodoModel n = openList.peek();
             if(n.equals(target)){
-                target.setPreviousVertex(n.getPreviousVertex());
+                target.setNodoprevio(n.getNodoprevio());
                 break;
             }
             if(n.isBlocked(previousDeliveredDate)){
-                neighbour_list.add(previousVertex);
+                neighbourList.add(nodoprevio);
             }else{
-                neighbour_list = graph_adjacentNeighbour(n, mapConfiguration,previousDeliveredDate, target, timeAdvance);
+                neighbourList = graph_adjacentNeighbour(n, mapaModelConfiguration,previousDeliveredDate, target, timeAdvance);
             }
-            for(Node current: neighbour_list){
-                double totalWeight = n.getG() + PESO;
+            for(NodoModel current: neighbourList){
+                double totalWeight = n.getG() + peso;
 
                 if(!openList.contains(current) && !closedList.contains(current)){
-                    current.setPreviousVertex(n);
+                    current.setNodoprevio(n);
                     current.setG(totalWeight);
                     current.setF(current.getG() + current.getDistancia(target));
                     openList.add(current);
                 } else {
-                    //Sacar los movimientos hasta el momento
-                    List<Node> movs = new ArrayList<>();
-                    for (Node vertex = current.getPreviousVertex(); vertex != null; vertex = vertex.getPreviousVertex()) {
+                    List<NodoModel> movs = new ArrayList<>();
+                    for (NodoModel vertex = current.getNodoprevio(); vertex != null; vertex = vertex.getNodoprevio()) {
                         movs.add(vertex);
                     }
-                    List<Node> movements = new ArrayList<>(movs);
+                    List<NodoModel> movements = new ArrayList<>(movs);
                     Collections.reverse(movements);
-                    long partial_time = new Double(((double)movements.size()*3600000/velocity)).longValue();
+                    long partial_time = (((long)movements.size()*3600000/velocity));
                     Date checkDate = Date.from(previousDeliveredDate.toInstant().plus(partial_time, ChronoUnit.MILLIS));
                     if(totalWeight < current.getG() && !current.isBlocked(checkDate)){
-                        current.setPreviousVertex(n);
+                        current.setNodoprevio(n);
                         current.setG(totalWeight);
                         current.setF(current.getG() + current.getDistancia(target));
 
@@ -76,276 +78,275 @@ public class AStar {
             closedList.add(n);
         }
         openList.clear();
-        List<Node> movs = new ArrayList<>();
-        for (Node vertex = target.getPreviousVertex(); vertex != null; vertex = vertex.getPreviousVertex()) {
+        List<NodoModel> movs = new ArrayList<>();
+        for (NodoModel vertex = target.getNodoprevio(); vertex != null; vertex = vertex.getNodoprevio()) {
             movs.add(vertex);
         }
-        List<Node> movements = new ArrayList<>(movs);
+        List<NodoModel> movements = new ArrayList<>(movs);
         Collections.reverse(movements);
         return movements;
     }
-    private static List<Node> graph_adjacentNeighbour(Node u, Map mapConfiguration,Date now,
-                                                        Node target, double timeAdvance) {
-        List<Node> neighbours = new ArrayList<>();
-        //Date now = Date.from(Instant.now());
-        now = Date.from(now.toInstant().plus(new Double(timeAdvance).longValue(),ChronoUnit.SECONDS));
-        int i= u.getCoordX();
-        int j = u.getCoordY();
-        int MAX_x = mapConfiguration.getDimensionX();
-        int MAX_y = mapConfiguration.getDimensionY();
-        Node v1;
-        Node v2;
-        Node v3;
-        Node v4;
+    private static List<NodoModel> graph_adjacentNeighbour(NodoModel nodo, MapaModel mapaModelConfiguration, Date currentTime, NodoModel target, double timeAdvance) {
+
+        List<NodoModel> neighbours = new ArrayList<>();
+        currentTime = Date.from(currentTime.toInstant().plus((long)(timeAdvance),ChronoUnit.SECONDS));
+        int i = nodo.getCoordenadaX();
+        int j = nodo.getCoordenadaY();
+        int dimensionXMax = mapaModelConfiguration.getDimensionX();
+        int dimensionYMax = mapaModelConfiguration.getDimensionY();
+        NodoModel nodo1;
+        NodoModel nodo2;
+        NodoModel nodo3;
+        NodoModel nodo4;
         if((i==0) && (j==0)){
-            v1=mapConfiguration.getMap()[i+1][j];
-            v2=mapConfiguration.getMap()[i][j+1];
-            Node n1 = Node.builder().coordX(v1.getCoordX()).coordY(v1.getCoordY())
-                    .initDateBlocked(v1.getInitDateBlocked())
-                    .endDateBlocked(v1.getEndDateBlocked())
-                    .previousVertex(v1.getPreviousVertex())
-                    .blockList(v1.getBlockList()).build();
-            Node n2 = Node.builder().coordX(v2.getCoordX()).coordY(v2.getCoordY())
-                    .initDateBlocked(v2.getInitDateBlocked())
-                    .endDateBlocked(v2.getEndDateBlocked())
-                    .previousVertex(v2.getPreviousVertex())
-                    .blockList(v2.getBlockList()).build();
-            if(n1.equals(target)){
-                neighbours.add(n1);
-            }else if(!n1.isBlocked(now)) {
-                neighbours.add(n1);
+            nodo1= mapaModelConfiguration.getMapa()[i+1][j];
+            nodo2= mapaModelConfiguration.getMapa()[i][j+1];
+            NodoModel neighbour1 = NodoModel.builder().coordenadaX(nodo1.getCoordenadaX()).coordenadaY(nodo1.getCoordenadaY())
+                    .inicioBloqueo(nodo1.getInicioBloqueo())
+                    .finBloqueo(nodo1.getFinBloqueo())
+                    .nodoprevio(nodo1.getNodoprevio())
+                    .blockList(nodo1.getBlockList()).build();
+            NodoModel neighbour2 = NodoModel.builder().coordenadaX(nodo2.getCoordenadaX()).coordenadaY(nodo2.getCoordenadaY())
+                    .inicioBloqueo(nodo2.getInicioBloqueo())
+                    .finBloqueo(nodo2.getFinBloqueo())
+                    .nodoprevio(nodo2.getNodoprevio())
+                    .blockList(nodo2.getBlockList()).build();
+            if(neighbour1.equals(target)){
+                neighbours.add(neighbour1);
+            }else if(!neighbour1.isBlocked(currentTime)) {
+                neighbours.add(neighbour1);
             }
-            if(n2.equals(target)){
-                neighbours.add(n2);
-            }else if(!n2.isBlocked(now))
-                neighbours.add(n2);
-        }else if((i==MAX_x-1)&& (j==MAX_y-1)){
-            v1=mapConfiguration.getMap()[i-1][j];
-            v2=mapConfiguration.getMap()[i][j-1];
-            Node n1 = Node.builder().coordX(v1.getCoordX()).coordY(v1.getCoordY())
-                    .initDateBlocked(v1.getInitDateBlocked())
-                    .endDateBlocked(v1.getEndDateBlocked())
-                    .previousVertex(v1.getPreviousVertex())
-                    .blockList(v1.getBlockList()).build();
-            Node n2 = Node.builder().coordX(v2.getCoordX()).coordY(v2.getCoordY())
-                    .initDateBlocked(v2.getInitDateBlocked())
-                    .endDateBlocked(v2.getEndDateBlocked())
-                    .previousVertex(v2.getPreviousVertex())
-                    .blockList(v2.getBlockList()).build();
+            if(neighbour2.equals(target)){
+                neighbours.add(neighbour2);
+            }else if(!neighbour2.isBlocked(currentTime))
+                neighbours.add(neighbour2);
+        }else if((i==dimensionXMax-1)&& (j==dimensionYMax-1)){
+            nodo1 = mapaModelConfiguration.getMapa()[i-1][j];
+            nodo2 = mapaModelConfiguration.getMapa()[i][j-1];
+            NodoModel n1 = NodoModel.builder().coordenadaX(nodo1.getCoordenadaX()).coordenadaY(nodo1.getCoordenadaY())
+                    .inicioBloqueo(nodo1.getInicioBloqueo())
+                    .finBloqueo(nodo1.getFinBloqueo())
+                    .nodoprevio(nodo1.getNodoprevio())
+                    .blockList(nodo1.getBlockList()).build();
+            NodoModel n2 = NodoModel.builder().coordenadaX(nodo2.getCoordenadaX()).coordenadaY(nodo2.getCoordenadaY())
+                    .inicioBloqueo(nodo2.getInicioBloqueo())
+                    .finBloqueo(nodo2.getFinBloqueo())
+                    .nodoprevio(nodo2.getNodoprevio())
+                    .blockList(nodo2.getBlockList()).build();
             if(n1.equals(target)){
                 neighbours.add(n1);
-            }else if(!n1.isBlocked(now))
+            }else if(!n1.isBlocked(currentTime))
                 neighbours.add(n1);
             if(n2.equals(target)){
                 neighbours.add(n2);
-            }else if(!n2.isBlocked(now))
+            }else if(!n2.isBlocked(currentTime))
                 neighbours.add(n2);
-        }else if((i==0)&&(j==MAX_y-1)){
-            v1=mapConfiguration.getMap()[i][j-1];
-            v2=mapConfiguration.getMap()[i+1][j];
-            Node n1 = Node.builder().coordX(v1.getCoordX()).coordY(v1.getCoordY())
-                    .initDateBlocked(v1.getInitDateBlocked())
-                    .endDateBlocked(v1.getEndDateBlocked())
-                    .previousVertex(v1.getPreviousVertex())
-                    .blockList(v1.getBlockList()).build();
-            Node n2 = Node.builder().coordX(v2.getCoordX()).coordY(v2.getCoordY())
-                    .initDateBlocked(v2.getInitDateBlocked())
-                    .endDateBlocked(v2.getEndDateBlocked())
-                    .previousVertex(v2.getPreviousVertex())
-                    .blockList(v2.getBlockList()).build();
+        }else if((i==0)&&(j==dimensionYMax-1)){
+            nodo1 = mapaModelConfiguration.getMapa()[i][j-1];
+            nodo2 = mapaModelConfiguration.getMapa()[i+1][j];
+            NodoModel n1 = NodoModel.builder().coordenadaX(nodo1.getCoordenadaX()).coordenadaY(nodo1.getCoordenadaY())
+                    .inicioBloqueo(nodo1.getInicioBloqueo())
+                    .finBloqueo(nodo1.getFinBloqueo())
+                    .nodoprevio(nodo1.getNodoprevio())
+                    .blockList(nodo1.getBlockList()).build();
+            NodoModel n2 = NodoModel.builder().coordenadaX(nodo2.getCoordenadaX()).coordenadaY(nodo2.getCoordenadaY())
+                    .inicioBloqueo(nodo2.getInicioBloqueo())
+                    .finBloqueo(nodo2.getFinBloqueo())
+                    .nodoprevio(nodo2.getNodoprevio())
+                    .blockList(nodo2.getBlockList()).build();
             if(n1.equals(target)){
                 neighbours.add(n1);
-            }else if(!n1.isBlocked(now))
+            }else if(!n1.isBlocked(currentTime))
                 neighbours.add(n1);
             if(n2.equals(target)){
                 neighbours.add(n2);
-            }else if(!n2.isBlocked(now))
+            }else if(!n2.isBlocked(currentTime))
                 neighbours.add(n2);
-        }else if((i==MAX_x-1)&&(j==0)) {
-            v1=mapConfiguration.getMap()[i-1][j];
-            v2=mapConfiguration.getMap()[i][j+1];
-            Node n1 = Node.builder().coordX(v1.getCoordX()).coordY(v1.getCoordY())
-                    .initDateBlocked(v1.getInitDateBlocked())
-                    .endDateBlocked(v1.getEndDateBlocked())
-                    .previousVertex(v1.getPreviousVertex())
-                    .blockList(v1.getBlockList()).build();
-            Node n2 = Node.builder().coordX(v2.getCoordX()).coordY(v2.getCoordY())
-                    .initDateBlocked(v2.getInitDateBlocked())
-                    .endDateBlocked(v2.getEndDateBlocked())
-                    .previousVertex(v2.getPreviousVertex())
-                    .blockList(v2.getBlockList()).build();
+        }else if((i==dimensionXMax-1)&&(j==0)) {
+            nodo1= mapaModelConfiguration.getMapa()[i-1][j];
+            nodo2= mapaModelConfiguration.getMapa()[i][j+1];
+            NodoModel n1 = NodoModel.builder().coordenadaX(nodo1.getCoordenadaX()).coordenadaY(nodo1.getCoordenadaY())
+                    .inicioBloqueo(nodo1.getInicioBloqueo())
+                    .finBloqueo(nodo1.getFinBloqueo())
+                    .nodoprevio(nodo1.getNodoprevio())
+                    .blockList(nodo1.getBlockList()).build();
+            NodoModel n2 = NodoModel.builder().coordenadaX(nodo2.getCoordenadaX()).coordenadaY(nodo2.getCoordenadaY())
+                    .inicioBloqueo(nodo2.getInicioBloqueo())
+                    .finBloqueo(nodo2.getFinBloqueo())
+                    .nodoprevio(nodo2.getNodoprevio())
+                    .blockList(nodo2.getBlockList()).build();
             if(n1.equals(target)){
                 neighbours.add(n1);
-            }else if(!n1.isBlocked(now))
+            }else if(!n1.isBlocked(currentTime))
                 neighbours.add(n1);
             if(n2.equals(target)){
                 neighbours.add(n2);
-            }else if(!n2.isBlocked(now))
+            }else if(!n2.isBlocked(currentTime))
                 neighbours.add(n2);
         }else if((i!=0)&&(j==0)) {
-            v1=mapConfiguration.getMap()[i-1][j];
-            v2=mapConfiguration.getMap()[i+1][j];
-            v3=mapConfiguration.getMap()[i][j+1];
-            Node n1 = Node.builder().coordX(v1.getCoordX()).coordY(v1.getCoordY())
-                    .initDateBlocked(v1.getInitDateBlocked())
-                    .endDateBlocked(v1.getEndDateBlocked())
-                    .previousVertex(v1.getPreviousVertex())
-                    .blockList(v1.getBlockList()).build();
-            Node n2 = Node.builder().coordX(v2.getCoordX()).coordY(v2.getCoordY())
-                    .initDateBlocked(v2.getInitDateBlocked())
-                    .endDateBlocked(v2.getEndDateBlocked())
-                    .previousVertex(v2.getPreviousVertex())
-                    .blockList(v2.getBlockList()).build();
-            Node n3 = Node.builder().coordX(v3.getCoordX()).coordY(v3.getCoordY())
-                    .initDateBlocked(v3.getInitDateBlocked())
-                    .endDateBlocked(v3.getEndDateBlocked())
-                    .previousVertex(v3.getPreviousVertex())
-                    .blockList(v3.getBlockList()).build();
+            nodo1= mapaModelConfiguration.getMapa()[i-1][j];
+            nodo2= mapaModelConfiguration.getMapa()[i+1][j];
+            nodo3= mapaModelConfiguration.getMapa()[i][j+1];
+            NodoModel n1 = NodoModel.builder().coordenadaX(nodo1.getCoordenadaX()).coordenadaY(nodo1.getCoordenadaY())
+                    .inicioBloqueo(nodo1.getInicioBloqueo())
+                    .finBloqueo(nodo1.getFinBloqueo())
+                    .nodoprevio(nodo1.getNodoprevio())
+                    .blockList(nodo1.getBlockList()).build();
+            NodoModel n2 = NodoModel.builder().coordenadaX(nodo2.getCoordenadaX()).coordenadaY(nodo2.getCoordenadaY())
+                    .inicioBloqueo(nodo2.getInicioBloqueo())
+                    .finBloqueo(nodo2.getFinBloqueo())
+                    .nodoprevio(nodo2.getNodoprevio())
+                    .blockList(nodo2.getBlockList()).build();
+            NodoModel n3 = NodoModel.builder().coordenadaX(nodo3.getCoordenadaX()).coordenadaY(nodo3.getCoordenadaY())
+                    .inicioBloqueo(nodo3.getInicioBloqueo())
+                    .finBloqueo(nodo3.getFinBloqueo())
+                    .nodoprevio(nodo3.getNodoprevio())
+                    .blockList(nodo3.getBlockList()).build();
             if(n1.equals(target)){
                 neighbours.add(n1);
-            }else if(!n1.isBlocked(now))
+            }else if(!n1.isBlocked(currentTime))
                 neighbours.add(n1);
             if(n2.equals(target)){
                 neighbours.add(n2);
-            }else if(!n2.isBlocked(now))
+            }else if(!n2.isBlocked(currentTime))
                 neighbours.add(n2);
             if(n3.equals(target)){
                 neighbours.add(n3);
-            }else if(!n3.isBlocked(now))
+            }else if(!n3.isBlocked(currentTime))
                 neighbours.add(n3);
-        }else if((i==0)&&(j!=0)) {
-            v1=mapConfiguration.getMap()[i+1][j];
-            v2=mapConfiguration.getMap()[i][j-1];
-            v3=mapConfiguration.getMap()[i][j+1];
-            Node n1 = Node.builder().coordX(v1.getCoordX()).coordY(v1.getCoordY())
-                    .initDateBlocked(v1.getInitDateBlocked())
-                    .endDateBlocked(v1.getEndDateBlocked())
-                    .previousVertex(v1.getPreviousVertex())
-                    .blockList(v1.getBlockList()).build();
-            Node n2 = Node.builder().coordX(v2.getCoordX()).coordY(v2.getCoordY())
-                    .initDateBlocked(v2.getInitDateBlocked())
-                    .endDateBlocked(v2.getEndDateBlocked())
-                    .previousVertex(v2.getPreviousVertex())
-                    .blockList(v2.getBlockList()).build();
-            Node n3 = Node.builder().coordX(v3.getCoordX()).coordY(v3.getCoordY())
-                    .initDateBlocked(v3.getInitDateBlocked())
-                    .endDateBlocked(v3.getEndDateBlocked())
-                    .previousVertex(v3.getPreviousVertex())
-                    .blockList(v3.getBlockList()).build();
+        }else if((i == 0)&&(j != 0)) {
+            nodo1= mapaModelConfiguration.getMapa()[i+1][j];
+            nodo2= mapaModelConfiguration.getMapa()[i][j-1];
+            nodo3= mapaModelConfiguration.getMapa()[i][j+1];
+            NodoModel n1 = NodoModel.builder().coordenadaX(nodo1.getCoordenadaX()).coordenadaY(nodo1.getCoordenadaY())
+                    .inicioBloqueo(nodo1.getInicioBloqueo())
+                    .finBloqueo(nodo1.getFinBloqueo())
+                    .nodoprevio(nodo1.getNodoprevio())
+                    .blockList(nodo1.getBlockList()).build();
+            NodoModel n2 = NodoModel.builder().coordenadaX(nodo2.getCoordenadaX()).coordenadaY(nodo2.getCoordenadaY())
+                    .inicioBloqueo(nodo2.getInicioBloqueo())
+                    .finBloqueo(nodo2.getFinBloqueo())
+                    .nodoprevio(nodo2.getNodoprevio())
+                    .blockList(nodo2.getBlockList()).build();
+            NodoModel n3 = NodoModel.builder().coordenadaX(nodo3.getCoordenadaX()).coordenadaY(nodo3.getCoordenadaY())
+                    .inicioBloqueo(nodo3.getInicioBloqueo())
+                    .finBloqueo(nodo3.getFinBloqueo())
+                    .nodoprevio(nodo3.getNodoprevio())
+                    .blockList(nodo3.getBlockList()).build();
             if(n1.equals(target)){
                 neighbours.add(n1);
-            }else if(!n1.isBlocked(now))
+            }else if(!n1.isBlocked(currentTime))
                 neighbours.add(n1);
             if(n2.equals(target)){
                 neighbours.add(n2);
-            }else if(!n2.isBlocked(now))
+            }else if(!n2.isBlocked(currentTime))
                 neighbours.add(n2);
             if(n3.equals(target)){
                 neighbours.add(n3);
-            }else if(!n3.isBlocked(now))
+            }else if(!n3.isBlocked(currentTime))
                 neighbours.add(n3);
-        }else if((i==MAX_x-1)&&(j!=0)) {
-            v1=mapConfiguration.getMap()[i-1][j];
-            v2=mapConfiguration.getMap()[i][j-1];
-            v3=mapConfiguration.getMap()[i][j+1];
-            Node n1 = Node.builder().coordX(v1.getCoordX()).coordY(v1.getCoordY())
-                    .initDateBlocked(v1.getInitDateBlocked())
-                    .endDateBlocked(v1.getEndDateBlocked())
-                    .previousVertex(v1.getPreviousVertex())
-                    .blockList(v1.getBlockList()).build();
-            Node n2 = Node.builder().coordX(v2.getCoordX()).coordY(v2.getCoordY())
-                    .initDateBlocked(v2.getInitDateBlocked())
-                    .endDateBlocked(v2.getEndDateBlocked())
-                    .previousVertex(v2.getPreviousVertex())
-                    .blockList(v2.getBlockList()).build();
-            Node n3 = Node.builder().coordX(v3.getCoordX()).coordY(v3.getCoordY())
-                    .initDateBlocked(v3.getInitDateBlocked())
-                    .endDateBlocked(v3.getEndDateBlocked())
-                    .previousVertex(v3.getPreviousVertex())
-                    .blockList(v3.getBlockList()).build();
+        }else if((i == dimensionXMax-1)&&(j != 0)) {
+            nodo1= mapaModelConfiguration.getMapa()[i-1][j];
+            nodo2= mapaModelConfiguration.getMapa()[i][j-1];
+            nodo3= mapaModelConfiguration.getMapa()[i][j+1];
+            NodoModel n1 = NodoModel.builder().coordenadaX(nodo1.getCoordenadaX()).coordenadaY(nodo1.getCoordenadaY())
+                    .inicioBloqueo(nodo1.getInicioBloqueo())
+                    .finBloqueo(nodo1.getFinBloqueo())
+                    .nodoprevio(nodo1.getNodoprevio())
+                    .blockList(nodo1.getBlockList()).build();
+            NodoModel n2 = NodoModel.builder().coordenadaX(nodo2.getCoordenadaX()).coordenadaY(nodo2.getCoordenadaY())
+                    .inicioBloqueo(nodo2.getInicioBloqueo())
+                    .finBloqueo(nodo2.getFinBloqueo())
+                    .nodoprevio(nodo2.getNodoprevio())
+                    .blockList(nodo2.getBlockList()).build();
+            NodoModel n3 = NodoModel.builder().coordenadaX(nodo3.getCoordenadaX()).coordenadaY(nodo3.getCoordenadaY())
+                    .inicioBloqueo(nodo3.getInicioBloqueo())
+                    .finBloqueo(nodo3.getFinBloqueo())
+                    .nodoprevio(nodo3.getNodoprevio())
+                    .blockList(nodo3.getBlockList()).build();
             if(n1.equals(target)){
                 neighbours.add(n1);
-            }else if(!n1.isBlocked(now))
+            }else if(!n1.isBlocked(currentTime))
                 neighbours.add(n1);
             if(n2.equals(target)){
                 neighbours.add(n2);
-            }else if(!n2.isBlocked(now))
+            }else if(!n2.isBlocked(currentTime))
                 neighbours.add(n2);
             if(n3.equals(target)){
                 neighbours.add(n3);
-            }else if(!n3.isBlocked(now))
+            }else if(!n3.isBlocked(currentTime))
                 neighbours.add(n3);
-        }else if((i!=0)&&(j==MAX_y-1)) {
-            v1=mapConfiguration.getMap()[i-1][j];
-            v2=mapConfiguration.getMap()[i+1][j];
-            v3=mapConfiguration.getMap()[i][j-1];
-            Node n1 = Node.builder().coordX(v1.getCoordX()).coordY(v1.getCoordY())
-                    .initDateBlocked(v1.getInitDateBlocked())
-                    .endDateBlocked(v1.getEndDateBlocked())
-                    .previousVertex(v1.getPreviousVertex())
-                    .blockList(v1.getBlockList()).build();
-            Node n2 = Node.builder().coordX(v2.getCoordX()).coordY(v2.getCoordY())
-                    .initDateBlocked(v2.getInitDateBlocked())
-                    .endDateBlocked(v2.getEndDateBlocked())
-                    .previousVertex(v2.getPreviousVertex())
-                    .blockList(v2.getBlockList()).build();
-            Node n3 = Node.builder().coordX(v3.getCoordX()).coordY(v3.getCoordY())
-                    .initDateBlocked(v3.getInitDateBlocked())
-                    .endDateBlocked(v3.getEndDateBlocked())
-                    .previousVertex(v3.getPreviousVertex())
-                    .blockList(v3.getBlockList()).build();
+        }else if((i!=0)&&(j==dimensionYMax-1)) {
+            nodo1 = mapaModelConfiguration.getMapa()[i-1][j];
+            nodo2 = mapaModelConfiguration.getMapa()[i+1][j];
+            nodo3 = mapaModelConfiguration.getMapa()[i][j-1];
+            NodoModel n1 = NodoModel.builder().coordenadaX(nodo1.getCoordenadaX()).coordenadaY(nodo1.getCoordenadaY())
+                    .inicioBloqueo(nodo1.getInicioBloqueo())
+                    .finBloqueo(nodo1.getFinBloqueo())
+                    .nodoprevio(nodo1.getNodoprevio())
+                    .blockList(nodo1.getBlockList()).build();
+            NodoModel n2 = NodoModel.builder().coordenadaX(nodo2.getCoordenadaX()).coordenadaY(nodo2.getCoordenadaY())
+                    .inicioBloqueo(nodo2.getInicioBloqueo())
+                    .finBloqueo(nodo2.getFinBloqueo())
+                    .nodoprevio(nodo2.getNodoprevio())
+                    .blockList(nodo2.getBlockList()).build();
+            NodoModel n3 = NodoModel.builder().coordenadaX(nodo3.getCoordenadaX()).coordenadaY(nodo3.getCoordenadaY())
+                    .inicioBloqueo(nodo3.getInicioBloqueo())
+                    .finBloqueo(nodo3.getFinBloqueo())
+                    .nodoprevio(nodo3.getNodoprevio())
+                    .blockList(nodo3.getBlockList()).build();
             if(n1.equals(target)){
                 neighbours.add(n1);
-            }else if(!n1.isBlocked(now))
+            }else if(!n1.isBlocked(currentTime))
                 neighbours.add(n1);
             if(n2.equals(target)){
                 neighbours.add(n2);
-            }else if(!n2.isBlocked(now))
+            }else if(!n2.isBlocked(currentTime))
                 neighbours.add(n2);
             if(n3.equals(target)){
                 neighbours.add(n3);
-            }else if(!n3.isBlocked(now))
+            }else if(!n3.isBlocked(currentTime))
                 neighbours.add(n3);
-        }else if(i<MAX_x-1 && j<MAX_y-1){
-            v1=mapConfiguration.getMap()[i][j+1];
-            v2=mapConfiguration.getMap()[i][j-1];
-            v3=mapConfiguration.getMap()[i+1][j];
-            v4=mapConfiguration.getMap()[i-1][j];
-            Node n1 = Node.builder().coordX(v1.getCoordX()).coordY(v1.getCoordY())
-                    .initDateBlocked(v1.getInitDateBlocked())
-                    .endDateBlocked(v1.getEndDateBlocked())
-                    .previousVertex(v1.getPreviousVertex())
-                    .blockList(v1.getBlockList()).build();
-            Node n2 = Node.builder().coordX(v2.getCoordX()).coordY(v2.getCoordY())
-                    .initDateBlocked(v2.getInitDateBlocked())
-                    .endDateBlocked(v2.getEndDateBlocked())
-                    .previousVertex(v2.getPreviousVertex())
-                    .blockList(v2.getBlockList()).build();
-            Node n3 = Node.builder().coordX(v3.getCoordX()).coordY(v3.getCoordY())
-                    .initDateBlocked(v3.getInitDateBlocked())
-                    .endDateBlocked(v3.getEndDateBlocked())
-                    .previousVertex(v3.getPreviousVertex())
-                    .blockList(v3.getBlockList()).build();
-            Node n4 = Node.builder().coordX(v4.getCoordX()).coordY(v4.getCoordY())
-                    .initDateBlocked(v4.getInitDateBlocked())
-                    .endDateBlocked(v4.getEndDateBlocked())
-                    .previousVertex(v4.getPreviousVertex())
-                    .blockList(v4.getBlockList()).build();
+        }else if(i<dimensionXMax-1 && j<dimensionYMax-1){
+            nodo1= mapaModelConfiguration.getMapa()[i][j+1];
+            nodo2= mapaModelConfiguration.getMapa()[i][j-1];
+            nodo3= mapaModelConfiguration.getMapa()[i+1][j];
+            nodo4= mapaModelConfiguration.getMapa()[i-1][j];
+            NodoModel n1 = NodoModel.builder().coordenadaX(nodo1.getCoordenadaX()).coordenadaY(nodo1.getCoordenadaY())
+                    .inicioBloqueo(nodo1.getInicioBloqueo())
+                    .finBloqueo(nodo1.getFinBloqueo())
+                    .nodoprevio(nodo1.getNodoprevio())
+                    .blockList(nodo1.getBlockList()).build();
+            NodoModel n2 = NodoModel.builder().coordenadaX(nodo2.getCoordenadaX()).coordenadaY(nodo2.getCoordenadaY())
+                    .inicioBloqueo(nodo2.getInicioBloqueo())
+                    .finBloqueo(nodo2.getFinBloqueo())
+                    .nodoprevio(nodo2.getNodoprevio())
+                    .blockList(nodo2.getBlockList()).build();
+            NodoModel n3 = NodoModel.builder().coordenadaX(nodo3.getCoordenadaX()).coordenadaY(nodo3.getCoordenadaY())
+                    .inicioBloqueo(nodo3.getInicioBloqueo())
+                    .finBloqueo(nodo3.getFinBloqueo())
+                    .nodoprevio(nodo3.getNodoprevio())
+                    .blockList(nodo3.getBlockList()).build();
+            NodoModel n4 = NodoModel.builder().coordenadaX(nodo4.getCoordenadaX()).coordenadaY(nodo4.getCoordenadaY())
+                    .inicioBloqueo(nodo4.getInicioBloqueo())
+                    .finBloqueo(nodo4.getFinBloqueo())
+                    .nodoprevio(nodo4.getNodoprevio())
+                    .blockList(nodo4.getBlockList()).build();
             if(n1.equals(target)){
                 neighbours.add(n1);
-            }else if(!n1.isBlocked(now))
+            }else if(!n1.isBlocked(currentTime))
                 neighbours.add(n1);
             if(n2.equals(target)){
                 neighbours.add(n2);
-            }else if(!n2.isBlocked(now))
+            }else if(!n2.isBlocked(currentTime))
                 neighbours.add(n2);
             if(n3.equals(target)){
                 neighbours.add(n3);
-            }else if(!n3.isBlocked(now))
+            }else if(!n3.isBlocked(currentTime))
                 neighbours.add(n3);
             if(n4.equals(target)){
                 neighbours.add(n4);
-            }else if(!n4.isBlocked(now))
+            }else if(!n4.isBlocked(currentTime))
                 neighbours.add(n4);
         }
         return neighbours;
