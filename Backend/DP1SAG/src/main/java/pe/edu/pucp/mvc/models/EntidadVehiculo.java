@@ -85,5 +85,6 @@ public class EntidadVehiculo implements Serializable {
         this.pesoTotal = vehiculo.getPesoTotal();
         this.pesoTara = vehiculo.getPesoTara();
         this.combustible =vehiculo.getCombustible();
+        this.listaPedidos = new ArrayList<>();
     }
 }

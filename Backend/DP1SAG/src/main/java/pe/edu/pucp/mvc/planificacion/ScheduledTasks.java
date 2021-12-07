@@ -48,13 +48,12 @@ public class ScheduledTasks {
         List<PedidoModel> listaPedidos;
         List<VehiculoModel> vehiculoModels;
 
-        List<EntidadVehiculo> listaVehiculos = LecturaVehiculo.lectura("D:\\CICLO10\\Trabajo\\vehiculos2021.txt");
-        //List<EntidadVehiculo> listaVehiculos = new ArrayList<EntidadVehiculo>();
+        // Carga de informacion de los vehiculos
+        List<EntidadVehiculo> listaVehiculos = new ArrayList<EntidadVehiculo>();
+        vehiculoModels = vehiculoService.listaVehiculosDisponibles();
+        vehiculoModels.forEach(vehiculo -> listaVehiculos.add(new EntidadVehiculo(vehiculo)));
 
-
-        // Carga de information de los vehiculos
-        //vehiculoModels = vehiculoService.listaVehiculosDisponibles();
-        //vehiculoModels.forEach(vehiculo -> listaVehiculos.add(new EntidadVehiculo(vehiculo)));
+        // Carga de información de los bloqueos
 
         ArrayList<NodoModel> blockList = LecturaBloques.lectura("D:\\CICLO10\\Trabajo\\Grupo2\\Download\\bloqueos\\202112bloqueadas.txt");
 
