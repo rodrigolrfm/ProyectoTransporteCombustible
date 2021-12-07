@@ -21,33 +21,49 @@ public class VehiculoModel implements Serializable {
     @Column(unique = true,nullable = false)
     private int idVehiculo;
 
-    @Column(nullable = false, length = 50)
+    @Column(nullable = true, length = 50)
     private String estado;
 
+    @Column(nullable = true)
     private double velocidad;
+
+    @Column(nullable = true)
     private int  tipoVehiculo;
 
+    @Column(nullable = true)
     private double pesoTara;
+
+    @Column(nullable = true)
     private int cargaGLP;
+
+    @Column(nullable = true)
     private double pesoCargaGLP;
+
+    @Column(nullable = true)
     private double pesoTotal;
 
+    @Column(nullable = true)
     private int estadoVehiculo;
+
+    @Column(nullable = true)
     private Calendar fechaInicio;
 
     @Builder.Default
+    @Column(nullable = true)
     private double cantidadPedidos = 0;
+
 
     @OneToMany(mappedBy = "vehiculoModel")
     @Builder.Default
+    @Column(nullable = true)
     private List<PedidoModel> listaPedidos = new ArrayList<>();
 
     private double combustible;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private double capacidad;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private int tieneAveria;
 
 
@@ -61,6 +77,7 @@ public class VehiculoModel implements Serializable {
         this.velocidad = vehiculo.getVelocidad();
         this.tieneAveria = vehiculo.getTieneAveria();
         this.tipoVehiculo = vehiculo.getTipoVehiculo();
+        this.pesoCargaGLP = vehiculo.getPesoCargaGLP();
         this.pesoTotal = vehiculo.getPesoTotal();
         this.pesoTara = vehiculo.getPesoTara();
         this.combustible =vehiculo.getCombustible();

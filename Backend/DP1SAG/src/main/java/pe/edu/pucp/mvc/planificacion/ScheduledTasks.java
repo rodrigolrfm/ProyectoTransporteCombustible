@@ -20,6 +20,7 @@ import pe.edu.pucp.mvc.controllers.MapaModel;
 import pe.edu.pucp.mvc.metodos.EjecucionAlgoritmo;
 import pe.edu.pucp.mvc.models.*;
 import pe.edu.pucp.mvc.services.PedidoService;
+import pe.edu.pucp.mvc.services.VehiculoService;
 import pe.edu.pucp.utils.LecturaBloques;
 import pe.edu.pucp.utils.LecturaVehiculo;
 
@@ -33,23 +34,27 @@ public class ScheduledTasks {
     @Autowired
     private PedidoService pedidoService;
 
+    @Autowired
+    private VehiculoService vehiculoService;
+
     public static SseEmitter emi = null;
     //EntidadRutas rutasFinal = EntidadRutas.builder().paths(new ArrayList<>()).build();
-    @Scheduled(fixedRate = 100000)
     //@Scheduled(cron=" * * * * *")
+    @Scheduled(fixedRate = 80000)
     public void reportCurrentTime() throws Exception {
-        //JSONObject json = new JSONObject();
-        //rutasFinal = ejecucionAlgoritmo.ejecutarAlgoritmoDiaDia();
 
         EntidadRutas rutasFinal = EntidadRutas.builder().paths(new ArrayList<>()).build();
 
         List<PedidoModel> listaPedidos;
+        List<VehiculoModel> vehiculoModels;
 
-        List<EntidadVehiculo> listaVehiculos;
+        List<EntidadVehiculo> listaVehiculos = LecturaVehiculo.lectura("D:\\CICLO10\\Trabajo\\vehiculos2021.txt");
+        //List<EntidadVehiculo> listaVehiculos = new ArrayList<EntidadVehiculo>();
 
-        //listaVehiculos = LecturaVehiculo.lectura("/home/ubuntu/Grupo2/Download/vehiculos2021.txt");
-        listaVehiculos = LecturaVehiculo.lectura("D:\\CICLO10\\Trabajo\\Grupo2\\Download\\vehiculos2021.txt");
-        //listaPedidos = LecturaPedido.lectura("/home/ubuntu/Grupo2/Download/ventas/ventas202202.txt");
+
+        // Carga de information de los vehiculos
+        //vehiculoModels = vehiculoService.listaVehiculosDisponibles();
+        //vehiculoModels.forEach(vehiculo -> listaVehiculos.add(new EntidadVehiculo(vehiculo)));
 
         ArrayList<NodoModel> blockList = LecturaBloques.lectura("D:\\CICLO10\\Trabajo\\Grupo2\\Download\\bloqueos\\202112bloqueadas.txt");
 
@@ -80,6 +85,7 @@ public class ScheduledTasks {
         int totalCapacity = 0;
 
         requestListDesdoblado = pedidoService.listaPedidosSinAtender();
+
 
         for(PedidoModel pedido:requestListDesdoblado){
             totalCapacity += pedido.getCantidadGLP();
@@ -112,10 +118,6 @@ public class ScheduledTasks {
                 for(Pair<EntidadVehiculo, PriorityQueue<Pair<Float, PedidoModel>>> lvc : listaVC){
                     EntidadVehiculo v = lvc.getKey();
                     PriorityQueue<Pair<Float, PedidoModel>> requestListArreange = lvc.getValue();
-                    //System.out.println(req.getHorasLimite());
-                    //System.out.println(req.getHorasLimite().getTimeInMillis());
-                    //System.out.println(v.getFechaInicio());
-                    //System.out.println(v.getFechaInicio().getTimeInMillis());
                     float distance = v.getNodoActual().getDistancia(req),
                             tiempoAproximado = (float)(distance/v.getVelocidad()),
 

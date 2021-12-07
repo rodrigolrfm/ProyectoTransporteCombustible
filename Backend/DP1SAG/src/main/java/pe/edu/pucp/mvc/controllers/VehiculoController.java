@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import pe.edu.pucp.mvc.models.EntidadVehiculo;
+import pe.edu.pucp.mvc.models.PedidoModel;
 import pe.edu.pucp.mvc.models.VehiculoModel;
 import pe.edu.pucp.mvc.services.VehiculoService;
 

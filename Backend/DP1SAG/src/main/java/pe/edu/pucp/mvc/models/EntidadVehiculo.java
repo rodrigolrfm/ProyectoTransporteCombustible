@@ -15,12 +15,9 @@ import java.util.List;
 public class EntidadVehiculo implements Serializable {
 
     private int idVehiculo;
-
     private String estado;
-
     private double velocidad;
     private int tipoVehiculo;
-
     private double pesoTara;
     private int cargaGLP;
     private double pesoCargaGLP;
@@ -71,5 +68,22 @@ public class EntidadVehiculo implements Serializable {
             ruta.add(PositionModel.builder().x(nodo.getCoordenadaX()).y(nodo.getCoordenadaY()).destino(Integer.valueOf(esDestino)).build());
         });
         return ruta;
+    }
+
+    public EntidadVehiculo(VehiculoModel vehiculo){
+        this.idVehiculo = vehiculo.getIdVehiculo();
+        this.cantidadPedidos=vehiculo.getCantidadPedidos();
+        this.capacidad = vehiculo.getCapacidad();
+        this.cargaGLP = vehiculo.getCargaGLP();
+        this.estadoVehiculo = vehiculo.getEstadoVehiculo();
+        this.estado = vehiculo.getEstado();
+        this.fechaInicio = vehiculo.getFechaInicio();
+        this.velocidad = vehiculo.getVelocidad();
+        this.tieneAveria = vehiculo.getTieneAveria();
+        this.tipoVehiculo = vehiculo.getTipoVehiculo();
+        this.pesoCargaGLP = vehiculo.getPesoCargaGLP();
+        this.pesoTotal = vehiculo.getPesoTotal();
+        this.pesoTara = vehiculo.getPesoTara();
+        this.combustible =vehiculo.getCombustible();
     }
 }
