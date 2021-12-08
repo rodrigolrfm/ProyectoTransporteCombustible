@@ -112,20 +112,8 @@ const MapO=(props: simulacion )=>{
       return () => clearInterval(interval);
     }, [paths]);
     useEffect(() => {
-    let funcionRequest;
-    
-
-    
-    simulacionDia(funcionRequest);
-
-      
-    console.log(funcionRequest);
-        
-
-    });
-
-    
-  
+        simulacionDia(null);
+    }, []);
     
     // useEffect(() => {
     //   console.log('mostrando bloqueos');
