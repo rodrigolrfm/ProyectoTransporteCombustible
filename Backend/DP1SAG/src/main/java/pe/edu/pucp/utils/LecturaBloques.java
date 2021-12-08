@@ -50,6 +50,7 @@ public class LecturaBloques {
                         blockedList.add(p);
                         break;
                     }
+
                     int canty=0;
                     int cantx=0;
 
