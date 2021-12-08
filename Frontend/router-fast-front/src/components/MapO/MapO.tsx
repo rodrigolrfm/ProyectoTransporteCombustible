@@ -7,6 +7,7 @@ import url from  'src/utils/constant';
 import axios from 'axios';
 import BlockIcon from '@mui/icons-material/Block';
 import { IconButton } from '@mui/material';
+import simulacionDia from '../ServerEvents/serverEvents';
 
 const vectorX = 70;
 const vectorY = 50;
@@ -16,6 +17,7 @@ const bloqueosData = [
     {x: 20, y: 30},
     {x: 25, y: 30},
     {x: 30, y: 30}
+    
   ]
 
 
@@ -110,61 +112,20 @@ const MapO=(props: simulacion )=>{
       return () => clearInterval(interval);
     }, [paths]);
     useEffect(() => {
+    let funcionRequest;
+    
 
-      /*
+    
+    simulacionDia(funcionRequest);
 
-      let serverURL = new EventSource(url + "/archivos/simularRutas");
-      let data = [];
-          
-      // Inicializa el sentEvent 
-      serverURL.onopen=function (event) {
-          console.log ("Conexión cliente servidor");
-      }
-      serverURL.addEventListener("MAPAS", function(e) {
-          console.log(event);
-          data = JSON.parse(event.data);
-          if(data.flag == 3){
-            // Cerrar conexión
-              serverURL.close();
-          }
-          setPaths(
-            data.paths.map((path) => {
-              return {
-                ...path.path,
-                ruta: obtenerRuta(path.path),
-                pos: 0,
-                date: implementarFecha(data.paths[0].startTime,path.startTime),
-                dateStart: data.paths[0].startTime,
-                nowFixed: new Date(),
-              };
-            })
-        })
+      
+    console.log(funcionRequest);
+        
 
-      serverURL.οnerrοr=function (event) {
-          serverURL.close();
-      }
+    });
 
-      /*
-      */
-        console.log("Mapa Colapso");
-        axios
-        .post(url + "/ejecutar/simularRutas")
-        .then((e) => {
-          setPaths(
-            e.data.paths.map((path) => {
-              return {
-                ...path.path,
-                ruta: obtenerRuta(path.path),
-                pos: 0,
-                date: implementarFecha(e.data.paths[0].startTime,path.startTime),
-                dateStart: e.data.paths[0].startTime,
-                nowFixed: new Date(),
-              };
-            })
-          );
-        });              
-    }, []);
-     
+    
+  
     
     // useEffect(() => {
     //   console.log('mostrando bloqueos');
