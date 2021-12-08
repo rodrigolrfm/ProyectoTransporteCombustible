@@ -92,4 +92,21 @@ public class NodoModel implements Comparable<NodoModel>, Serializable {
         return String.format("[%d,%d]", coordenadaX, coordenadaY);
     }
 
+    public NodoModel(BloqueoModel bloqueoModel){
+        this.estaBloqueado = bloqueoModel.isEstaBloqueado();
+        this.g = bloqueoModel.getG();
+        this.finBloqueo = bloqueoModel.getFinBloqueo();
+        this.inicioBloqueo = bloqueoModel.getInicioBloqueo();
+        this.f = bloqueoModel.getF();
+        this.coordenadaY = bloqueoModel.getCoordenadaY();
+        this.coordenadaX = bloqueoModel.getCoordenadaX();
+        this.blockList = new ArrayList<>();
+        BloqueoModel bloqueo = BloqueoModel.builder().inicioBloqueo(bloqueoModel.getInicioBloqueo()).finBloqueo(bloqueoModel.getFinBloqueo()).build();
+        this.blockList.add(bloqueo);
+        this.distanciaMinima = bloqueoModel.getDistanciaMinima();
+        this.h = bloqueoModel.getH();
+        this.nodoprevio = null;
+    }
+
+
 }

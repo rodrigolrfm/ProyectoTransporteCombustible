@@ -19,6 +19,7 @@ import pe.edu.pucp.mvc.controllers.EjecucionController;
 import pe.edu.pucp.mvc.controllers.MapaModel;
 import pe.edu.pucp.mvc.metodos.EjecucionAlgoritmo;
 import pe.edu.pucp.mvc.models.*;
+import pe.edu.pucp.mvc.services.BloqueoService;
 import pe.edu.pucp.mvc.services.PedidoService;
 import pe.edu.pucp.mvc.services.VehiculoService;
 import pe.edu.pucp.utils.LecturaBloques;
@@ -37,6 +38,9 @@ public class ScheduledTasks {
     @Autowired
     private VehiculoService vehiculoService;
 
+    @Autowired
+    private BloqueoService bloqueoService;
+
     public static SseEmitter emi = null;
     //EntidadRutas rutasFinal = EntidadRutas.builder().paths(new ArrayList<>()).build();
     //@Scheduled(cron=" * * * * *")
@@ -54,8 +58,11 @@ public class ScheduledTasks {
         vehiculoModels.forEach(vehiculo -> listaVehiculos.add(new EntidadVehiculo(vehiculo)));
 
         // Carga de información de los bloqueos
-
-        ArrayList<NodoModel> blockList = LecturaBloques.lectura("D:\\CICLO10\\Trabajo\\Grupo2\\Download\\bloqueos\\202112bloqueadas.txt");
+        //ArrayList<NodoModel> blockList = LecturaBloques.lectura("D:\\CICLO10\\Trabajo\\Grupo2\\Download\\bloqueos\\202112bloqueadas.txt");
+        List<NodoModel> blockList = new ArrayList<>();
+        List<BloqueoModel> bloqueos = new ArrayList<>();
+        bloqueos = bloqueoService.listaBloqueosDiaDia();
+        bloqueos.forEach(bloqueo -> blockList.add(new NodoModel(bloqueo)));
 
         // Depositos iniciales
         ArrayList<PlantaModel> plantas = new ArrayList<>();

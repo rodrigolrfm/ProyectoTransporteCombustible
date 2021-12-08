@@ -34,7 +34,10 @@ public class LecturaBloques {
                 strEndDate = file.getName().substring(0,4) + "/" +
                         file.getName().substring(4,6) + "/" +
                         endSplitDate[0]+ " " + endSplitDate[1] + ":" + endSplitDate[2];
+                //Extrar fecha inicio
                 initDate = sdf.parse(strInitDate);
+
+                // extraer fecha fin
                 endDate = sdf.parse(strEndDate);
                 for(int i = 1; i<rowRequest.length; i+=2){
                     NodoModel p = null;
@@ -61,7 +64,7 @@ public class LecturaBloques {
                     }
 
                     if(canty>0){
-                        for(int j =0;j<canty;j++){
+                        for(int j =0; j < canty;j++){
                             p = NodoModel.builder().inicioBloqueo(initDate).finBloqueo(endDate).estaBloqueado(true)
                                     .coordenadaX(Integer.parseInt(rowRequest[i]))
                                     .coordenadaY(Integer.parseInt(rowRequest[i+1])+j).build();
