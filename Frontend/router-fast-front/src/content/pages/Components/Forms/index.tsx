@@ -36,6 +36,8 @@ function Forms() {
     const data = {
             posicionX: posicionX,
             posicionY: posicionY,
+            capacidad: capacidad,
+            fecha: value
         }
         axios.post(process.env.REACT_APP_API_URL + '/api/stats/employees',JSON.stringify(data) , {
             headers: { 'Content-Type': 'application/json' }

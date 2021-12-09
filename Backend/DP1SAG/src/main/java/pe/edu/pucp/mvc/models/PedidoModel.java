@@ -1,5 +1,7 @@
 package pe.edu.pucp.mvc.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -18,7 +20,9 @@ import java.util.Calendar;
 public class PedidoModel extends NodoModel implements Serializable {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idNodo;
+
     @Id
     private int idExtendido;
 
@@ -31,9 +35,13 @@ public class PedidoModel extends NodoModel implements Serializable {
 
 
     @Column(name = "fechaPedido",nullable = true)
+    @JsonProperty("fechaPedido")
+    @JsonFormat(pattern="yyyy/MM/dd HH:mm")
     private Calendar fechaPedido;
 
     @Column(name = "horasLimite",nullable = true)
+    @JsonProperty("horasLimite")
+    @JsonFormat(pattern="yyyy/MM/dd HH:mm")
     private Calendar horasLimite;
 
     @Column(name = "cantidadGLP",nullable = true)

@@ -3,11 +3,9 @@ package pe.edu.pucp.mvc.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import pe.edu.pucp.mvc.dtos.PedidoUniqueDTO;
 import pe.edu.pucp.mvc.models.PedidoModel;
 import pe.edu.pucp.mvc.services.PedidoService;
 import pe.edu.pucp.mvc.services.VehiculoService;
@@ -28,6 +26,53 @@ public class PedidoController {
     @Autowired
     PedidoService pedidoService;
 
+    @PostMapping(value = "/insertarPedido", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public String insertarPedido(@RequestBody PedidoModel pedidoUnique){
+        PedidoModel pedido = PedidoModel.builder().coordenadaX(pedidoUnique.getCoordenadaX())
+                                .coordenadaY(pedidoUnique.getCoordenadaY())
+                                .fechaPedido(pedidoUnique.getFechaPedido())
+                                .horasLimite(pedidoUnique.getHorasLimite())
+                                .cantidadGLP(pedidoUnique.getCantidadGLP())
+                                .build();
+        String response;
+        pedido.setIdExtendido(0);
+        try{
+            int minimo = 5;
+            pedido = pedidoService.guardarPedido(pedido);
+            int i = 1;
+            PedidoModel pedidoPartido=null;
+            for(; i < (int)pedido.getCantidadGLP()/minimo + 1; i++) {
+                pedidoPartido = PedidoModel.builder()
+                        .idNodo(pedido.getIdNodo())
+                        .idExtendido(i)
+                        .clienteModel(pedido.getClienteModel())
+                        .cantidadGLP(minimo)
+                        .coordenadaX(pedido.getCoordenadaX())
+                        .coordenadaY(pedido.getCoordenadaY())
+                        .fechaPedido(pedido.getFechaPedido())
+                        .horasLimite(pedido.getHorasLimite()).build();
+                pedidoService.guardarPedido(pedidoPartido);
+            }
+
+            if(pedido.getCantidadGLP()%minimo != 0.0) {
+                pedidoPartido = PedidoModel.builder()
+                        .idNodo(pedido.getIdNodo())
+                        .idExtendido(i)
+                        .clienteModel(pedido.getClienteModel())
+                        .cantidadGLP(pedido.getCantidadGLP() % minimo)
+                        .coordenadaX(pedido.getCoordenadaX())
+                        .coordenadaY(pedido.getCoordenadaY())
+                        .fechaPedido(pedido.getFechaPedido())
+                        .horasLimite(pedido.getHorasLimite()).build();
+                pedidoService.guardarPedido(pedidoPartido);
+            }
+            response = "SUCCESS";
+        }catch (Exception e){
+            response = e.getMessage();
+        }
+        return response;
+    }
+
     @PostMapping(value = "/cargaMasivaPedidos", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public List<PedidoModel> cargaMasivaNodos(@RequestParam("filear") MultipartFile file) throws IOException {
 
@@ -46,7 +91,6 @@ public class PedidoController {
             String[] rowRequest, day;
             Date date;
 
-            int num = 0;
             while ((line = br.readLine()) != null) {
                 int minimo = 5;
                 int totalCapacity = 0;
@@ -63,7 +107,7 @@ public class PedidoController {
                 glpTotal += Integer.parseInt(rowRequest[3]);
 
                 PedidoModel pedido = PedidoModel.builder()
-                        .idNodo(num++)
+                        .idExtendido(0)
                         .coordenadaX(Integer.parseInt(rowRequest[1]))
                         .coordenadaY(Integer.parseInt(rowRequest[2]))
                         .fechaPedido(reqDate)
