@@ -6,8 +6,9 @@ import { useEffect, useState } from 'react';
 import url from  'src/utils/constant';
 import axios from 'axios';
 import BlockIcon from '@mui/icons-material/Block';
-import { IconButton } from '@mui/material';
+import { Card, CardContent, IconButton ,CardActionArea,CardMedia, Typography} from '@mui/material';
 import simulacionDia from '../ServerEvents/serverEvents';
+import Grid from '@mui/material/Grid';
 
 const vectorX = 70;
 const vectorY = 50;
@@ -75,6 +76,10 @@ const useStyles = makeStyles((theme) => ({
 interface simulacion{simulacion : number}; // Integer
 
 const MapO=(props: simulacion )=>{
+    const pedAtendidos=1;
+    const pedPendientes=2;
+    const camiones=3;
+    const pedPenalizados=1;
 
     const [ruta, setRuta] = useState([]);
     const [paths, setPaths] = useState([]);
@@ -112,7 +117,10 @@ const MapO=(props: simulacion )=>{
       return () => clearInterval(interval);
     }, [paths]);
     useEffect(() => {
-        simulacionDia(null);
+        let data;
+        simulacionDia(data);
+        console.log(data);
+        
     }, []);
     
     // useEffect(() => {
@@ -223,12 +231,39 @@ const MapO=(props: simulacion )=>{
             )}
           </div>
         );
+
+
       }
       map.push(<div className={classes.row}>{squareRows}</div>);
+      
     }
-
+    
     return (
+        <>
         <div className={classes.map}>{map}</div>
+        <Grid item xs={4}>
+        <Card sx={{ my:2 }}>
+        <CardActionArea sx={{p:2}}>
+          <Typography variant="h4">Pedidos Atendidos : {pedAtendidos}</Typography>
+          <Typography variant="h4">Pedidos Pendientes : {pedPendientes}</Typography>
+          <Typography variant="h4">Camiones: {camiones}</Typography>
+          <Typography variant="h4">Pedidos Penalizados: {pedPenalizados}</Typography>
+        </CardActionArea>
+        </Card>
+        </Grid>
+        <Grid item xs={7}>
+        <Card sx={{ my:2 }}>
+        <CardActionArea sx={{p:2}}>
+          <img
+                    alt="BTC"
+                    width="80%"
+                    src="/static/images/placeholders/logo/leyendadiaBeibi.png"
+                  />
+        </CardActionArea>
+        </Card>
+        </Grid>
+        
+        </>
     );
   }
   
