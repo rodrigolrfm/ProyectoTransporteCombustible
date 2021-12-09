@@ -96,7 +96,6 @@ public class PedidoModel extends NodoModel implements Serializable {
         System.out.print("coordenadaX " + this.getCoordenadaX());
         System.out.print("  coordenadaY " + this.getCoordenadaY());
         System.out.print("  idPedido " + this.getIdNodo());
-
         System.out.print("  hoursLimit " + this.getHorasLimite().getTimeInMillis());
         System.out.println();
     }

@@ -31,7 +31,8 @@ public class ScheduledTasks {
     private static final Logger log = LoggerFactory.getLogger(ScheduledTasks.class);
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
-    //private EjecucionAlgoritmo ejecucionAlgoritmo;
+    private InicializarDiaDia inicializarDiaDia = new InicializarDiaDia();
+
     @Autowired
     private PedidoService pedidoService;
 
@@ -42,49 +43,20 @@ public class ScheduledTasks {
     private BloqueoService bloqueoService;
 
     public static SseEmitter emi = null;
-    //EntidadRutas rutasFinal = EntidadRutas.builder().paths(new ArrayList<>()).build();
-    //@Scheduled(cron=" * * * * *")
+
     @Scheduled(fixedRate = 80000)
     public void reportCurrentTime() throws Exception {
 
         EntidadRutas rutasFinal = EntidadRutas.builder().paths(new ArrayList<>()).build();
 
-        List<PedidoModel> listaPedidos;
-        List<VehiculoModel> vehiculoModels;
+        inicializarDiaDia.inicializarProceso();
+        List<PedidoModel> listaPedidos = inicializarDiaDia.listaPedidos;
+        List<EntidadVehiculo> listaVehiculos = inicializarDiaDia.listaVehiculos;
+        List<NodoModel> blockList = inicializarDiaDia.blockList;
+        List<BloqueoModel> bloqueos = inicializarDiaDia.bloqueos;
+        List<PedidoModel> requestListDesdoblado = inicializarDiaDia.listaPedidos;
+        MapaModel mapaModel= inicializarDiaDia.mapaModel;
 
-        // Carga de informacion de los vehiculos
-        List<EntidadVehiculo> listaVehiculos = new ArrayList<EntidadVehiculo>();
-        vehiculoModels = vehiculoService.listaVehiculosDisponibles();
-        vehiculoModels.forEach(vehiculo -> listaVehiculos.add(new EntidadVehiculo(vehiculo)));
-
-        // Carga de información de los bloqueos
-        //ArrayList<NodoModel> blockList = LecturaBloques.lectura("D:\\CICLO10\\Trabajo\\Grupo2\\Download\\bloqueos\\202112bloqueadas.txt");
-        List<NodoModel> blockList = new ArrayList<>();
-        List<BloqueoModel> bloqueos = new ArrayList<>();
-        bloqueos = bloqueoService.listaBloqueosDiaDia();
-        bloqueos.forEach(bloqueo -> blockList.add(new NodoModel(bloqueo)));
-
-        // Depositos iniciales
-        ArrayList<PlantaModel> plantas = new ArrayList<>();
-        plantas.add(PlantaModel.builder().coordenadaX(12).coordenadaY(8).esPrincipal(true).build());
-        plantas.add(PlantaModel.builder().coordenadaX(42).coordenadaY(42).build());
-        plantas.add(PlantaModel.builder().coordenadaX(63).coordenadaY(3).build());
-
-        MapaModel mapaModel = new MapaModel(70, 50, plantas);
-        mapaModel.setBlockList(blockList);
-
-
-        listaVehiculos.forEach(v -> {
-            // Fecha de inicio y copia de fecha de inicio
-            Calendar init = Calendar.getInstance();
-            init.set(2021, 0, 0, 0, 0, 0);
-            v.setFechaInicio(init);
-            v.setNodoActual(plantas.get(0));
-            v.setCombustible(25);
-            v.setVelocidad(50);
-        });
-
-        List<PedidoModel> requestListDesdoblado = new ArrayList<>();
         int minimo = 5;
 
         // Split request list in minimum capacity
@@ -92,15 +64,16 @@ public class ScheduledTasks {
 
         requestListDesdoblado = pedidoService.listaPedidosSinAtender();
 
-
         for(PedidoModel pedido:requestListDesdoblado){
             totalCapacity += pedido.getCantidadGLP();
         }
 
         System.out.println("Total Capacity: " + totalCapacity);
+
         // lista que tendrá los vehículos y sus listas de pedidos ordenados por indice
         ArrayList<Pair<EntidadVehiculo, PriorityQueue<Pair<Float, PedidoModel>>>> listaVC = new ArrayList<>();
 
+        // Tener un arreglo auxiliar de pedidos
         List<PedidoModel> auxRequest = new ArrayList<>();
         requestListDesdoblado.forEach(r -> {
             auxRequest.add(r);
@@ -153,15 +126,17 @@ public class ScheduledTasks {
                             pedidoCompletado++;
                     }
 
-                    //throw new Exception("Llegó al colapso logístico");
+                    throw new Exception("Llegó al colapso logístico");
                 }
             }
 
             for(Pair<EntidadVehiculo, PriorityQueue<Pair<Float, PedidoModel>>> vc : listaVC){
-                //Assign request to vehicles
+                // Se asigna los pedidos a los vehículos
+
                 listaVehiculos.clear(); // se puede quitar esta lista intermedia
                 listaVehiculos.add(vc.getKey());
-//                System.out.println("PQ: " + vc.getValue());
+
+                System.out.println("PQ: " + vc.getValue());
                 int assigned = 0;
                 try {
                     assigned += Knapsack.allocate(vc.getValue(), listaVehiculos, auxRequest);
@@ -219,9 +194,6 @@ public class ScheduledTasks {
         } while(!requestListDesdoblado.isEmpty());
 
         Collections.sort(rutasFinal.getPaths());
-
-        //return rutasFinal;
-
 
         if (emi!=null){
             emi.send(SseEmitter.event().name("RUTAS").data(rutasFinal));

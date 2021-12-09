@@ -35,14 +35,11 @@ public class EjecucionController {
 
     @GetMapping(value = "/obtenerRutas")
     public SseEmitter devolverRutas(){
-
         SseEmitter sseEmitter = new SseEmitter(Long.MAX_VALUE);
         sseEmitters.add(sseEmitter);
         sseEmitter.onCompletion(() -> { EjecucionController.sseEmitters.remove(ScheduledTasks.emi); ScheduledTasks.emi = null; });
         sseEmitter.onTimeout(() -> { EjecucionController.sseEmitters.remove(ScheduledTasks.emi); ScheduledTasks.emi = null; });
-
         ScheduledTasks.emi = sseEmitter;
-
         return sseEmitter;
     }
 
