@@ -14,6 +14,9 @@ import java.util.Optional;
 public interface PedidoRepository extends CrudRepository<PedidoModel, Integer> {
     public abstract Optional<PedidoModel> findById(Integer id);
 
-    @Query(value ="CALL OBTENER_PEDIDOS_SIN_ATENDER();",nativeQuery = true)
+    @Query(value ="CALL OBTENER_PEDIDOS_SIN_ATENDER();", nativeQuery = true)
     List<PedidoModel> findPedidosSinAtender();
+
+    @Query(value ="SELECT max(id_nodo) FROM pedido;", nativeQuery = true)
+    Integer findMaxIdNodo();
 }

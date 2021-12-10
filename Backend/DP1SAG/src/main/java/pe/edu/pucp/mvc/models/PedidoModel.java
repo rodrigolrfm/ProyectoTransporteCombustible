@@ -20,7 +20,6 @@ import java.util.Calendar;
 public class PedidoModel extends NodoModel implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idNodo;
 
     @Id

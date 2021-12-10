@@ -22,5 +22,12 @@ public class PedidoService {
         return pedidoRepository.findPedidosSinAtender();
     }
 
-
+    public Integer getMaxIdNodo(){
+        Integer id = pedidoRepository.findMaxIdNodo();
+        if (id == null){
+            return -1;
+        }else{
+            return id;
+        }
+    }
 }

@@ -12,4 +12,9 @@ public class PedidoIdentidad implements Serializable {
     private int idExtendido;
     private int idNodo;
 
+    public PedidoIdentidad(){}
+    public PedidoIdentidad(Integer idExtendido, Integer idNodo) {
+        this.idNodo = idNodo;
+        this.idExtendido = idExtendido;
+    }
 }

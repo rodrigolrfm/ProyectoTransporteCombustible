@@ -36,6 +36,8 @@ public class PedidoController {
                                 .build();
         String response;
         pedido.setIdExtendido(0);
+        Integer idNodo = pedidoService.getMaxIdNodo();
+        pedido.setIdNodo(idNodo + 1);
         try{
             int minimo = 5;
             pedido = pedidoService.guardarPedido(pedido);
@@ -105,8 +107,9 @@ public class PedidoController {
                 cal.add(Calendar.HOUR, Integer.parseInt(rowRequest[4]));
 
                 glpTotal += Integer.parseInt(rowRequest[3]);
-
+                Integer idNodo = pedidoService.getMaxIdNodo();
                 PedidoModel pedido = PedidoModel.builder()
+                        .idNodo(idNodo + 1)
                         .idExtendido(0)
                         .coordenadaX(Integer.parseInt(rowRequest[1]))
                         .coordenadaY(Integer.parseInt(rowRequest[2]))
