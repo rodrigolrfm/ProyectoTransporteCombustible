@@ -1,10 +1,6 @@
 import url from  'src/utils/constant';
 
-const funcionRequest = (data) => {
- //pintar
 
-
-}
 
 let datax;
 const simulacionDia  = (funcionRequest) => {
@@ -19,8 +15,8 @@ const simulacionDia  = (funcionRequest) => {
     source.addEventListener("RUTAS", (event) => {
         console.log("xd");
         datax=event.data;
-        console.log(datax);
-        //funcionRequest(event.data);
+        //console.log(datax);
+        funcionRequest(event.data);
     });
 
     /* 

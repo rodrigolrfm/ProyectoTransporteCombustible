@@ -15,6 +15,9 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DateTimePicker from '@mui/lab/DateTimePicker';
 import axios from 'axios';
+import url from  'src/utils/constant';
+import * as moment from 'moment';
+
 
 const Input = styled('input')({
   display: 'none',
@@ -26,24 +29,35 @@ function Forms() {
   const [posicionX,setPosicionX] = useState('')
   const [posicionY,setPosicionY] = useState('')
   const [capacidad,setCapacidad] = useState('')
+  //const [value, setValue] = React.useState(new Date());
+  //const [horaslimite, setHoraLimite] = React.useState(new Date());
   const [value, setValue] = React.useState(new Date());
+  const [horaslimite, setHoraLimite] = useState('')
 
   const sendData= ()=>{
     console.log(posicionX);
     console.log(posicionY);
     console.log(capacidad);
     console.log(value);
+    console.log(horaslimite);
     const data = {
-            posicionX: posicionX,
-            posicionY: posicionY,
-            capacidad: capacidad,
-            fecha: value
+            coordenadaX: posicionX,
+            coordenadaY: posicionY,
+            fechaPedido: moment.default(value).format('YYYY/MM/DD HH:mm'),
+            horasLimite:moment.default(value).add(horaslimite,"hours").format('YYYY/MM/DD HH:mm'),
+            cantidadGLP: capacidad
+
         }
-        axios.post(process.env.REACT_APP_API_URL + '/api/stats/employees',JSON.stringify(data) , {
+        
+        axios.post(url + '/pedido/insertarPedido',JSON.stringify(data) , {
             headers: { 'Content-Type': 'application/json' }
-        }).then((r) => {
-            console.log(r.data);
-            //setPersonalHoras(r.data);
+        })
+        
+        .then((r) => {
+            console.log(r);
+            console.log(data);
+            
+            
         });
   }
 
@@ -124,12 +138,34 @@ function Forms() {
                     <DateTimePicker
 
                         renderInput={(props) => <TextField {...props} />}
-                        label="DateTimePicker"
+                        label="Fecha Pedido"
+                        
                         value={value}
                         onChange={(newValue) => {
                         setValue(newValue);
                         }}
                     />
+                    <TextField
+                      required
+                      id="outlined-required"
+                      label="Horas Limite"
+                      type="number"
+                      value= {horaslimite}
+                      name = {horaslimite}
+                      onChange={e => setHoraLimite(e.target.value)}   
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                    />
+
+                    {/*<DateTimePicker
+                      renderInput={(props) => <TextField {...props} />}
+                      label="Horas Limite"
+                      value={value}
+                      onChange={(newValue) => {
+                      setHoraLimite(newValue);
+                      }}
+                    />*/}
 
                     <Button variant="contained" onClick={sendData} sx={{mt:1, mx:2, height: 50}} >
                   Agregar Pedido

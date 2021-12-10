@@ -14,6 +14,14 @@ const vectorX = 70;
 const vectorY = 50;
 const path = [ ];
 
+const data = [
+  {x: 20, y: 30},
+  {x: 25, y: 30},
+  {x: 30, y: 30}
+  
+]
+
+
 const bloqueosData = [
     {x: 20, y: 30},
     {x: 25, y: 30},
@@ -82,44 +90,76 @@ const MapO=(props: simulacion )=>{
     const pedPenalizados=1;
 
     const [ruta, setRuta] = useState([]);
-    const [paths, setPaths] = useState([]);
+    const [caminos, setCaminos] = useState([]);
     const [bloqueos, setBloqueos] = useState([]);
 
     const classes = useStyles();
     const map = [];
     useEffect(() => {
-
+      /*
+      //const pos=5;
       const intervalTime = 500;
-      const interval = setInterval(() => {
-        let arr;
+      //console.log(paths);
+      const arr = caminos.map((path) => {
+        const now = new Date();
+        const date = new Date(path.date);
+        const nowFixed = new Date(path.nowFixed);
+        const dateStart = new Date(path.dateStart);
         
-        //console.log(paths);
-        arr = paths.map((path) => {
-          const now = new Date();
-          const date = new Date(path.date);
-          const nowFixed = new Date(path.nowFixed);
-          const dateStart = new Date(path.dateStart);
-          
-          let rest = now.getTime() - date.getTime() - (nowFixed.getTime() - dateStart.getTime());
-          
-          //console.log("asdlkasjdlsad");
-          const posAux = Math.floor(rest / intervalTime); // restar los milisegundos para igual
-          //al tiempo de inicio del primer pedido 
-          //console.log(posAux);
-          if (posAux === path.ruta.length) {
-            setRuta(null);
-            return null;
-          } else return { ...path, pos: posAux };
-        });
-        setPaths(arr.filter((el) => el != null));
-        // setPaths(...paths, pos)
-      }, intervalTime);
-      return () => clearInterval(interval);
-    }, [paths]);
+        let rest = now.getTime() - date.getTime() - (nowFixed.getTime() - dateStart.getTime());
+        
+        //console.log("asdlkasjdlsad");
+        const posAux = Math.floor(rest / intervalTime); // restar los milisegundos para igual
+        //al tiempo de inicio del primer pedido 
+        //console.log(posAux);
+        if (posAux === path.ruta.length) {
+          setRuta(null);
+          return null;
+        } else return { ...path, pos: posAux };
+      });
+
+      //setCaminos(arr.filter((el) => el != null));
+      //setCaminos(arr);
+       //setCaminos([...path, pos]);
+
+     
+
+      /*
+      const arr = caminos.map((data)=>{
+       console.log(data);
+
+      })
+      setCaminos(data);
+      */
+    }, [caminos]);
+
+    
+
     useEffect(() => {
-        let data;
-        simulacionDia(data);
-        console.log(data);
+      
+        const funcionRequest= (data)=>{
+          console.log(data);
+          /*
+          setPaths(
+            data.paths?.map((path) => {
+              return {
+                ...path.path,
+                ruta: obtenerRuta(path.path),
+                pos: 0,
+                date: implementarFecha(data.paths[0].startTime,path.startTime),
+                dateStart: data.paths[0].startTime,
+                nowFixed: new Date(),
+              };
+            })
+          );
+          */
+
+  
+          };
+
+        simulacionDia(funcionRequest);
+
+        
         
     }, []);
     
@@ -190,7 +230,8 @@ const MapO=(props: simulacion )=>{
               <PersonPinIcon style={{ color: '#424774'}} />
             </div>
           ) : null}
-          {paths?.map((path) => { 
+          
+          {/*caminos?.map((path) => { 
             // let aux = new Date() - path.date;
             if (path?.ruta[path.pos] && path?.ruta[path.pos].x === j && path?.ruta[path.pos].y ===i) {
               let dir = path.ruta[path.pos].next;
@@ -213,7 +254,8 @@ const MapO=(props: simulacion )=>{
                 </div>
               );
             }
-          })}
+          })*/}
+          
             {i === 8 && j === 12 && (
               <div className={classes.icon} style={{ transform: 'rotate(0deg)' }}>
                 <HomeIcon style={{ color: '#35737D' }} />
