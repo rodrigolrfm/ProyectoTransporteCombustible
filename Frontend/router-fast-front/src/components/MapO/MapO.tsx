@@ -21,12 +21,10 @@ const data = [
   
 ]
 
-
 const bloqueosData = [
     {x: 20, y: 30},
     {x: 25, y: 30},
     {x: 30, y: 30}
-    
   ]
 
 
@@ -96,7 +94,6 @@ const MapO=(props: simulacion )=>{
     const classes = useStyles();
     const map = [];
     useEffect(() => {
-      /*
       //const pos=5;
       const intervalTime = 500;
       //console.log(paths);
@@ -118,6 +115,10 @@ const MapO=(props: simulacion )=>{
         } else return { ...path, pos: posAux };
       });
 
+      //console.log(arr);
+      setTimeout(() => {
+        setCaminos(arr.filter((el) => el != null));
+      }, 200)
       //setCaminos(arr.filter((el) => el != null));
       //setCaminos(arr);
        //setCaminos([...path, pos]);
@@ -138,29 +139,23 @@ const MapO=(props: simulacion )=>{
     useEffect(() => {
       
         const funcionRequest= (data)=>{
-          console.log(data);
-          /*
-          setPaths(
-            data.paths?.map((path) => {
-              return {
-                ...path.path,
-                ruta: obtenerRuta(path.path),
-                pos: 0,
-                date: implementarFecha(data.paths[0].startTime,path.startTime),
-                dateStart: data.paths[0].startTime,
-                nowFixed: new Date(),
-              };
-            })
-          );
-          */
+          data = JSON.parse(data);
+          let newData = data.paths?.map((path) => {
+            return {
+              ...path.path,
+              ruta: obtenerRuta(path.path),
+              pos: 0,
+              date: implementarFecha(data.paths[0].startTime,path.startTime),
+              dateStart: data.paths[0].startTime,
+              nowFixed: new Date(),
+            };
+          });
 
-  
+          if(newData)
+            setCaminos(newData);
           };
 
         simulacionDia(funcionRequest);
-
-        
-        
     }, []);
     
     // useEffect(() => {
@@ -231,7 +226,7 @@ const MapO=(props: simulacion )=>{
             </div>
           ) : null}
           
-          {/*caminos?.map((path) => { 
+          {caminos?.map((path) => { 
             // let aux = new Date() - path.date;
             if (path?.ruta[path.pos] && path?.ruta[path.pos].x === j && path?.ruta[path.pos].y ===i) {
               let dir = path.ruta[path.pos].next;
@@ -254,7 +249,7 @@ const MapO=(props: simulacion )=>{
                 </div>
               );
             }
-          })*/}
+          })}
           
             {i === 8 && j === 12 && (
               <div className={classes.icon} style={{ transform: 'rotate(0deg)' }}>
