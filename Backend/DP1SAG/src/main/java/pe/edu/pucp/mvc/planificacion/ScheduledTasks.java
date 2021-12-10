@@ -25,13 +25,21 @@ import pe.edu.pucp.mvc.services.VehiculoService;
 import pe.edu.pucp.utils.LecturaBloques;
 import pe.edu.pucp.utils.LecturaVehiculo;
 
+import javax.annotation.PostConstruct;
+
 @Component
 public class ScheduledTasks {
 
     private static final Logger log = LoggerFactory.getLogger(ScheduledTasks.class);
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
-    private InicializarDiaDia inicializarDiaDia = new InicializarDiaDia();
+    private List<PedidoModel> listaPedidos = new ArrayList<>();
+    public List<VehiculoModel> vehiculoModels = new ArrayList<>();
+    private List<EntidadVehiculo> listaVehiculos = new ArrayList<>();
+    private List<NodoModel> blockList = new ArrayList<>();
+    private List<BloqueoModel> bloqueos = new ArrayList<>();
+    private List<PedidoModel> requestListDesdoblado = new ArrayList<>();
+    private MapaModel mapaModel= null;
 
     @Autowired
     private PedidoService pedidoService;
@@ -44,21 +52,43 @@ public class ScheduledTasks {
 
     public static SseEmitter emi = null;
 
+    @PostConstruct
+    private void postConstruct() {
+
+        vehiculoModels = vehiculoService.listaVehiculosDisponibles();
+        vehiculoModels.forEach(vehiculo -> listaVehiculos.add(new EntidadVehiculo(vehiculo)));
+
+        // Carga de información de los bloqueos
+        bloqueos = bloqueoService.listaBloqueosDiaDia();
+        bloqueos.forEach(bloqueo -> blockList.add(new NodoModel(bloqueo)));
+
+        // Depositos iniciales
+        ArrayList<PlantaModel> plantas = new ArrayList<>();
+        plantas.add(PlantaModel.builder().coordenadaX(12).coordenadaY(8).esPrincipal(true).build());
+        plantas.add(PlantaModel.builder().coordenadaX(42).coordenadaY(42).build());
+        plantas.add(PlantaModel.builder().coordenadaX(63).coordenadaY(3).build());
+        mapaModel = new MapaModel(70, 50, plantas);
+        // Se crea el mapa
+
+        mapaModel.setBlockList(blockList);
+
+        // Inicializar las fechas de inicio de los vehículos
+        listaVehiculos.forEach(v -> {
+            // Fecha de inicio y copia de fecha de inicio
+            Calendar init = Calendar.getInstance();
+            init.set(2021, 0, 0, 0, 0, 0);
+            v.setFechaInicio(init);
+            v.setNodoActual(plantas.get(0));
+            v.setCombustible(25);
+            v.setVelocidad(50);
+        });
+    }
+
     @Scheduled(fixedRate = 80000)
     public void reportCurrentTime() throws Exception {
 
         EntidadRutas rutasFinal = EntidadRutas.builder().paths(new ArrayList<>()).build();
-
-        inicializarDiaDia.inicializarProceso();
-        List<PedidoModel> listaPedidos = inicializarDiaDia.listaPedidos;
-        List<EntidadVehiculo> listaVehiculos = inicializarDiaDia.listaVehiculos;
-        List<NodoModel> blockList = inicializarDiaDia.blockList;
-        List<BloqueoModel> bloqueos = inicializarDiaDia.bloqueos;
-        List<PedidoModel> requestListDesdoblado = inicializarDiaDia.listaPedidos;
-        MapaModel mapaModel= inicializarDiaDia.mapaModel;
-
         int minimo = 5;
-
         // Split request list in minimum capacity
         int totalCapacity = 0;
 
@@ -136,7 +166,7 @@ public class ScheduledTasks {
                 listaVehiculos.clear(); // se puede quitar esta lista intermedia
                 listaVehiculos.add(vc.getKey());
 
-                System.out.println("PQ: " + vc.getValue());
+                //System.out.println("PQ: " + vc.getValue());
                 int assigned = 0;
                 try {
                     assigned += Knapsack.allocate(vc.getValue(), listaVehiculos, auxRequest);
