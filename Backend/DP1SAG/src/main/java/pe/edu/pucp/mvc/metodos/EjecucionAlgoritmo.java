@@ -132,7 +132,7 @@ public class EjecucionAlgoritmo {
 //                System.out.println("PQ: " + vc.getValue());
                 int assigned = 0;
                 try {
-                    assigned += Knapsack.allocate(vc.getValue(), listaVehiculos, auxRequest);
+                    //assigned += Knapsack.allocate(vc.getValue(), listaVehiculos, auxRequest);
                     //verificar si entra en el camión los pedidos.
                 }
                 catch (Exception e) {

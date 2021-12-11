@@ -92,6 +92,15 @@ public class ScheduledTasks {
         // Split request list in minimum capacity
         int totalCapacity = 0;
 
+        //cargar vehiculos disponibles
+        vehiculoModels = vehiculoService.listaVehiculosDisponibles();
+        vehiculoModels.forEach(vehiculo -> listaVehiculos.add(new EntidadVehiculo(vehiculo)));
+
+        // Carga de información de los bloqueos
+        bloqueos = bloqueoService.listaBloqueosDiaDia();
+        bloqueos.forEach(bloqueo -> blockList.add(new NodoModel(bloqueo)));
+
+
         requestListDesdoblado = pedidoService.listaPedidosSinAtender();
 
         for(PedidoModel pedido:requestListDesdoblado){
@@ -160,6 +169,7 @@ public class ScheduledTasks {
                 }
             }
 
+
             for(Pair<EntidadVehiculo, PriorityQueue<Pair<Float, PedidoModel>>> vc : listaVC){
                 // Se asigna los pedidos a los vehículos
 
@@ -171,6 +181,9 @@ public class ScheduledTasks {
                 try {
                     assigned += Knapsack.allocate(vc.getValue(), listaVehiculos, auxRequest);
                     //verificar si entra en el camión los pedidos.
+                    if (!vc.getKey().getListaPedidos().isEmpty()){
+                        vehiculoService.actualizarEstadoVehiculo(vc.getKey().getIdVehiculo());
+                    }
                 }
                 catch (Exception e) {
                     System.out.println(e.getMessage());
@@ -210,13 +223,21 @@ public class ScheduledTasks {
             }
 
             // Se hace sort para las capacidadades
+
             listaVehiculos.sort((v1, v2) -> Long.compare(v1.getFechaInicio().getTimeInMillis() , v2.getFechaInicio().getTimeInMillis()));
 
+            // Se filtra una nueva lista de los pedidos desdoblados
             List<PedidoModel> aux = new ArrayList<>();
             requestListDesdoblado.forEach(r -> {
                 if(!r.isAtendido()) {
                     aux.add(r);
+                }else{
+                    pedidoService.actualizarPedidosAtentidosDesdoblado(r.getIdNodo(),r.getIdExtendido());
                 }
+                if (pedidoService.verificarTotalPedidosDesdobladosAtendidos(r.getIdNodo())==1){
+                    pedidoService.actualizarPedidoPadreAtentido(r.getIdNodo());
+                }
+
             });
 
             requestListDesdoblado = aux;

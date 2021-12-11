@@ -5,12 +5,16 @@ package pe.edu.pucp.algorithm;
 import java.util.List;
 import java.util.PriorityQueue;
 import javafx.util.Pair;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import pe.edu.pucp.mvc.models.PedidoModel;
 import pe.edu.pucp.mvc.models.EntidadVehiculo;
+import pe.edu.pucp.mvc.services.VehiculoService;
 
 
 public class Knapsack {
-    
+
     public static int allocate(PriorityQueue<Pair<Float, PedidoModel>> requestList, List<EntidadVehiculo> vehicles, List<PedidoModel> listaDesdoblada) throws Exception {
         boolean assign = false;
         int assigned = 0;
@@ -36,6 +40,7 @@ public class Knapsack {
         for (EntidadVehiculo v : vehicles) {
             if ((v.getEstadoVehiculo()==0) &&
                 r.getCantidadGLP() + v.getCantidadPedidos() <= v.getCargaGLP()) {
+
                 v.setCantidadPedidos(r.getCantidadGLP()+ v.getCantidadPedidos());
                 if(!v.getListaPedidos().isEmpty()){
                     for(PedidoModel req : v.getListaPedidos()){
@@ -53,7 +58,9 @@ public class Knapsack {
                     }
                     if (!flat) v.getListaPedidos().add(r);
                 }
-                else v.getListaPedidos().add(r);
+                else {
+                    v.getListaPedidos().add(r);
+                }
                 if(v.getCantidadPedidos() == v.getCargaGLP()){
                     v.setEstadoVehiculo(1);
                 }

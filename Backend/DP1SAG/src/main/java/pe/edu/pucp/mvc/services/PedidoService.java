@@ -30,4 +30,16 @@ public class PedidoService {
             return id;
         }
     }
+
+    public int actualizarPedidosAtentidosDesdoblado(Integer idNodo, Integer idExtendido){
+        return pedidoRepository.actualizarPedidoAtentido(idNodo, idExtendido);
+    }
+
+    public int verificarTotalPedidosDesdobladosAtendidos(Integer idNodo){
+        return pedidoRepository.getValuePedidosTotalAtentido(idNodo);
+    }
+
+    public int actualizarPedidoPadreAtentido(Integer idNodo){
+        return pedidoRepository.actualizarPedidoPadre(idNodo);
+    }
 }

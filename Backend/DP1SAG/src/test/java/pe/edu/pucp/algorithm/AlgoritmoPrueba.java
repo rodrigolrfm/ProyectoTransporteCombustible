@@ -159,7 +159,7 @@ public class AlgoritmoPrueba {
                 listaVehiculos.add(vc.getKey());
                 int assigned = 0;
                 try {
-                    assigned += Knapsack.allocate(vc.getValue(), listaVehiculos, auxRequest);
+                    //assigned += Knapsack.allocate(vc.getValue(), listaVehiculos, auxRequest);
                 }
                 catch (Exception e) {
                     System.out.println(e.getMessage());

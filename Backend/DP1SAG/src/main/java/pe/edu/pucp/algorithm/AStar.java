@@ -12,8 +12,6 @@ import java.util.PriorityQueue;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 
-
-
 public class AStar {
     public static double peso = 1;
     public static final List<NodoModel> get_shortest_path(NodoModel start, NodoModel target, MapaModel mapaModelConfiguration, Date previousDeliveredDate, int velocity, NodoModel nodoprevio){
