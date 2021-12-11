@@ -9,6 +9,8 @@ import MapC from 'src/components/MapC/MapC';
 import url from  'src/utils/constant';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 
+import BarsR from 'src/components/Bars/BarsR';
+import { StyledEngineProvider } from '@mui/material';
 
 
 const Input = styled('input')({
@@ -33,6 +35,8 @@ function PageHeader() {
     
     setStart(true);
     // a 3 días  -> true -> 1
+
+    
     if( tipo == "1"){
       setSimulacion(1);
     }
@@ -146,7 +150,14 @@ function PageHeader() {
         </Grid>
       </Grid>
       <CustomSnackbar alert={alert} setAlert={setAlert}/>
-      {simulacion===1? <div ref={myRef}> <MapR simulacion={simulacion}></MapR></div>:<div>
+
+      {simulacion===1? <div ref={myRef}> 
+      <StyledEngineProvider injectFirst>
+        
+      <BarsR/>
+      </StyledEngineProvider>
+      
+      <MapR simulacion={simulacion}></MapR></div>:<div>
       </div>
       }
       {simulacion===2? <div ref={myRef}> <MapC simulacion={simulacion}></MapC></div>:<div>

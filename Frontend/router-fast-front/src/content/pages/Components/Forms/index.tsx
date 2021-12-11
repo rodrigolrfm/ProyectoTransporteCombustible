@@ -17,6 +17,7 @@ import DateTimePicker from '@mui/lab/DateTimePicker';
 import axios from 'axios';
 import url from  'src/utils/constant';
 import * as moment from 'moment';
+import CustomSnackbar from 'src/components/Custom/CustomSnackbar';
 
 
 const Input = styled('input')({
@@ -29,12 +30,13 @@ function Forms() {
   const [posicionX,setPosicionX] = useState('')
   const [posicionY,setPosicionY] = useState('')
   const [capacidad,setCapacidad] = useState('')
+  const [alert, setAlert] = useState({isOpen: false, message: '', type: ''})
   //const [value, setValue] = React.useState(new Date());
   //const [horaslimite, setHoraLimite] = React.useState(new Date());
   const [value, setValue] = React.useState(new Date());
   const [horaslimite, setHoraLimite] = useState('')
 
-  const sendData= ()=>{
+  const sendData= async ()=>{
     console.log(posicionX);
     console.log(posicionY);
     console.log(capacidad);
@@ -54,8 +56,10 @@ function Forms() {
         })
         
         .then((r) => {
-            console.log(r);
-            console.log(data);
+          setAlert({isOpen: true, message: 'Pedido agregado exitosamente.', type: 'success'})
+          console.log(r);
+          console.log(data);
+          console.log("Pedido agregado exitosamente.");
             
             
         });
@@ -83,7 +87,7 @@ function Forms() {
                 <Box
                   component="form"
                   sx={{
-                    '& .MuiTextField-root': { m: 1, width: '25ch' },
+                    '& .MuiTextField-root': { m: 1, width: '20ch' },
                   }}
                   noValidate
                   autoComplete="off"
@@ -175,6 +179,7 @@ function Forms() {
               </CardContent>
             </Card>
           </Grid>
+          <CustomSnackbar alert={alert} setAlert={setAlert}/>
           <MapO simulacion={1}></MapO>
         </Grid>
         

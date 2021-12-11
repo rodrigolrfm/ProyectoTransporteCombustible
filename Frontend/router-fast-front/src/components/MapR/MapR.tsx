@@ -8,11 +8,13 @@ import url from  'src/utils/constant';
 import axios from 'axios';
 import BlockIcon from '@mui/icons-material/Block';
 import { IconButton } from '@mui/material';
+import LinearDeterminate from '../Bars/BarsR';
 
 
 const vectorX = 70;
 const vectorY = 50;
 const path = [ ];
+const intervalTime = 300;
 
 const bloqueosData = [
   {x: 20, y: 30},
@@ -20,6 +22,78 @@ const bloqueosData = [
   {x: 30, y: 30}
 ]
 
+const pathsaux =[
+
+  { "path": [ 
+      {"destino": 0, "x": 12, "y": 8},
+              {"destino": 0, "x": 13, "y": 8},
+      {"destino": 0, "x": 14, "y": 8},
+              {"destino": 0, "x": 15, "y": 8},
+      {"destino": 0, "x": 16, "y": 8},
+              {"destino": 0, "x": 17, "y": 8},
+      {"destino": 0, "x": 18, "y": 8},
+      {"destino": 0, "x": 19, "y": 8},
+              {"destino": 0, "x": 20, "y": 8},
+      {"destino": 0, "x": 21, "y": 8},
+      {"destino": 0, "x": 22, "y": 8},
+              {"destino": 0, "x": 23, "y": 8},
+      {"destino": 0, "x": 24, "y": 8},
+              {"destino": 0, "x": 25, "y": 8},
+      {"destino": 0, "x": 26, "y": 8},
+              {"destino": 0, "x": 27, "y": 8},
+      {"destino": 0, "x": 28, "y": 8},
+      {"destino": 0, "x": 29, "y": 8},
+              {"destino": 0, "x": 30, "y": 8},
+      {"destino": 0, "x": 31, "y": 8},
+      {"destino": 0, "x": 32, "y": 8},
+              {"destino": 0, "x": 33, "y": 8},
+      {"destino": 0, "x": 34, "y": 8},
+              {"destino": 0, "x": 35, "y": 8},
+      {"destino": 0, "x": 36, "y": 8},
+              {"destino": 0, "x": 37, "y": 8},
+              {"destino": 0, "x": 12, "y": 8},
+              {"destino": 0, "x": 13, "y": 8},
+      {"destino": 0, "x": 14, "y": 8},
+              {"destino": 0, "x": 15, "y": 8},
+      {"destino": 0, "x": 16, "y": 8},
+              {"destino": 0, "x": 17, "y": 8},
+      {"destino": 0, "x": 18, "y": 8},
+      {"destino": 0, "x": 19, "y": 8},
+              {"destino": 0, "x": 20, "y": 8},
+      {"destino": 0, "x": 21, "y": 8},
+      {"destino": 0, "x": 22, "y": 8},
+              {"destino": 0, "x": 23, "y": 8},
+      {"destino": 0, "x": 24, "y": 8},
+              {"destino": 0, "x": 25, "y": 8},
+      {"destino": 0, "x": 26, "y": 8},
+              {"destino": 0, "x": 27, "y": 8},
+      {"destino": 0, "x": 28, "y": 8},
+      {"destino": 0, "x": 29, "y": 8},
+              {"destino": 0, "x": 30, "y": 8},
+      {"destino": 0, "x": 31, "y": 8},
+      {"destino": 0, "x": 32, "y": 8},
+              {"destino": 0, "x": 33, "y": 8},
+      {"destino": 0, "x": 34, "y": 8},
+              {"destino": 0, "x": 35, "y": 8},
+      {"destino": 0, "x": 36, "y": 8},
+              {"destino": 0, "x": 37, "y": 8},
+             ],
+    "startTime": "2021-11-11T01:30:51.969+00:00",
+    "endTime": "2021-11-11T02:05:51.969+00:00"
+   },
+
+   { "path": [
+      {"destino": 0, "x": 12, "y": 8},
+              {"destino": 0, "x": 12, "y": 9},
+      {"destino": 0, "x": 12, "y": 10},
+      {"destino": 0, "x": 12, "y": 11},
+      {"destino": 0, "x": 12, "y": 12},
+      {"destino": 0, "x": 12, "y": 13}
+             ],
+    "startTime": "2021-11-11T02:30:51.969+00:00",
+    "endTime": "2021-11-11T02:35:51.969+00:00"
+   }
+]
 
 const obtenerRuta = (path) => {
     const ruta = [];
@@ -40,7 +114,7 @@ const ruta = obtenerRuta(path);
 const implementarFecha = (startTime, dateTime) => {
   const startTimeX = new Date(startTime);
   const dateTimeX = new Date(dateTime);
-  const resultado = startTimeX.getTime() + (dateTimeX.getTime() - startTimeX.getTime())/500;
+  const resultado = startTimeX.getTime() + (dateTimeX.getTime() - startTimeX.getTime())/intervalTime;
   return new Date (resultado);
 };
 
@@ -57,7 +131,7 @@ const useStyles = makeStyles((theme) => ({
   
     map: {
       backgroundColor: '#F8DBB1',
-      marginTop: '72px',
+      marginTop: '32px',
     },
     row: {
       display: 'flex',
@@ -85,10 +159,10 @@ const MapR=(props: simulacion )=>{
     const map = [];
     useEffect(() => {
 
-      const intervalTime = 500;
+      const intervalV=50;
       const interval = setInterval(() => {
         let arr;
-        
+       
         //console.log(paths);
         arr = paths.map((path) => {
           const now = new Date();
@@ -97,10 +171,11 @@ const MapR=(props: simulacion )=>{
           const dateStart = new Date(path.dateStart);
           
           let rest = now.getTime() - date.getTime() - (nowFixed.getTime() - dateStart.getTime());
-          
+
+         // const pos = Math.floor(((new Date(path.startOfBreak) - new Date(path.startTime)) / 60000) * (speed / 60));
+
           //console.log("asdlkasjdlsad");
-          const posAux = Math.floor(rest / intervalTime); // restar los milisegundos para igual
-          //al tiempo de inicio del primer pedido 
+          const posAux = Math.floor( (rest/60000) * ((intervalV*intervalTime)/60)); // aumentando la velocidad
           //console.log(posAux);
           if (posAux === path.ruta.length) {
             setRuta(null);
@@ -109,9 +184,11 @@ const MapR=(props: simulacion )=>{
         });
         setPaths(arr.filter((el) => el != null));
         // setPaths(...paths, pos)
-      }, intervalTime);
+      }, 500);
       return () => clearInterval(interval);
     }, [paths]);
+
+
     useEffect(() => {
 
       /*
@@ -150,9 +227,13 @@ const MapR=(props: simulacion )=>{
       /*
       */
        console.log("Mapa 3 días");
+       /*
         axios
         .post(url + "/ejecutar/simularRutas")
+        
         .then((e) => {
+          */
+          /*
           setPaths(
             e.data.paths.map((path) => {
               return {
@@ -165,13 +246,28 @@ const MapR=(props: simulacion )=>{
               };
             })
           );
-        });              
+          */
+          setPaths(
+            pathsaux.map((path) => {
+              return {
+                ...path.path,
+                ruta: obtenerRuta(path.path),
+                pos: 0,
+                date: implementarFecha(pathsaux[0].startTime,path.startTime),
+                dateStart: pathsaux[0].startTime,
+                nowFixed: new Date(),
+              };
+            })
+          );
+                    
     }, []);   
 
     useEffect(() => {
       console.log(bloqueosData);
       setBloqueos(bloqueosData);
     }, []);
+    
+    
 
     for (let i = 0; i < vectorY; i++) { //50
       const squareRows = [];

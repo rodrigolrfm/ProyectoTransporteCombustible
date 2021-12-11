@@ -4,9 +4,9 @@ import '@mui/lab/themeAugmentation';
 const themeColors = {
   primary: '#43909D',
   secondary: '#6E759F',
-  success: '#44D600',
+  success: '#5BCFC1',
   warning: '#FFA319',
-  error: '#FF1943',
+  error: '#A4303E',
   info: '#33C2FF',
   black: '#223354',
   white: '#ffffff',
