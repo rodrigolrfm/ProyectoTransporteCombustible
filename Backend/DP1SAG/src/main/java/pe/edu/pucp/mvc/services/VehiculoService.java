@@ -28,4 +28,8 @@ public class VehiculoService {
         vehiculoRepository.updateEstadoVehiculo(id);
     }
 
+    public void actualizarEstadoVehiculoToVacio(Integer id){
+        vehiculoRepository.updateEstadoVehiculotoVacio(id);
+    }
+
 }

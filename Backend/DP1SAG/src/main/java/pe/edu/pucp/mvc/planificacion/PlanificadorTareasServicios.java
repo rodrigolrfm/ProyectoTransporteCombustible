@@ -18,24 +18,13 @@ public class PlanificadorTareasServicios{
 
     Map<String, ScheduledFuture<?>> jobsMap = new HashMap<>();
 
-    /**
-     * metodo que crea una tarea programada y la agrega a la lista de tareas
-     * programadas
-     * @param jobId
-     * @param tasklet
-     * @param cronExpression
-     */
+
     public void planificarTareas(String jobId, Runnable tasklet, String cronExpression) {
         System.out.println("Scheduling task with job id: " + jobId + " and cron expression: " + cronExpression);
         ScheduledFuture<?> scheduledTask = taskScheduler.schedule(tasklet, new CronTrigger(cronExpression, TimeZone.getTimeZone(TimeZone.getDefault().getID())));
         jobsMap.put(jobId, scheduledTask);
     }
 
-    /**
-     * metodo que cancela la ejecucion de una tarea programada de la lista de
-     * tareas programadas
-     * @param jobId
-     */
     public void eliminarPlanificadorTareas(String jobId) {
         ScheduledFuture<?> scheduledTask = jobsMap.get(jobId);
         if(scheduledTask != null) {
