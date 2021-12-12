@@ -17,6 +17,14 @@ const Input = styled('input')({
   display: 'none',
 });
 
+//export const tiempo = 300;
+//export const prueba = 300;
+/*
+15 minutos-> 300
+10 minutos--> 400
+5 minutos--> 500
+*/
+
 function PageHeader() {
   const myRef = useRef(null)
   const executeScroll = () => myRef.current.scrollIntoView()   
@@ -27,6 +35,7 @@ function PageHeader() {
   const [fileB, setFileB] = useState(null)
   const [simulacion,setSimulacion] = useState(0)
   const [tipo, setTipo] = useState('')
+  
 
   const handleChange = (event: SelectChangeEvent) => {
     setTipo(event.target.value);
@@ -97,6 +106,7 @@ function PageHeader() {
 
   }
   
+  const tiempo=900;
   return (
     <Grid container justifyContent="space-between" alignItems="center">
       <Grid item>
@@ -154,7 +164,7 @@ function PageHeader() {
       {simulacion===1? <div ref={myRef}> 
       <StyledEngineProvider injectFirst>
         
-      <BarsR/>
+      {/*<BarsR/>*/}
       </StyledEngineProvider>
       
       <MapR simulacion={simulacion}></MapR></div>:<div>

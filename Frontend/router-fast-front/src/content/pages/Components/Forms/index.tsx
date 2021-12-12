@@ -18,6 +18,7 @@ import axios from 'axios';
 import url from  'src/utils/constant';
 import * as moment from 'moment';
 import CustomSnackbar from 'src/components/Custom/CustomSnackbar';
+import { SettingsInputAntennaTwoTone } from '@mui/icons-material';
 
 
 const Input = styled('input')({
@@ -35,6 +36,7 @@ function Forms() {
   //const [horaslimite, setHoraLimite] = React.useState(new Date());
   const [value, setValue] = React.useState(new Date());
   const [horaslimite, setHoraLimite] = useState('')
+
 
   const sendData= async ()=>{
     console.log(posicionX);
@@ -62,15 +64,22 @@ function Forms() {
           console.log("Pedido agregado exitosamente.");
             
             
+        
         });
+        setPosicionX(" ");
+        setPosicionY(" ");
+        setCapacidad(" ");
+        setHoraLimite(" ");
   }
+
+ 
 
   return (
     <>
       <Helmet>
         <title>Forms - Components</title>
       </Helmet>
-      <FormControl fullWidth sx={{ mt: 3 }}/>
+      <FormControl id="pedido-form"  fullWidth sx={{ mt: 3 }}/>
       <Container maxWidth="lg">
         <Grid
           container

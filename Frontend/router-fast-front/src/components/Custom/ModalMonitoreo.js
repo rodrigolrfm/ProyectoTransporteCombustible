@@ -40,7 +40,8 @@ const ModalMonitoreo = ({ onClose, ruta }) => {
   const [pedidos, setPedidos] = useState();
 
   useEffect(() => {
-    setPedidos(ruta?.filter(nodo => nodo.destino));
+    //setPedidos(ruta?.filter(nodo => nodo.destino));
+    setPedidos(ruta);
   }, [])
 
   const classes = useStyles();

@@ -9,12 +9,17 @@ import axios from 'axios';
 import BlockIcon from '@mui/icons-material/Block';
 import { IconButton } from '@mui/material';
 import LinearDeterminate from '../Bars/BarsR';
+import ModalMonitoreo from '../Custom/ModalMonitoreo';
 
+//import { tiempo,prueba} from "src/content/applications/Transactions/PageHeader";
+//import { tiempo } from '../Tiempo/tiempo';
 
 const vectorX = 70;
 const vectorY = 50;
 const path = [ ];
-const intervalTime = 300;
+
+const intervaloTiempo=300;
+
 
 const bloqueosData = [
   {x: 20, y: 30},
@@ -22,6 +27,7 @@ const bloqueosData = [
   {x: 30, y: 30}
 ]
 
+//const intervaloTiempo = prueba;
 const pathsaux =[
 
   { "path": [ 
@@ -114,7 +120,7 @@ const ruta = obtenerRuta(path);
 const implementarFecha = (startTime, dateTime) => {
   const startTimeX = new Date(startTime);
   const dateTimeX = new Date(dateTime);
-  const resultado = startTimeX.getTime() + (dateTimeX.getTime() - startTimeX.getTime())/intervalTime;
+  const resultado = startTimeX.getTime() + (dateTimeX.getTime() - startTimeX.getTime())/intervaloTiempo;
   return new Date (resultado);
 };
 
@@ -175,7 +181,7 @@ const MapR=(props: simulacion )=>{
          // const pos = Math.floor(((new Date(path.startOfBreak) - new Date(path.startTime)) / 60000) * (speed / 60));
 
           //console.log("asdlkasjdlsad");
-          const posAux = Math.floor( (rest/60000) * ((intervalV*intervalTime)/60)); // aumentando la velocidad
+          const posAux = Math.floor( (rest/60000) * ((intervalV*intervaloTiempo)/60)); // aumentando la velocidad
           //console.log(posAux);
           if (posAux === path.ruta.length) {
             setRuta(null);
@@ -322,6 +328,7 @@ const MapR=(props: simulacion )=>{
                   
                 >
                   <LocalShippingIcon style={{ color: '#35737D' }} onClick={() => setRuta(path.ruta)} />
+                  
                 </div>
               );
             }

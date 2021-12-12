@@ -2,10 +2,17 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import LinearProgress from "@mui/material/LinearProgress";
 import { Card, CardContent, Typography } from "@mui/material";
+//import { tiempo, prueba } from "src/content/applications/Transactions/PageHeader";
+//import { tiempo } from "../Tiempo/tiempo";
+
+
 
 const BarsR = () => {
   const [progress, setProgress] = React.useState(0);
-  let tiempoSimulacion = 900; //colapso en 5 segundos
+  let tiempoSimulacion = 900; //simulación para 15 minutos
+  //let tiempoSimulacion = (-30)*prueba + 18000;
+
+  console.log(tiempoSimulacion);
   let intervalito = tiempoSimulacion * 10;
 
   React.useEffect(() => {

@@ -9,6 +9,9 @@ import BlockIcon from '@mui/icons-material/Block';
 import { Card, CardContent, IconButton ,CardActionArea,CardMedia, Typography} from '@mui/material';
 import simulacionDia from '../ServerEvents/serverEvents';
 import Grid from '@mui/material/Grid';
+import ModalMonitoreo from '../Custom/ModalMonitoreo';
+import { HomeWork } from '@mui/icons-material';
+import EmojiPeople from '@mui/icons-material/EmojiPeople';
 
 const vectorX = 70;
 const vectorY = 50;
@@ -43,6 +46,19 @@ const obtenerRuta = (path) => {
   };
   
 //const ruta = obtenerRuta(path);
+/*
+const obtenerPosicion = (path, speed) => {
+  let pos;
+  
+  if (path.startOfBreak && new Date(path.startOfBreak) < new Date() && new Date(path.endOfBreak) > new Date()) {
+    pos = Math.floor(((new Date(path.startOfBreak) - new Date(path.startTime)) / 60000) * (speed / 60));
+  } else if (path.endOfBreak && new Date(path.endOfBreak) < new Date()) {
+    pos = Math.floor(((new Date() - new Date(path.startTime) - 3600000) / 60000) * (speed / 60));
+  } else pos = Math.floor(((new Date() - new Date(path.startTime)) / 60000) * (speed / 60));
+  return pos;
+};
+
+*/
 /*Función para proporcionar el tiempo de simulación */
 const implementarFecha = (startTime, dateTime) => {
   const startTimeX = new Date(startTime);
@@ -93,6 +109,8 @@ const MapO=(props: simulacion )=>{
 
     const classes = useStyles();
     const map = [];
+
+    /*
     useEffect(() => {
       //const pos=5;
       const intervalTime = 500;
@@ -118,28 +136,49 @@ const MapO=(props: simulacion )=>{
       //console.log(arr);
       setTimeout(() => {
         setCaminos(arr.filter((el) => el != null));
-      }, 200)
-      //setCaminos(arr.filter((el) => el != null));
-      //setCaminos(arr);
-       //setCaminos([...path, pos]);
-
-     
-
-      /*
-      const arr = caminos.map((data)=>{
-       console.log(data);
-
-      })
-      setCaminos(data);
-      */
-    }, [caminos]);
+      }, 2500)
+      
 
     
+    }, [caminos]);
+
+    */
+    useEffect(() => {
+
+      const intervalTime = 500;
+      const interval = setInterval(() => {
+        let arr;
+        
+        //console.log(paths);
+        arr = caminos.map((path) => {
+          const now = new Date();
+          const date = new Date(path.date);
+          const nowFixed = new Date(path.nowFixed);
+          const dateStart = new Date(path.dateStart);
+          
+          let rest = now.getTime() - date.getTime() - (nowFixed.getTime() - dateStart.getTime());
+          
+          //console.log("asdlkasjdlsad");
+          const posAux = Math.floor(rest / intervalTime); // restar los milisegundos para igual
+          //al tiempo de inicio del primer pedido 
+          //console.log(posAux);
+          if (posAux === path.ruta.length) {
+            setRuta(null);
+            return null;
+          } else return { ...path, pos: posAux };
+        });
+        setCaminos(arr.filter((el) => el != null));
+        console.log(caminos);
+        // setPaths(...paths, pos)
+      }, intervalTime);
+      return () => clearInterval(interval);
+    }, [caminos]);
 
     useEffect(() => {
       
         const funcionRequest= (data)=>{
           data = JSON.parse(data);
+          /*
           let newData = data.paths?.map((path) => {
             return {
               ...path.path,
@@ -150,7 +189,17 @@ const MapO=(props: simulacion )=>{
               nowFixed: new Date(),
             };
           });
-
+          */
+          let newData = data.paths?.map((path) => {
+            return {
+              ...path.path,
+              ruta: obtenerRuta(path.path),
+              pos: 0,
+              date: implementarFecha(data.paths[0].startTime,path.startTime),
+              dateStart: data.paths[0].startTime,
+              nowFixed: new Date(),
+            };
+          });
           if(newData)
             setCaminos(newData);
           };
@@ -171,6 +220,8 @@ const MapO=(props: simulacion )=>{
     
     useEffect(() => {
       console.log(bloqueosData);
+
+
       setBloqueos(bloqueosData);
     }, []);
 
@@ -222,7 +273,7 @@ const MapO=(props: simulacion )=>{
 
             {ruta?.find(({ x, y }) => x === j && y === i)?.destino ? (
             <div className={classes.icon} style={{ transform: 'rotate(0deg)' }}>
-              <PersonPinIcon style={{ color: '#424774'}} />
+              <EmojiPeople style={{ color: '#424774'}} />
             </div>
           ) : null}
           
@@ -246,6 +297,7 @@ const MapO=(props: simulacion )=>{
                   
                 >
                   <LocalShippingIcon style={{ color: '#35737D' }} onClick={() => setRuta(path.ruta)} />
+                  {/*<ModalMonitoreo onClose={() => setRuta(path.ruta)} ruta></ModalMonitoreo>*/}
                 </div>
               );
             }
@@ -253,7 +305,7 @@ const MapO=(props: simulacion )=>{
           
             {i === 8 && j === 12 && (
               <div className={classes.icon} style={{ transform: 'rotate(0deg)' }}>
-                <HomeIcon style={{ color: '#35737D' }} />
+                <HomeWork style={{ color: '#35737D' }} />
               </div>
             )}
             {i === 42 && j === 42 && (
