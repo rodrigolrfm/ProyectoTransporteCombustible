@@ -73,12 +73,15 @@ public class ScheduledTasks {
         mapaModel.setBlockList(blockList);
 
         LocalDateTime now = LocalDateTime.now();
+        System.out.println(now.getYear());
+        System.out.println(now.getMonth().getValue());
+        System.out.println("fecha: " + now.toString());
 
         // Inicializar las fechas de inicio de los vehículos
         listaVehiculos.forEach(v -> {
             // Fecha de inicio y copia de fecha de inicio
             Calendar init = Calendar.getInstance();
-            init.set(now.getYear(), now.getMonth().getValue(), now.getDayOfMonth(), now.getHour(), now.getMinute(), now.getSecond());
+            init.set(now.getYear(), now.getMonth().getValue()-1, now.getDayOfMonth(), now.getHour(), now.getMinute(), now.getSecond());
             v.setFechaInicio(init);
             v.setNodoActual(plantas.get(0));
             v.setCombustible(25);
@@ -116,7 +119,7 @@ public class ScheduledTasks {
 
             float totalTime=0;
 
-
+            do{
                 listaVC.clear();
 
                 listaVehiculos.forEach(v -> {
@@ -236,6 +239,7 @@ public class ScheduledTasks {
                 });
 
                 requestListDesdoblado = aux;
+        } while(!requestListDesdoblado.isEmpty());
             Collections.sort(rutasFinal.getPaths());
 
             if (emi!=null){
