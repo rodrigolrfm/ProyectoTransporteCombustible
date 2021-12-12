@@ -29,6 +29,8 @@ public class ScheduledTasks {
 
     private static final Logger log = LoggerFactory.getLogger(ScheduledTasks.class);
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+    private static int value = 1;
+    private int i = 0;
 
     private List<PedidoModel> listaPedidos = new ArrayList<>();
     public List<VehiculoModel> vehiculoModels = new ArrayList<>();
@@ -66,8 +68,8 @@ public class ScheduledTasks {
         plantas.add(PlantaModel.builder().coordenadaX(42).coordenadaY(42).build());
         plantas.add(PlantaModel.builder().coordenadaX(63).coordenadaY(3).build());
         mapaModel = new MapaModel(70, 50, plantas);
-        // Se crea el mapa
 
+        // Se crea el mapa
         mapaModel.setBlockList(blockList);
 
         LocalDateTime now = LocalDateTime.now();
@@ -113,7 +115,7 @@ public class ScheduledTasks {
 
 
             float totalTime=0;
-            do {
+
 
                 listaVC.clear();
 
@@ -196,8 +198,8 @@ public class ScheduledTasks {
                     System.out.println(v.getListaPedidos());
                     if(!v.getListaPedidos().isEmpty())
                         GeneticAlgorithm.Genetic(v, vertices, mapaModel);
-
                 }
+
                 for(EntidadVehiculo v : listaVehiculos){
                     if(v.getRutaVehiculo() != null && !v.getRutaVehiculo().isEmpty()) { // si encontró una buana ruta.
                         v.getFechaInicio().add(Calendar.MINUTE, Math.round((float) Math.ceil(v.calculateTimeToDispatch())));
@@ -209,11 +211,11 @@ public class ScheduledTasks {
                         sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
                         sdf.setTimeZone(TimeZone.getTimeZone("CET"));
                         String text = sdf.format(v.getFechaInicio().getTime());
-                        EntidadRuta rutaVehiculo = EntidadRuta.builder().startTime(text).path(v.getRutaVehiculoPositions(requestListDesdoblado)).endTime("Alap").build();
+                        EntidadRuta rutaVehiculo = EntidadRuta.builder().startTime(text).path(v.getRutaVehiculoPositions(requestListDesdoblado)).endTime("F").build();
                         rutasFinal.agregarRuta(rutaVehiculo);
+                        v.clearVehicle();
+                        vehiculoService.actualizarEstadoVehiculoToVacio(v.getIdVehiculo());
                     }
-                    v.clearVehicle();
-                    vehiculoService.actualizarEstadoVehiculoToVacio(v.getIdVehiculo());
                 }
 
                 // Se hace sort para las capacidadades
@@ -231,13 +233,9 @@ public class ScheduledTasks {
                     if (pedidoService.verificarTotalPedidosDesdobladosAtendidos(r.getIdNodo())==1){
                         pedidoService.actualizarPedidoPadreAtentido(r.getIdNodo());
                     }
-
                 });
 
                 requestListDesdoblado = aux;
-
-            } while(!requestListDesdoblado.isEmpty());
-
             Collections.sort(rutasFinal.getPaths());
 
             if (emi!=null){
@@ -247,5 +245,4 @@ public class ScheduledTasks {
             System.out.println(ex.getMessage());
         }
     }
-
 }

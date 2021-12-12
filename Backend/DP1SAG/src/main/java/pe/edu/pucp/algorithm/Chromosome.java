@@ -76,8 +76,8 @@ public class Chromosome {
                 return Double.MAX_VALUE;
         }
         
-        if(previousDeliveredDate.compareTo(((PedidoModel) genes.get(0)).getHorasLimite().getTime()) > 0)
-            return -1;
+        //if(previousDeliveredDate.compareTo(((PedidoModel) genes.get(0)).getHorasLimite().getTime()) > 0)
+        //    return -1;
         
         gastoCombustible = distancia*glp/150;
         distanciaTotal = distancia;
@@ -99,8 +99,8 @@ public class Chromosome {
                 if(distancia == 0)
                     return Double.MAX_VALUE;
                 
-                if(previousDeliveredDate.compareTo(((PedidoModel) genes.get(i + 1)).getHorasLimite().getTime()) > 0)
-                    return -1;
+        //        if(previousDeliveredDate.compareTo(((PedidoModel) genes.get(i + 1)).getHorasLimite().getTime()) > 0)
+        //            return -1;
             }
             glp -= req.getCantidadGLP()/2; // hacer peso del glp una constante simbolica
             gastoCombustible += distancia*glp/150;
