@@ -173,7 +173,9 @@ const MapO=(props: simulacion )=>{
       }, intervalTime);
       return () => clearInterval(interval);
     }, [caminos]);
+     
 
+    
     useEffect(() => {
       
         const funcionRequest= (data)=>{

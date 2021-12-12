@@ -1,3 +1,3 @@
-const url = 'http://3.216.87.102:9999' /*IP DEL BACK*/
+const url = 'http://3.214.211.251:9999' /*IP DEL BACK*/
 
 export default url;

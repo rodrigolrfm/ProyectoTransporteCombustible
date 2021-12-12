@@ -22,9 +22,22 @@ const intervaloTiempo=300;
 
 
 const bloqueosData = [
+  {
+  "bloqueo": [
   {x: 20, y: 30},
-  {x: 25, y: 30},
-  {x: 30, y: 30}
+  ],
+  startTime: "2021-11-11T01:30:51.969+00:00",
+  endTime: "2021-11-11T02:30:51.969+00:00"
+  },
+  {
+  "bloqueo": [
+  {x: 45, y: 50},
+  ],
+  startTime: "2021-11-11T01:30:51.969+00:00",
+  endTime: "2021-11-11T02:30:51.969+00:00"
+  },
+  
+  
 ]
 
 //const intervaloTiempo = prueba;
@@ -112,8 +125,18 @@ const obtenerRuta = (path) => {
         else ruta.push({ ...path[i], next: 'right' });
       }
     }
+    console.log("xxxxxxxxxxxxxxx");
+    console.log(ruta);
     return ruta;
   };
+const obtenerBloqueo = (path) => {
+    const bloqueo = [
+      {x:20 , y:30},
+    ];
+    console.log(bloqueo);
+    return bloqueo;
+  };
+  
   
 const ruta = obtenerRuta(path); 
 /*Función para proporcionar el tiempo de simulación */
@@ -193,45 +216,39 @@ const MapR=(props: simulacion )=>{
       }, 500);
       return () => clearInterval(interval);
     }, [paths]);
+    
+   //bloqueos
 
+   useEffect(() => {
+
+    const intervalV=50;
+    const interval = setInterval(() => {
+      let arr;
+     
+      //console.log(paths);
+      arr = paths.map((bloqueo) => {
+        const now = new Date();
+        const date = new Date(bloqueo.date);
+        const nowFixed = new Date(bloqueo.nowFixed);
+        const dateStart = new Date(bloqueo.dateStart);
+        let rest = now.getTime() - date.getTime() - (nowFixed.getTime() - dateStart.getTime());
+       // const pos = Math.floor(((new Date(path.startOfBreak) - new Date(path.startTime)) / 60000) * (speed / 60));
+        //console.log("asdlkasjdlsad");
+        const bloqueoAux = Math.floor( (rest/60000) * ((intervalV*intervaloTiempo)/60)); // aumentando la velocidad
+        //console.log(posAux);
+        if (bloqueoAux === bloqueo.ruta.length) {
+            setRuta(null);
+            return null;
+          } else return { ...path, pos: bloqueoAux };
+        });
+        setBloqueos(arr.filter((el) => el != null));
+    }, 500);
+    return () => clearInterval(interval);
+  }, [paths]);
 
     useEffect(() => {
 
-      /*
-
-      let serverURL = new EventSource(url + "/archivos/simularRutas");
-      let data = [];
-          
-      // Inicializa el sentEvent 
-      serverURL.onopen=function (event) {
-          console.log ("Conexión cliente servidor");
-      }
-      serverURL.addEventListener("MAPAS", function(e) {
-          console.log(event);
-          data = JSON.parse(event.data);
-          if(data.flag == 3){
-            // Cerrar conexión
-              serverURL.close();
-          }
-          setPaths(
-            data.paths.map((path) => {
-              return {
-                ...path.path,
-                ruta: obtenerRuta(path.path),
-                pos: 0,
-                date: implementarFecha(data.paths[0].startTime,path.startTime),
-                dateStart: data.paths[0].startTime,
-                nowFixed: new Date(),
-              };
-            })
-        })
-
-      serverURL.οnerrοr=function (event) {
-          serverURL.close();
-      }
-
-      /*
-      */
+    
        console.log("Mapa 3 días");
        /*
         axios
@@ -265,14 +282,20 @@ const MapR=(props: simulacion )=>{
               };
             })
           );
-                    
+          setBloqueos(
+            bloqueosData.map((bloqueo) => {
+              return {
+                ...bloqueo.bloqueo,
+                bloqueos: obtenerBloqueo(bloqueo.bloqueo),
+                pos: 0,
+                date: implementarFecha(bloqueosData[0].startTime,bloqueo.startTime),
+                dateStart: bloqueosData[0].startTime,
+                nowFixed: new Date(),
+              };
+            })
+          );
+ 
     }, []);   
-
-    useEffect(() => {
-      console.log(bloqueosData);
-      setBloqueos(bloqueosData);
-    }, []);
-    
     
 
     for (let i = 0; i < vectorY; i++) { //50
