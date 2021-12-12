@@ -53,7 +53,8 @@ public class PlanificacionTareas implements Runnable{
     private List<PedidoModel> requestListDesdoblado = new ArrayList<>();
     private MapaModel mapaModel= null;
     private static int dia = 0;
-
+    private static Calendar inicio = null;
+    private static Calendar fin = null;
 
     @Autowired
     private PedidoService pedidoService;
@@ -67,6 +68,12 @@ public class PlanificacionTareas implements Runnable{
 
     @PostConstruct
     private void postConstruct() {
+
+        // cargar fechas de inicio
+        inicio = Calendar.getInstance();
+        fin = Calendar.getInstance();
+        inicio.set(2021,11,13,0,0,0);
+        fin.set(2021,11,15,0,0,0);
 
         //Carga de velículos
         vehiculoModels = vehiculoService.listaVehiculosDisponibles();
@@ -115,7 +122,7 @@ public class PlanificacionTareas implements Runnable{
             int totalCapacity = 0;
 
             //Carga de los pedidos
-            //requestListDesdoblado = pedidoService.obtenerPedidos3días(inicio,fin,dia);
+            requestListDesdoblado = pedidoService.obtenerPedidos3días(inicio,fin,dia);
 
             for(PedidoModel pedido:requestListDesdoblado){
                 totalCapacity += pedido.getCantidadGLP();
@@ -276,6 +283,7 @@ public class PlanificacionTareas implements Runnable{
                 emitter.send(SseEmitter.event().name("STOP").data("ACABO"));
                 emitter.complete();
                 planificadorTareasServicios.eliminarPlanificadorTareas(uuid);
+                dia=0;
             }
 
         }
@@ -285,6 +293,5 @@ public class PlanificacionTareas implements Runnable{
         } catch (Exception exception) {
             exception.printStackTrace();
         }
-        //counter++;
     }
 }
