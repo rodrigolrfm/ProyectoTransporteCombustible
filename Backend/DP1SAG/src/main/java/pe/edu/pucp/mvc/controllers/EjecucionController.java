@@ -48,7 +48,7 @@ public class EjecucionController {
         ControlTarea planificador = ControlTarea.builder()
                 .tipoAction("PrintDataTask")
                 .datos("Datos que deberías ver")
-                .controlCron("*/10 * * * * ?")
+                .controlCron("* 10 * * * ?")
                 .build();
         PlanificacionTareas planificadorTareas = new PlanificacionTareas();
         String uuid = UUID.randomUUID().toString();
