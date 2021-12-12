@@ -73,9 +73,6 @@ public class ScheduledTasks {
         mapaModel.setBlockList(blockList);
 
         LocalDateTime now = LocalDateTime.now();
-        System.out.println(now.getYear());
-        System.out.println(now.getMonth().getValue());
-        System.out.println("fecha: " + now.toString());
 
         // Inicializar las fechas de inicio de los vehículos
         listaVehiculos.forEach(v -> {
@@ -215,7 +212,13 @@ public class ScheduledTasks {
                         sdf.setTimeZone(TimeZone.getTimeZone("CET"));
                         String text = sdf.format(v.getFechaInicio().getTime());
                         EntidadRuta rutaVehiculo = EntidadRuta.builder().startTime(text).path(v.getRutaVehiculoPositions(requestListDesdoblado)).endTime("F").build();
-                        rutasFinal.agregarRuta(rutaVehiculo);
+                        for(PositionModel pos : rutaVehiculo.getPath()){
+                            if (pos.getDestino() == 1){
+                                rutasFinal.agregarRuta(rutaVehiculo);
+                                break;
+                            }
+                        }
+                        //rutasFinal.agregarRuta(rutaVehiculo);
                         v.clearVehicle();
                         vehiculoService.actualizarEstadoVehiculoToVacio(v.getIdVehiculo());
                     }

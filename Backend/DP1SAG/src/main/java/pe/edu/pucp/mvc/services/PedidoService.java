@@ -7,6 +7,7 @@ import pe.edu.pucp.mvc.models.NodoModel;
 import pe.edu.pucp.mvc.models.PedidoModel;
 import pe.edu.pucp.mvc.repositories.PedidoRepository;
 
+import java.util.Calendar;
 import java.util.List;
 
 @Service
@@ -42,4 +43,9 @@ public class PedidoService {
     public int actualizarPedidoPadreAtentido(Integer idNodo){
         return pedidoRepository.actualizarPedidoPadre(idNodo);
     }
+
+    public List<PedidoModel> obtenerPedidos3días(Calendar inicio, Calendar fin, int dia){
+        return pedidoRepository.getPedidos3dias(inicio,fin,dia);
+    }
+
 }

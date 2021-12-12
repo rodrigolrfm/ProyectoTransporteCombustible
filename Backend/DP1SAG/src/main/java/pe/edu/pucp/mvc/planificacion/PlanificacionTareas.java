@@ -3,6 +3,7 @@ package pe.edu.pucp.mvc.planificacion;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.*;
 
 import javafx.util.Pair;
@@ -51,6 +52,8 @@ public class PlanificacionTareas implements Runnable{
     private List<BloqueoModel> bloqueos = new ArrayList<>();
     private List<PedidoModel> requestListDesdoblado = new ArrayList<>();
     private MapaModel mapaModel= null;
+    private static int dia = 0;
+
 
     @Autowired
     private PedidoService pedidoService;
@@ -83,11 +86,13 @@ public class PlanificacionTareas implements Runnable{
 
         mapaModel.setBlockList(blockList);
 
+        LocalDateTime now = LocalDateTime.now();
+        dia = now.getDayOfMonth();
         // Inicializar las fechas de inicio de los vehículos
         listaVehiculos.forEach(v -> {
             // Fecha de inicio y copia de fecha de inicio
             Calendar init = Calendar.getInstance();
-            init.set(2021, 0, 0, 0, 0, 0);
+            init.set(now.getYear(), now.getMonth().getValue()-1, now.getDayOfMonth(), now.getHour(), now.getMinute(), now.getSecond());
             v.setFechaInicio(init);
             v.setNodoActual(plantas.get(0));
             v.setCombustible(25);
@@ -110,7 +115,7 @@ public class PlanificacionTareas implements Runnable{
             int totalCapacity = 0;
 
             //Carga de los pedidos
-            requestListDesdoblado = pedidoService.listaPedidosSinAtender();
+            //requestListDesdoblado = pedidoService.obtenerPedidos3días(inicio,fin,dia);
 
             for(PedidoModel pedido:requestListDesdoblado){
                 totalCapacity += pedido.getCantidadGLP();
@@ -158,23 +163,26 @@ public class PlanificacionTareas implements Runnable{
                         }
                     }
                     if(colapso == listaVC.size()){
+                        try {
+                            int totalGLP = 0;
+                            for (PedidoModel r : requestListDesdoblado)
+                                totalGLP += r.getCantidadGLP();
 
-                        int totalGLP = 0;
-                        for(PedidoModel r : requestListDesdoblado)
-                            totalGLP += r.getCantidadGLP();
-
-                        int pedidoCompletado = 0;
-                        for(PedidoModel rq : requestListDesdoblado){
-                            double aux = 0;
-                            aux = auxRequest.stream()
-                                    .filter(auxrq -> auxrq.getIdNodo() == rq.getIdNodo())
-                                    .map(auxrq -> auxrq.isAtendido() ? auxrq.getCantidadGLP() : 0)
-                                    .reduce(aux, (accumulator, _item) -> accumulator + _item);
-                            if(aux == rq.getCantidadGLP())
-                                pedidoCompletado++;
+                            int pedidoCompletado = 0;
+                            for (PedidoModel rq : requestListDesdoblado) {
+                                double aux = 0;
+                                aux = auxRequest.stream()
+                                        .filter(auxrq -> auxrq.getIdNodo() == rq.getIdNodo())
+                                        .map(auxrq -> auxrq.isAtendido() ? auxrq.getCantidadGLP() : 0)
+                                        .reduce(aux, (accumulator, _item) -> accumulator + _item);
+                                if (aux == rq.getCantidadGLP())
+                                    pedidoCompletado++;
+                            }
+                        }catch(Exception error){
+                            System.err.println("Coalpso Logístico" + error.getMessage());
                         }
 
-                        throw new Exception("Llegó al colapso logístico");
+
                     }
                 }
 
@@ -227,8 +235,9 @@ public class PlanificacionTareas implements Runnable{
                         String text = sdf.format(v.getFechaInicio().getTime());
                         EntidadRuta rutaVehiculo = EntidadRuta.builder().startTime(text).path(v.getRutaVehiculoPositions(requestListDesdoblado)).endTime("Alap").build();
                         rutasFinal.agregarRuta(rutaVehiculo);
+                        v.clearVehicle();
+                        vehiculoService.actualizarEstadoVehiculoToVacio(v.getIdVehiculo());
                     }
-                    v.clearVehicle();
                 }
 
                 // Se hace sort para las capacidadades
@@ -250,16 +259,7 @@ public class PlanificacionTareas implements Runnable{
                 });
 
                 requestListDesdoblado = aux;
-                //cargar vehiculos disponibles
-            /*listaVehiculos.clear();
-            vehiculoModels = vehiculoService.listaVehiculosDisponibles();
-            vehiculoModels.forEach(vehiculo -> listaVehiculos.add(new EntidadVehiculo(vehiculo)));
 
-            blockList.clear();
-            // Carga de información de los bloqueos
-            bloqueos = bloqueoService.listaBloqueosDiaDia();
-            bloqueos.forEach(bloqueo -> blockList.add(new NodoModel(bloqueo)));
-            */
             } while(!requestListDesdoblado.isEmpty());
 
             Collections.sort(rutasFinal.getPaths());
@@ -270,10 +270,10 @@ public class PlanificacionTareas implements Runnable{
                             .name("3dias")
                             .data(rutasFinal)
             );
-
+            dia+=1;
             counter++;
             if(counter==3){
-                emitter.send(SseEmitter.event().name("STOP").data("Jorge es cabro"));
+                emitter.send(SseEmitter.event().name("STOP").data("ACABO"));
                 emitter.complete();
                 planificadorTareasServicios.eliminarPlanificadorTareas(uuid);
             }
