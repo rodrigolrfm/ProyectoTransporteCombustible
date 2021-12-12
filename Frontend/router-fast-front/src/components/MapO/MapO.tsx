@@ -12,23 +12,37 @@ import Grid from '@mui/material/Grid';
 import ModalMonitoreo from '../Custom/ModalMonitoreo';
 import { HomeWork } from '@mui/icons-material';
 import EmojiPeople from '@mui/icons-material/EmojiPeople';
+import { Dialog } from '@mui/material';
 
 const vectorX = 70;
 const vectorY = 50;
 const path = [ ];
 
+/*
 const data = [
   {x: 20, y: 30},
   {x: 25, y: 30},
   {x: 30, y: 30}
   
 ]
-
+*/
+/*
+Del dia 13:
+10,20,10,40,35,40
+*/
+/*
 const bloqueosData = [
     {x: 20, y: 30},
     {x: 25, y: 30},
     {x: 30, y: 30}
   ]
+*/
+
+const bloqueosData = [
+    {x: 10, y: 20},
+    {x: 10, y: 40},
+    {x: 35, y: 40}
+]
 
 
 const obtenerRuta = (path) => {
@@ -103,6 +117,7 @@ const MapO=(props: simulacion )=>{
     const camiones=3;
     const pedPenalizados=1;
 
+    const [openInfo, setOpenInfo] = useState(false);
     const [ruta, setRuta] = useState([]);
     const [caminos, setCaminos] = useState([]);
     const [bloqueos, setBloqueos] = useState([]);
@@ -173,9 +188,7 @@ const MapO=(props: simulacion )=>{
       }, intervalTime);
       return () => clearInterval(interval);
     }, [caminos]);
-     
-
-    
+         
     useEffect(() => {
       
         const funcionRequest= (data)=>{
@@ -220,6 +233,15 @@ const MapO=(props: simulacion )=>{
     //   return () => clearInterval(interval);
     // }, []);
     
+    const handleClose = () => {
+      setOpenInfo(false);
+    };
+
+    const handleClickOpen = (ruta) => {
+      setRuta(ruta);
+      setOpenInfo(true);
+    }
+
     useEffect(() => {
       console.log(bloqueosData);
 
@@ -227,6 +249,8 @@ const MapO=(props: simulacion )=>{
       setBloqueos(bloqueosData);
     }, []);
 
+    
+    //setPedidos(ruta?.filter(nodo => nodo.destino));
     for (let i = 0; i < vectorY; i++) { //50
       const squareRows = [];
       for (let j = 0; j < vectorX; j++) { //70
@@ -278,7 +302,6 @@ const MapO=(props: simulacion )=>{
               <EmojiPeople style={{ color: '#424774'}} />
             </div>
           ) : null}
-          
           {caminos?.map((path) => { 
             // let aux = new Date() - path.date;
             if (path?.ruta[path.pos] && path?.ruta[path.pos].x === j && path?.ruta[path.pos].y ===i) {
@@ -295,11 +318,10 @@ const MapO=(props: simulacion )=>{
                         : dir === 'left'
                         ? 'rotate(180deg)'
                         : 'rotate(0deg)',
-                  }}
-                  
+                  }}  
                 >
-                  <LocalShippingIcon style={{ color: '#35737D' }} onClick={() => setRuta(path.ruta)} />
-                  {/*<ModalMonitoreo onClose={() => setRuta(path.ruta)} ruta></ModalMonitoreo>*/}
+                  <LocalShippingIcon style={{ color: '#35737D' }} onClick={() => handleClickOpen(path.ruta)} />
+                  
                 </div>
               );
             }
@@ -332,7 +354,7 @@ const MapO=(props: simulacion )=>{
     return (
         <>
         <div className={classes.map}>{map}</div>
-        <Grid item xs={4}>
+    {/* <Grid item xs={4}>
         <Card sx={{ my:2 }}>
         <CardActionArea sx={{p:2}}>
           <Typography variant="h4">Pedidos Atendidos : {pedAtendidos}</Typography>
@@ -341,8 +363,9 @@ const MapO=(props: simulacion )=>{
           <Typography variant="h4">Pedidos Penalizados: {pedPenalizados}</Typography>
         </CardActionArea>
         </Card>
-        </Grid>
-        <Grid item xs={7}>
+        </Grid> */}
+        
+        <Grid item xs={10}>
         <Card sx={{ my:2 }}>
         <CardActionArea sx={{p:2}}>
           <img
@@ -353,7 +376,9 @@ const MapO=(props: simulacion )=>{
         </CardActionArea>
         </Card>
         </Grid>
-        
+        <Dialog onClose={handleClose} open={openInfo} >
+          <ModalMonitoreo onClose={handleClose} ruta={ruta}/>
+        </Dialog>
         </>
     );
   }

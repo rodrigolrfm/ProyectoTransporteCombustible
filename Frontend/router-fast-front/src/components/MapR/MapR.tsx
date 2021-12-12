@@ -36,11 +36,11 @@ const bloqueosData = [
   startTime: "2021-11-11T01:30:51.969+00:00",
   endTime: "2021-11-11T02:30:51.969+00:00"
   },
-  
-  
 ]
 
+//onst pathsaux=[]
 //const intervaloTiempo = prueba;
+
 const pathsaux =[
 
   { "path": [ 
@@ -138,7 +138,7 @@ const obtenerBloqueo = (path) => {
   };
   
   
-const ruta = obtenerRuta(path); 
+//const ruta = obtenerRuta(path); 
 /*Función para proporcionar el tiempo de simulación */
 const implementarFecha = (startTime, dateTime) => {
   const startTimeX = new Date(startTime);
@@ -222,11 +222,13 @@ const MapR=(props: simulacion )=>{
    useEffect(() => {
 
     const intervalV=50;
+    console.log(bloqueos);
+
     const interval = setInterval(() => {
       let arr;
      
       //console.log(paths);
-      arr = paths.map((bloqueo) => {
+      arr = bloqueos.map((bloqueo) => {
         const now = new Date();
         const date = new Date(bloqueo.date);
         const nowFixed = new Date(bloqueo.nowFixed);
@@ -235,16 +237,20 @@ const MapR=(props: simulacion )=>{
        // const pos = Math.floor(((new Date(path.startOfBreak) - new Date(path.startTime)) / 60000) * (speed / 60));
         //console.log("asdlkasjdlsad");
         const bloqueoAux = Math.floor( (rest/60000) * ((intervalV*intervaloTiempo)/60)); // aumentando la velocidad
-        //console.log(posAux);
+        console.log(bloqueoAux);
+        /*
         if (bloqueoAux === bloqueo.ruta.length) {
             setRuta(null);
             return null;
           } else return { ...path, pos: bloqueoAux };
+          */
         });
-        setBloqueos(arr.filter((el) => el != null));
+      
+        //setBloqueos(arr.filter((el) => el != null));
+        //console.log(bloqueos);
     }, 500);
     return () => clearInterval(interval);
-  }, [paths]);
+  }, [bloqueos]);
 
     useEffect(() => {
 
@@ -252,11 +258,10 @@ const MapR=(props: simulacion )=>{
        console.log("Mapa 3 días");
        /*
         axios
-        .post(url + "/ejecutar/simularRutas")
+        .post(url + "/ejecutar/obtenerTresDias")
         
         .then((e) => {
-          */
-          /*
+          
           setPaths(
             e.data.paths.map((path) => {
               return {
@@ -269,7 +274,10 @@ const MapR=(props: simulacion )=>{
               };
             })
           );
-          */
+        });
+        */
+
+          
           setPaths(
             pathsaux.map((path) => {
               return {
@@ -282,6 +290,7 @@ const MapR=(props: simulacion )=>{
               };
             })
           );
+          
           setBloqueos(
             bloqueosData.map((bloqueo) => {
               return {
@@ -294,8 +303,8 @@ const MapR=(props: simulacion )=>{
               };
             })
           );
- 
-    }, []);   
+           
+      }, []);   
     
 
     for (let i = 0; i < vectorY; i++) { //50

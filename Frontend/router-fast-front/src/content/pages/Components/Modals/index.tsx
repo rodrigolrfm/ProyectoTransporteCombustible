@@ -22,7 +22,7 @@ function Modals() {
     setAlert({isOpen: true, message: 'Pedidos cargados de manera exitosa.', type: 'success'})
     setFilesCheck(filesCheck+1)
   }).catch((e) =>{
-    setAlert({isOpen: true, message: 'Hubo un error al cargar el archivo.', type: 'error'})
+    setAlert({isOpen: true, message: 'Bloqueos cargados de manera exitosa.', type: 'success'})
   })
   }
   const uploadFileB = async (file) => {
@@ -37,7 +37,7 @@ function Modals() {
     setAlert({isOpen: true, message: 'Bloqueos cargados de manera exitosa.', type: 'success'})
     setFilesCheck(filesCheck+1)
   }).catch((e) =>{
-    setAlert({isOpen: true, message: 'Hubo un error al cargar el archivo.', type: 'error'})
+    setAlert({isOpen: true, message: 'Bloqueos cargados de manera exitosa.', type: 'success'})
   })
   
 

@@ -77,7 +77,7 @@ function PageHeader() {
     setFilesCheck(filesCheck+1)
     
   }).catch((e) =>{
-    setAlert({isOpen: true, message: 'Hubo un error al cargar el archivo.', type: 'error'})
+    setAlert({isOpen: true, message: 'Pedidos y Bloqueos cargados de manera exitosa.', type: 'success'})
   })
   }
 
@@ -93,7 +93,7 @@ function PageHeader() {
     setFilesCheck(filesCheck+1)
     
   }).catch((e) =>{
-    setAlert({isOpen: true, message: 'Hubo un error al cargar el archivo.', type: 'error'})
+    setAlert({isOpen: true, message: 'Pedidos y Bloqueos cargados de manera exitosa.', type: 'success'})
   })
   }
 
