@@ -238,6 +238,7 @@ public class ScheduledTasks {
                     }
                 });
 
+                
                 requestListDesdoblado = aux;
         } while(!requestListDesdoblado.isEmpty());
             Collections.sort(rutasFinal.getPaths());
