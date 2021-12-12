@@ -13,10 +13,7 @@ import pe.edu.pucp.mvc.models.PedidoModel;
 import pe.edu.pucp.mvc.models.VehiculoModel;
 import pe.edu.pucp.mvc.services.VehiculoService;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,11 +29,10 @@ public class VehiculoController {
 
         List<EntidadVehiculo> vehicleList = new ArrayList<>();
 
-        //File convertFile = new File("/home/ubuntu/resources/" + file.getOriginalFilename());
-        File convertFile = new File("D:\\CICLO10\\Trabajo\\" + file.getOriginalFilename());
-        //File convertFile = new File("D:/work/" + file.getOriginalFilename());
+        String content = new String(file.getBytes());
+        Reader inputString = new StringReader(content);
+        final BufferedReader br = new BufferedReader(inputString);
 
-        final BufferedReader br = new BufferedReader(new FileReader(convertFile));
         String line;
         String[] rowRequest;
         char type;

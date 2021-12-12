@@ -83,11 +83,10 @@ public class PedidoController {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm");
 
         try {
-            //File convertFile = new File("/home/ubuntu/resources/" + file.getOriginalFilename());
-            File convertFile = new File("D:\\CICLO10\\Trabajo\\" + file.getOriginalFilename());
-            convertFile.createNewFile();
-            //FileOutputStream fout = new FileOutputStream(convertFile);
-            BufferedReader br = new BufferedReader(new FileReader(convertFile));
+            String content = new String(file.getBytes());
+            Reader inputString = new StringReader(content);
+            final BufferedReader br = new BufferedReader(inputString);
+
             String line;
             String strDate;
             String[] rowRequest, day;

@@ -13,10 +13,7 @@ import pe.edu.pucp.mvc.models.NodoModel;
 import pe.edu.pucp.mvc.services.BloqueoService;
 import pe.edu.pucp.mvc.services.VehiculoService;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -36,9 +33,10 @@ public class BloqueoController {
 
         ArrayList<NodoModel> blockedList = new ArrayList<>();
         try{
-            //File convertFile = new File("/home/ubuntu/resources/" + file.getOriginalFilename());
-            File convertFile = new File("D:\\CICLO10\\Trabajo\\Grupo2\\Download\\bloqueos\\" + file.getOriginalFilename());
-            final BufferedReader br = new BufferedReader(new FileReader(convertFile));
+
+            String content = new String(file.getBytes());
+            Reader inputString = new StringReader(content);
+            final BufferedReader br = new BufferedReader(inputString);
 
             String line;
             String strInitDate,strEndDate;
