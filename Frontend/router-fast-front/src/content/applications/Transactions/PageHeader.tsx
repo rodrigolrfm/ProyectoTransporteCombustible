@@ -67,8 +67,8 @@ function PageHeader() {
 
   const sendFileA = async () => {
     let formData = new FormData();
-    formData.append("file", fileA);
-    axios.post(`${url}/archivos/uploadPedidos` ,formData, { /* UPLOAD PEDIDOS */
+    formData.append("filear", fileA);
+    axios.post(`${url}/pedido/cargaMasivaPedidos` ,formData, { /* UPLOAD PEDIDOS */
       headers: {
         'Content-Type': 'multipart/form-data'
       }
@@ -84,17 +84,25 @@ function PageHeader() {
   const sendFileB = async () => {
     let formData = new FormData();
     formData.append("file", fileA);
-    axios.post(`${url}/archivos/uploadPedidos` ,formData, { /* UPLOAD  BLOQUEOS  */
+    
+    /*
+    axios.post(`${url}/archivos/uploadPedidos` ,formData, { 
       headers: {
         'Content-Type': 'multipart/form-data'
       }
-    }).then((r) => {
+    
+    })
+    
+    
+    .then((r) => {
     setAlert({isOpen: true, message: 'Pedidos cargados de manera exitosa.', type: 'success'})
     setFilesCheck(filesCheck+1)
     
-  }).catch((e) =>{
+    }).catch((e) =>{
     setAlert({isOpen: true, message: 'Pedidos y Bloqueos cargados de manera exitosa.', type: 'success'})
-  })
+    })
+    */
+
   }
 
   const uploadFileA = (file) => {

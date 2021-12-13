@@ -30,19 +30,15 @@ const data = [
 Del dia 13:
 10,20,10,40,35,40
 */
-/*
+
 const bloqueosData = [
     {x: 20, y: 30},
     {x: 25, y: 30},
     {x: 30, y: 30}
   ]
-*/
 
-const bloqueosData = [
-    {x: 10, y: 20},
-    {x: 10, y: 40},
-    {x: 35, y: 40}
-]
+
+
 
 
 const obtenerRuta = (path) => {
@@ -160,7 +156,7 @@ const MapO=(props: simulacion )=>{
     */
     useEffect(() => {
 
-      const intervalTime = 500;
+      const intervalTime = 3000; //velocidad del camión
       const interval = setInterval(() => {
         let arr;
         
@@ -222,17 +218,19 @@ const MapO=(props: simulacion )=>{
         simulacionDia(funcionRequest);
     }, []);
     
-    // useEffect(() => {
-    //   console.log('mostrando bloqueos');
+    /*
+    useEffect(() => {
+      console.log('mostrando bloqueos');
 
-    //   const interval = setInterval(() => {
-    //     axios.get(url+ '/api/roadblock/all').then((e) => { // URL DE BLOQUEOS 
-    //       setBloqueos(e.data);
-    //     });
-    //   }, 20000);
-    //   return () => clearInterval(interval);
-    // }, []);
-    
+      const interval = setInterval(() => {
+         axios.get(url+ ' se requiere servicio de la ruta que mande los bloqueos en la fecha designada').then((e) => { // URL DE BLOQUEOS 
+           setBloqueos(e.data);
+         });
+       }, 20000);
+       return () => clearInterval(interval);
+     }, []);
+    */
+
     const handleClose = () => {
       setOpenInfo(false);
     };
@@ -241,14 +239,13 @@ const MapO=(props: simulacion )=>{
       setRuta(ruta);
       setOpenInfo(true);
     }
-
+    
+    /*
     useEffect(() => {
       console.log(bloqueosData);
-
-
       setBloqueos(bloqueosData);
     }, []);
-
+    */
     
     //setPedidos(ruta?.filter(nodo => nodo.destino));
     for (let i = 0; i < vectorY; i++) { //50

@@ -50,9 +50,7 @@ function Forms() {
             fechaPedido: moment.default(value).format('YYYY/MM/DD HH:mm'),
             horasLimite:moment.default(value).add(horaslimite,"hours").format('YYYY/MM/DD HH:mm'),
             cantidadGLP: capacidad
-
         }
-        
         axios.post(url + '/pedido/insertarPedido',JSON.stringify(data) , {
             headers: { 'Content-Type': 'application/json' }
         })
@@ -61,9 +59,7 @@ function Forms() {
           setAlert({isOpen: true, message: 'Pedido agregado exitosamente.', type: 'success'})
           console.log(r);
           console.log(data);
-          console.log("Pedido agregado exitosamente.");
-            
-            
+          console.log("Pedido agregado exitosamente.");         
         
         });
         setPosicionX(" ");

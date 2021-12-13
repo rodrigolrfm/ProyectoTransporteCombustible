@@ -38,9 +38,9 @@ const bloqueosData = [
   },
 ]
 
-//onst pathsaux=[]
+const pathsaux=[]
 //const intervaloTiempo = prueba;
-
+/*
 const pathsaux =[
 
   { "path": [ 
@@ -113,7 +113,7 @@ const pathsaux =[
     "endTime": "2021-11-11T02:35:51.969+00:00"
    }
 ]
-
+*/
 const obtenerRuta = (path) => {
     const ruta = [];
     for (let i = 0; i < path.length - 1; i++) {
@@ -138,7 +138,7 @@ const obtenerBloqueo = (path) => {
   };
   
   
-//const ruta = obtenerRuta(path); 
+const ruta = obtenerRuta(path); 
 /*Función para proporcionar el tiempo de simulación */
 const implementarFecha = (startTime, dateTime) => {
   const startTimeX = new Date(startTime);
@@ -222,13 +222,11 @@ const MapR=(props: simulacion )=>{
    useEffect(() => {
 
     const intervalV=50;
-    console.log(bloqueos);
-
     const interval = setInterval(() => {
       let arr;
      
       //console.log(paths);
-      arr = bloqueos.map((bloqueo) => {
+      arr = paths.map((bloqueo) => {
         const now = new Date();
         const date = new Date(bloqueo.date);
         const nowFixed = new Date(bloqueo.nowFixed);
@@ -237,28 +235,24 @@ const MapR=(props: simulacion )=>{
        // const pos = Math.floor(((new Date(path.startOfBreak) - new Date(path.startTime)) / 60000) * (speed / 60));
         //console.log("asdlkasjdlsad");
         const bloqueoAux = Math.floor( (rest/60000) * ((intervalV*intervaloTiempo)/60)); // aumentando la velocidad
-        console.log(bloqueoAux);
-        /*
+        //console.log(posAux);
         if (bloqueoAux === bloqueo.ruta.length) {
             setRuta(null);
             return null;
           } else return { ...path, pos: bloqueoAux };
-          */
         });
-      
-        //setBloqueos(arr.filter((el) => el != null));
-        //console.log(bloqueos);
+        setBloqueos(arr.filter((el) => el != null));
     }, 500);
     return () => clearInterval(interval);
-  }, [bloqueos]);
+  }, [paths]);
 
     useEffect(() => {
 
     
        console.log("Mapa 3 días");
-       /*
+       
         axios
-        .post(url + "/ejecutar/obtenerTresDias")
+        .get(url + "/ejecutar/obtenerTresDias")
         
         .then((e) => {
           
@@ -275,9 +269,7 @@ const MapR=(props: simulacion )=>{
             })
           );
         });
-        */
-
-          
+          /*
           setPaths(
             pathsaux.map((path) => {
               return {
@@ -290,7 +282,7 @@ const MapR=(props: simulacion )=>{
               };
             })
           );
-          
+          */
           setBloqueos(
             bloqueosData.map((bloqueo) => {
               return {
@@ -298,6 +290,7 @@ const MapR=(props: simulacion )=>{
                 bloqueos: obtenerBloqueo(bloqueo.bloqueo),
                 pos: 0,
                 date: implementarFecha(bloqueosData[0].startTime,bloqueo.startTime),
+                dateEnd: implementarFecha(bloqueosData[0].startTime,bloqueo.endTime),
                 dateStart: bloqueosData[0].startTime,
                 nowFixed: new Date(),
               };
