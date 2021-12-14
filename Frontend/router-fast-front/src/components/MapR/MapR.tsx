@@ -114,6 +114,7 @@ const pathsaux =[
    }
 ]
 */
+
 const obtenerRuta = (path) => {
     const ruta = [];
     for (let i = 0; i < path.length - 1; i++) {
@@ -187,8 +188,9 @@ const MapR=(props: simulacion )=>{
     const classes = useStyles();
     const map = [];
     useEffect(() => {
+      
 
-      const intervalV=50;
+      const intervalV=500;
       const interval = setInterval(() => {
         let arr;
        
@@ -201,11 +203,11 @@ const MapR=(props: simulacion )=>{
           
           let rest = now.getTime() - date.getTime() - (nowFixed.getTime() - dateStart.getTime());
 
-         // const pos = Math.floor(((new Date(path.startOfBreak) - new Date(path.startTime)) / 60000) * (speed / 60));
-
-          //console.log("asdlkasjdlsad");
           const posAux = Math.floor( (rest/60000) * ((intervalV*intervaloTiempo)/60)); // aumentando la velocidad
+         
           //console.log(posAux);
+          
+
           if (posAux === path.ruta.length) {
             setRuta(null);
             return null;
@@ -214,6 +216,7 @@ const MapR=(props: simulacion )=>{
         setPaths(arr.filter((el) => el != null));
         // setPaths(...paths, pos)
       }, 500);
+       
       return () => clearInterval(interval);
     }, [paths]);
     
@@ -269,7 +272,9 @@ const MapR=(props: simulacion )=>{
             })
           );
         });
-          /*
+        
+
+          
           setPaths(
             pathsaux.map((path) => {
               return {
@@ -282,7 +287,7 @@ const MapR=(props: simulacion )=>{
               };
             })
           );
-          */
+          
           setBloqueos(
             bloqueosData.map((bloqueo) => {
               return {

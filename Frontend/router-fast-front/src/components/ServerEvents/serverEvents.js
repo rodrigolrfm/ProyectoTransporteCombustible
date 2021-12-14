@@ -1,10 +1,10 @@
 import url from  'src/utils/constant';
 
 
-
+export const startSimulation=false;
 let datax;
 const simulacionDia  = (funcionRequest) => {
-
+    
     var source = new EventSource(url +`/ejecutar/obtenerRutas`);
 
     source.onopen = (event) => {
@@ -14,8 +14,9 @@ const simulacionDia  = (funcionRequest) => {
     
     source.addEventListener("RUTAS", (event) => {
         console.log("xd");
+        startSimulation=true;
         datax=event.data;
-        //console.log(datax);
+        //console.log(x);
         funcionRequest(event.data);
     });
 

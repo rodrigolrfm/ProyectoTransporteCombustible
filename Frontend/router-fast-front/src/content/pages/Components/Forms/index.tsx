@@ -19,7 +19,7 @@ import url from  'src/utils/constant';
 import * as moment from 'moment';
 import CustomSnackbar from 'src/components/Custom/CustomSnackbar';
 import { SettingsInputAntennaTwoTone } from '@mui/icons-material';
-
+import simulacionDia from 'src/components/ServerEvents/serverEvents';
 
 const Input = styled('input')({
   display: 'none',
@@ -178,6 +178,9 @@ function Forms() {
 
                     <Button variant="contained" onClick={sendData} sx={{mt:1, mx:2, height: 50}} >
                   Agregar Pedido
+                  </Button>
+                  <Button variant="contained" onClick={simulacionDia} sx={{mt:1, mx:2, height: 50}} >
+                  Empezar Operación
                   </Button>
                   </Box>
                 </Box>

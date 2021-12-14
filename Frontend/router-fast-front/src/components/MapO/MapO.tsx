@@ -7,12 +7,13 @@ import url from  'src/utils/constant';
 import axios from 'axios';
 import BlockIcon from '@mui/icons-material/Block';
 import { Card, CardContent, IconButton ,CardActionArea,CardMedia, Typography} from '@mui/material';
-import simulacionDia from '../ServerEvents/serverEvents';
+import simulacionDia, { startSimulation } from '../ServerEvents/serverEvents';
 import Grid from '@mui/material/Grid';
 import ModalMonitoreo from '../Custom/ModalMonitoreo';
 import { HomeWork } from '@mui/icons-material';
 import EmojiPeople from '@mui/icons-material/EmojiPeople';
 import { Dialog } from '@mui/material';
+
 
 const vectorX = 70;
 const vectorY = 50;
@@ -117,7 +118,7 @@ const MapO=(props: simulacion )=>{
     const [ruta, setRuta] = useState([]);
     const [caminos, setCaminos] = useState([]);
     const [bloqueos, setBloqueos] = useState([]);
-
+    const [sendRequest, setSendRequest] = useState(false);
     const classes = useStyles();
     const map = [];
 
@@ -155,8 +156,14 @@ const MapO=(props: simulacion )=>{
 
     */
     useEffect(() => {
+      /*
+      Tiempo real:
+      
+      1 min -> 60000
+      60 min ->3600000
 
-      const intervalTime = 3000; //velocidad del camión
+      */
+      const intervalTime = 60000; //velocidad del camión
       const interval = setInterval(() => {
         let arr;
         
@@ -170,7 +177,14 @@ const MapO=(props: simulacion )=>{
           let rest = now.getTime() - date.getTime() - (nowFixed.getTime() - dateStart.getTime());
           
           //console.log("asdlkasjdlsad");
-          const posAux = Math.floor(rest / intervalTime); // restar los milisegundos para igual
+          let posAux = Math.floor(rest / intervalTime); // restar los milisegundos para igual
+          //camion averiado
+          /*
+          if (path.vehicle.status === 'DAMAGED') {
+            posAux = path.route?.findIndex(({ posX, posY }) => posX === path.breakdownX && posY === path.breakdownY);
+            return posAux;
+          }
+          */
           //al tiempo de inicio del primer pedido 
           //console.log(posAux);
           if (posAux === path.ruta.length) {
@@ -215,9 +229,29 @@ const MapO=(props: simulacion )=>{
             setCaminos(newData);
           };
 
-        simulacionDia(funcionRequest);
-    }, []);
+          simulacionDia(funcionRequest);
+
+    }, [startSimulation]);
     
+    /*
+    export default funcion= () => {
+      const [sendRequest, setSendRequest] = useState(false);
+    
+      useEffect(() => {
+        if(sendRequest){
+           //send the request
+           setSendRequest(false);
+        }
+      },
+      [sendRequest]);
+    
+      return (
+        <input type="button" disabled={sendRequest} onClick={() => setSendRequest(true)}></input>
+      );
+      }
+    */
+
+
     /*
     useEffect(() => {
       console.log('mostrando bloqueos');
@@ -317,7 +351,18 @@ const MapO=(props: simulacion )=>{
                         : 'rotate(0deg)',
                   }}  
                 >
-                  <LocalShippingIcon style={{ color: '#35737D' }} onClick={() => handleClickOpen(path.ruta)} />
+    
+                      <LocalShippingIcon
+                        style={{
+                          color: path.vehicle.status === 'DAMAGED' ? '#D3D3D3' : 'orange',
+                          fontSize: '30px',
+                        }}
+          
+                       />
+                
+
+                  {/*<LocalShippingIcon style={{ color: '#35737D' }} onClick={() => handleClickOpen(path.ruta)} */}
+                  
                   
                 </div>
               );

@@ -40,9 +40,14 @@ function PageHeader() {
   const handleChange = (event: SelectChangeEvent) => {
     setTipo(event.target.value);
   };
+
+  const cargarFiles=()=>{
+    setStart(true);
+
+  }
   const sendFiles= ()=>{
     
-    setStart(true);
+    
     // a 3 días  -> true -> 1
 
     
@@ -65,10 +70,13 @@ function PageHeader() {
     }
   },[start])
 
+  
   const sendFileA = async () => {
     let formData = new FormData();
     formData.append("filear", fileA);
-    axios.post(`${url}/pedido/cargaMasivaPedidos` ,formData, { /* UPLOAD PEDIDOS */
+
+    
+    axios.post(`${url}/pedido/cargaMasivaPedidos` ,formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
@@ -79,8 +87,9 @@ function PageHeader() {
   }).catch((e) =>{
     setAlert({isOpen: true, message: 'Pedidos y Bloqueos cargados de manera exitosa.', type: 'success'})
   })
+  
   }
-
+  
   const sendFileB = async () => {
     let formData = new FormData();
     formData.append("file", fileA);
@@ -107,11 +116,11 @@ function PageHeader() {
 
   const uploadFileA = (file) => {
     setFileA(file);
-
+    console.log("pedido almacenado");
   }
  const uploadFileB = (file) => {
     setFileB(file);
-
+    console.log("bloqueo almacenado");
   }
   
   const tiempo=900;
@@ -162,9 +171,16 @@ function PageHeader() {
         </Grid>
 
         <Grid item xs={2}>
+        <Button variant="contained"  onClick={cargarFiles}>
+            Cargar Archivos
+          </Button>
+          </Grid>
+          <Grid item xs={2}>
           <Button variant="contained"  onClick={sendFiles}>
             Empezar Simulación
+          
           </Button>
+          
         </Grid>
       </Grid>
       <CustomSnackbar alert={alert} setAlert={setAlert}/>
