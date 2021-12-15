@@ -35,8 +35,11 @@ import javax.annotation.PostConstruct;
 public class PlanificacionTareas implements Runnable{
 
     private String uuid;
+
     private PlanificadorTareasServicios planificadorTareasServicios;
+
     private ControlTarea controlTarea;
+
     private SseEmitter emitter;
     @Builder.Default
     private int counter = 0;
@@ -46,10 +49,15 @@ public class PlanificacionTareas implements Runnable{
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
     private List<PedidoModel> listaPedidos = new ArrayList<>();
+
     public List<VehiculoModel> vehiculoModels = new ArrayList<>();
+
     private List<EntidadVehiculo> listaVehiculos = new ArrayList<>();
+
     private List<NodoModel> blockList = new ArrayList<>();
+
     private List<BloqueoModel> bloqueos = new ArrayList<>();
+
     private List<PedidoModel> requestListDesdoblado = new ArrayList<>();
     private MapaModel mapaModel= null;
     private static int dia = 0;
@@ -75,13 +83,13 @@ public class PlanificacionTareas implements Runnable{
         inicio.set(2021,11,13,0,0,0);
         fin.set(2021,11,15,0,0,0);
 
-        //Carga de velículos
+        // Carga de velículos
         vehiculoModels = vehiculoService.listaVehiculosDisponibles();
         vehiculoModels.forEach(vehiculo -> listaVehiculos.add(new EntidadVehiculo(vehiculo)));
 
         // Carga de información de los bloqueos
-        bloqueos = bloqueoService.listaBloqueosDiaDia();
-        bloqueos.forEach(bloqueo -> blockList.add(new NodoModel(bloqueo)));
+        blockList = bloqueoService.listaBloqueosDiaDia();
+        //bloqueos.forEach(bloqueo -> blockList.add(new NodoModel(bloqueo)));
 
         // Depositos iniciales
         ArrayList<PlantaModel> plantas = new ArrayList<>();
@@ -240,7 +248,7 @@ public class PlanificacionTareas implements Runnable{
                         sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
                         sdf.setTimeZone(TimeZone.getTimeZone("CET"));
                         String text = sdf.format(v.getFechaInicio().getTime());
-                        EntidadRuta rutaVehiculo = EntidadRuta.builder().startTime(text).path(v.getRutaVehiculoPositions(requestListDesdoblado)).endTime("Alap").build();
+                        EntidadRuta rutaVehiculo = EntidadRuta.builder().startTime(text).path(v.getRutaVehiculoPositions(requestListDesdoblado)).endTime("F").build();
                         rutasFinal.agregarRuta(rutaVehiculo);
                         v.clearVehicle();
                         vehiculoService.actualizarEstadoVehiculoToVacio(v.getIdVehiculo());

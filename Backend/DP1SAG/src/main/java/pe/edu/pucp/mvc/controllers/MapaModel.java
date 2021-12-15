@@ -39,6 +39,7 @@ public class MapaModel {
         }
         this.plantas.forEach(d -> mapa[d.getCoordenadaX()][d.getCoordenadaY()] = d);
     }
+
     
     public void setBlockList(List<NodoModel> blockList) {
         blockList.forEach(v -> {
@@ -84,4 +85,13 @@ public class MapaModel {
             System.out.println("");
         }
     }
+
+    public ArrayList<PlantaModel> obtenerPlantarIntermedias(){
+        ArrayList<PlantaModel> plantas = new ArrayList<>();
+        plantas.add(PlantaModel.builder().coordenadaX(12).coordenadaY(8).esPrincipal(true).build());
+        plantas.add(PlantaModel.builder().coordenadaX(42).coordenadaY(42).build());
+        plantas.add(PlantaModel.builder().coordenadaX(63).coordenadaY(3).build());
+        return plantas;
+    }
+
 }

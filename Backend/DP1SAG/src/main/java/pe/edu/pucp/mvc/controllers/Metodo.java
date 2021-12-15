@@ -1,32 +1,30 @@
-package pe.edu.pucp.mvc.planificacion;
-
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.*;
-
+package pe.edu.pucp.mvc.controllers;
+/*
 import javafx.util.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import pe.edu.pucp.algorithm.GeneticAlgorithm;
 import pe.edu.pucp.algorithm.Knapsack;
-import pe.edu.pucp.mvc.controllers.MapaModel;
 import pe.edu.pucp.mvc.models.*;
+import pe.edu.pucp.mvc.planificacion.ScheduledTasks;
 import pe.edu.pucp.mvc.services.BloqueoService;
 import pe.edu.pucp.mvc.services.PedidoService;
 import pe.edu.pucp.mvc.services.VehiculoService;
 
-
 import javax.annotation.PostConstruct;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.util.*;
+import java.util.concurrent.Flow;
 
 @Component
-public class ScheduledTasks {
-
+public class Metodo {
     private static final Logger log = LoggerFactory.getLogger(ScheduledTasks.class);
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
     private static int value = 1;
@@ -49,10 +47,24 @@ public class ScheduledTasks {
     @Autowired
     private BloqueoService bloqueoService;
 
-    public static SseEmitter emi = null;
+    @Autowired
+    private ApplicationEventPublisher publisher;
+
+    @Autowired
+    private SimpMessagingTemplate template;
+
+    Calendar inicio;
+    Calendar fin;
+    int dia;
 
     @PostConstruct
     private void postConstruct() {
+
+        // cargar fechas de inicio
+        inicio = Calendar.getInstance();
+        fin = Calendar.getInstance();
+        inicio.set(2021,11,13,0,0,0);
+        fin.set(2021,11,15,0,0,0);
 
         //Carga de velículos
         vehiculoModels = vehiculoService.listaVehiculosDisponibles();
@@ -67,12 +79,12 @@ public class ScheduledTasks {
         plantas.add(PlantaModel.builder().coordenadaX(42).coordenadaY(42).build());
         plantas.add(PlantaModel.builder().coordenadaX(63).coordenadaY(3).build());
         mapaModel = new MapaModel(70, 50, plantas);
-
         // Se crea el mapa
+
         mapaModel.setBlockList(blockList);
 
         LocalDateTime now = LocalDateTime.now();
-
+        dia = now.getDayOfMonth();
         // Inicializar las fechas de inicio de los vehículos
         listaVehiculos.forEach(v -> {
             // Fecha de inicio y copia de fecha de inicio
@@ -85,9 +97,9 @@ public class ScheduledTasks {
         });
     }
 
-    @Scheduled(fixedRate = 120000)
-    public void reportCurrentTime() throws Exception {
 
+    @Scheduled(fixedDelay = 120000)
+    public void ejectuarAlgoritmo(){
         EntidadRutas rutasFinal = EntidadRutas.builder().paths(new ArrayList<>()).build();
         int minimo = 5;
         // Split request list in minimum capacity
@@ -242,14 +254,14 @@ public class ScheduledTasks {
 
 
                 requestListDesdoblado = aux;
-        } while(!requestListDesdoblado.isEmpty());
-            Collections.sort(rutasFinal.getPaths());
+            } while (!requestListDesdoblado.isEmpty());
 
-            if (emi!=null){
-                emi.send(SseEmitter.event().name("RUTAS").data(rutasFinal));
-            }
+            Collections.sort(rutasFinal.getPaths());
+            template.convertAndSend("/topic/estado-general",rutasFinal);
+
         }catch (Exception ex){
             System.out.println(ex.getMessage());
         }
     }
 }
+*/

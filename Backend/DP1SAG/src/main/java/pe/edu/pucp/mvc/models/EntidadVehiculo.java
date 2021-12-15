@@ -70,6 +70,7 @@ public class EntidadVehiculo implements Serializable {
         return ruta;
     }
 
+
     public EntidadVehiculo(VehiculoModel vehiculo){
         this.idVehiculo = vehiculo.getIdVehiculo();
         this.cantidadPedidos=vehiculo.getCantidadPedidos();

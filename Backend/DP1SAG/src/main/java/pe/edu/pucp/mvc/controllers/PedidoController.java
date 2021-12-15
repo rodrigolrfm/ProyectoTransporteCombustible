@@ -76,7 +76,7 @@ public class PedidoController {
     }
 
     @PostMapping(value = "/cargaMasivaPedidos", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public List<PedidoModel> cargaMasivaNodos(@RequestParam("filear") MultipartFile file) throws IOException {
+    public List<PedidoModel> cargaMasivaNodos(@RequestParam("file") MultipartFile file) throws IOException {
 
         int glpTotal = 0;
         List<PedidoModel> listaPedidos = new ArrayList<>();

@@ -3,6 +3,7 @@ package pe.edu.pucp.mvc.controllers;
 
 import javafx.util.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.amqp.AbstractRabbitListenerContainerFactoryConfigurer;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import pe.edu.pucp.algorithm.GeneticAlgorithm;
@@ -12,12 +13,15 @@ import pe.edu.pucp.mvc.planificacion.ControlTarea;
 import pe.edu.pucp.mvc.planificacion.PlanificacionTareas;
 import pe.edu.pucp.mvc.planificacion.PlanificadorTareasServicios;
 import pe.edu.pucp.mvc.planificacion.ScheduledTasks;
+import pe.edu.pucp.mvc.services.BloqueoService;
 import pe.edu.pucp.mvc.services.PedidoService;
+import pe.edu.pucp.mvc.services.VehiculoService;
 import pe.edu.pucp.utils.LecturaPedido;
 import pe.edu.pucp.utils.LecturaBloques;
 import pe.edu.pucp.utils.LecturaVehiculo;
 
 import java.text.SimpleDateFormat;
+import java.time.ZoneId;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -31,6 +35,12 @@ public class EjecucionController {
     @Autowired
     private PedidoService pedidoService;
 
+    @Autowired
+    private VehiculoService vehiculoService;
+
+    @Autowired
+    private BloqueoService bloqueoService;
+
     public static List<SseEmitter> sseEmitters = new ArrayList<>();
 
     @GetMapping(value = "/obtenerRutas")
@@ -43,26 +53,74 @@ public class EjecucionController {
         return sseEmitter;
     }
 
-    @GetMapping(value = "/obtenerTresDias")
-    public SseEmitter devolverRutasTresDias(){
-        ControlTarea planificador = ControlTarea.builder()
-                .tipoAction("PrintDataTask")
-                .datos("Datos que deberías ver")
-                .controlCron("* 10 * * * ?")
-                .build();
-        PlanificacionTareas planificadorTareas = new PlanificacionTareas();
-        String uuid = UUID.randomUUID().toString();
-        SseEmitter emitter = new SseEmitter(Long.MAX_VALUE);
-        emitter.onCompletion(() -> planificadorTareasServicios.eliminarPlanificadorTareas(uuid));
-        emitter.onTimeout(() -> planificadorTareasServicios.eliminarPlanificadorTareas(uuid));
-        planificadorTareas.setControlTarea(planificador);
-        planificadorTareas.setEmitter(emitter);
-        planificadorTareas.setUuid(uuid);
-        planificadorTareas.setPlanificadorTareasServicios(planificadorTareasServicios);
-        planificadorTareasServicios.planificarTareas(uuid, planificadorTareas, planificador.getControlCron());
-        return emitter;
+    private String generateCronExpression() {
+        Calendar now = Calendar.getInstance();
+        now.add(Calendar.SECOND, 20);
+        int min = now.get(Calendar.MINUTE);
+        int sec = now.get(Calendar.SECOND);
+        return sec + " " + min + "/10 * * * ?";
     }
 
+    /*
+    @GetMapping(value = "/obtenerTresDias")
+    public void devolverRutasTresDias(){
+        Metodo metodo = new Metodo();
+        metodo.ejectuarAlgoritmo();
+    }*/
+
+    @GetMapping(value = "/obtenerTresDias")
+    public SseEmitter devolverRutasTresDias(String fecha){
+        SseEmitter emitter = null;
+
+        try{
+            emitter = new SseEmitter(Long.MAX_VALUE);
+            ControlTarea controlDatosPlanificador = ControlTarea.builder()
+                    .tipoAction("Simulacion3Dias")
+                    .datos("")
+                    .fecha(fecha)
+                    .controlCron(generateCronExpression())
+                    .build();
+            // Cargar vehículos
+            controlDatosPlanificador.setVehiculoModels(vehiculoService.listaVehiculosDisponibles());
+            List<EntidadVehiculo> listaVehiculos = new ArrayList<>();
+            List<VehiculoModel> vehiculoModels = controlDatosPlanificador.getVehiculoModels();
+            vehiculoModels.forEach(vehiculo -> listaVehiculos.add(new EntidadVehiculo(vehiculo)));
+            controlDatosPlanificador.setListaVehiculos(listaVehiculos);
+
+            // Cargar bloqueos
+            controlDatosPlanificador.setBlockList(bloqueoService.listaBloqueosDiaDia());
+
+            //Cargar pedidos
+            controlDatosPlanificador.setListaPedidos(pedidoService.listaPedidosSinAtender());
+
+            MapaModel mapa = new MapaModel();
+            controlDatosPlanificador.setMapaModel(new MapaModel(70,50,mapa.obtenerPlantarIntermedias()));
+            Date fechaIni = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(fecha);
+            controlDatosPlanificador.setFechaInicio(fechaIni);
+            var localDate = fechaIni.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+            // Para aumentar la fecha a 3 dentro de tres días
+            localDate = localDate.plusDays(3);
+            System.out.println(java.sql.Timestamp.valueOf(localDate));
+            controlDatosPlanificador.setFechaFin(java.sql.Timestamp.valueOf(localDate));
+            controlDatosPlanificador.setFechaReferencial(fechaIni);
+
+
+            PlanificacionTareas planificadorTareas = new PlanificacionTareas();
+            String uuid = UUID.randomUUID().toString();
+            emitter.onCompletion(() -> planificadorTareasServicios.eliminarPlanificadorTareas(uuid));
+            emitter.onTimeout(() -> planificadorTareasServicios.eliminarPlanificadorTareas(uuid));
+            planificadorTareas.setControlTarea(controlDatosPlanificador);
+            planificadorTareas.setEmitter(emitter);
+            planificadorTareas.setUuid(uuid);
+            planificadorTareas.setPlanificadorTareasServicios(planificadorTareasServicios);
+            planificadorTareasServicios.planificarTareas(uuid, planificadorTareas, controlDatosPlanificador.getControlCron());
+
+        }catch (Exception ex){
+            System.out.println(ex.getMessage());
+        }
+        return emitter;
+
+    }
 
     @PostMapping(value = "/simularRutasColapso")
     public EntidadRutas ejecutarAlgortimo() throws Exception {
