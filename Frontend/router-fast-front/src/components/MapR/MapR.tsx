@@ -18,7 +18,7 @@ const vectorX = 70;
 const vectorY = 50;
 const path = [ ];
 
-const intervaloTiempo=300;
+const intervaloTiempo=500;
 
 
 const bloqueosData = [
@@ -38,72 +38,71 @@ const bloqueosData = [
   },
 ]
 
-const pathsaux=[]
+//const pathsaux=[]
 //const intervaloTiempo = prueba;
-/*
+
 const pathsaux =[
 
   { "path": [ 
-      {"destino": 0, "x": 12, "y": 8},
-              {"destino": 0, "x": 13, "y": 8},
-      {"destino": 0, "x": 14, "y": 8},
-              {"destino": 0, "x": 15, "y": 8},
-      {"destino": 0, "x": 16, "y": 8},
-              {"destino": 0, "x": 17, "y": 8},
-      {"destino": 0, "x": 18, "y": 8},
-      {"destino": 0, "x": 19, "y": 8},
-              {"destino": 0, "x": 20, "y": 8},
-      {"destino": 0, "x": 21, "y": 8},
-      {"destino": 0, "x": 22, "y": 8},
-              {"destino": 0, "x": 23, "y": 8},
-      {"destino": 0, "x": 24, "y": 8},
-              {"destino": 0, "x": 25, "y": 8},
-      {"destino": 0, "x": 26, "y": 8},
-              {"destino": 0, "x": 27, "y": 8},
-      {"destino": 0, "x": 28, "y": 8},
-      {"destino": 0, "x": 29, "y": 8},
-              {"destino": 0, "x": 30, "y": 8},
-      {"destino": 0, "x": 31, "y": 8},
-      {"destino": 0, "x": 32, "y": 8},
-              {"destino": 0, "x": 33, "y": 8},
-      {"destino": 0, "x": 34, "y": 8},
-              {"destino": 0, "x": 35, "y": 8},
-      {"destino": 0, "x": 36, "y": 8},
-              {"destino": 0, "x": 37, "y": 8},
+
               {"destino": 0, "x": 12, "y": 8},
               {"destino": 0, "x": 13, "y": 8},
-      {"destino": 0, "x": 14, "y": 8},
+              {"destino": 0, "x": 14, "y": 8},
               {"destino": 0, "x": 15, "y": 8},
-      {"destino": 0, "x": 16, "y": 8},
+              {"destino": 0, "x": 16, "y": 8},
               {"destino": 0, "x": 17, "y": 8},
-      {"destino": 0, "x": 18, "y": 8},
-      {"destino": 0, "x": 19, "y": 8},
+              {"destino": 0, "x": 18, "y": 8},
+              {"destino": 0, "x": 19, "y": 8},
               {"destino": 0, "x": 20, "y": 8},
-      {"destino": 0, "x": 21, "y": 8},
-      {"destino": 0, "x": 22, "y": 8},
+              {"destino": 0, "x": 21, "y": 8},
+              {"destino": 0, "x": 22, "y": 8},
               {"destino": 0, "x": 23, "y": 8},
-      {"destino": 0, "x": 24, "y": 8},
+              {"destino": 0, "x": 24, "y": 8},
               {"destino": 0, "x": 25, "y": 8},
-      {"destino": 0, "x": 26, "y": 8},
+              {"destino": 0, "x": 26, "y": 8},
               {"destino": 0, "x": 27, "y": 8},
-      {"destino": 0, "x": 28, "y": 8},
-      {"destino": 0, "x": 29, "y": 8},
+              {"destino": 0, "x": 28, "y": 8},
+              {"destino": 0, "x": 29, "y": 8},
               {"destino": 0, "x": 30, "y": 8},
-      {"destino": 0, "x": 31, "y": 8},
-      {"destino": 0, "x": 32, "y": 8},
+              {"destino": 0, "x": 31, "y": 8},
+              {"destino": 0, "x": 32, "y": 8},
               {"destino": 0, "x": 33, "y": 8},
-      {"destino": 0, "x": 34, "y": 8},
+              {"destino": 0, "x": 34, "y": 8},
               {"destino": 0, "x": 35, "y": 8},
-      {"destino": 0, "x": 36, "y": 8},
+              {"destino": 0, "x": 36, "y": 8},
               {"destino": 0, "x": 37, "y": 8},
+              {"destino": 0, "x": 36, "y": 8},
+              {"destino": 0, "x": 35, "y": 8},
+              {"destino": 0, "x": 34, "y": 8},
+              {"destino": 0, "x": 33, "y": 8},
+              {"destino": 0, "x": 32, "y": 8},
+              {"destino": 0, "x": 31, "y": 8},
+              {"destino": 0, "x": 30, "y": 8},
+              {"destino": 0, "x": 29, "y": 8},
+              {"destino": 0, "x": 28, "y": 8},
+              {"destino": 0, "x": 27, "y": 8},
+              {"destino": 0, "x": 26, "y": 8},
+              {"destino": 0, "x": 25, "y": 8},
+              {"destino": 0, "x": 24, "y": 8},
+              {"destino": 0, "x": 23, "y": 8},
+              {"destino": 0, "x": 22, "y": 8},
+              {"destino": 0, "x": 21, "y": 8},
+              {"destino": 0, "x": 20, "y": 8},
+              {"destino": 0, "x": 19, "y": 8},
+              {"destino": 0, "x": 18, "y": 8},
+              {"destino": 0, "x": 17, "y": 8},
+              {"destino": 0, "x": 16, "y": 8},
+              {"destino": 0, "x": 15, "y": 8},
+              {"destino": 0, "x": 14, "y": 8},
+              {"destino": 0, "x": 13, "y": 8},
+              {"destino": 0, "x": 12, "y": 8},
              ],
     "startTime": "2021-11-11T01:30:51.969+00:00",
     "endTime": "2021-11-11T02:05:51.969+00:00"
    },
-
    { "path": [
       {"destino": 0, "x": 12, "y": 8},
-              {"destino": 0, "x": 12, "y": 9},
+      {"destino": 0, "x": 12, "y": 9},
       {"destino": 0, "x": 12, "y": 10},
       {"destino": 0, "x": 12, "y": 11},
       {"destino": 0, "x": 12, "y": 12},
@@ -113,7 +112,6 @@ const pathsaux =[
     "endTime": "2021-11-11T02:35:51.969+00:00"
    }
 ]
-*/
 
 const obtenerRuta = (path) => {
     const ruta = [];
@@ -190,24 +188,19 @@ const MapR=(props: simulacion )=>{
     useEffect(() => {
       
 
-      const intervalV=500;
+      const intervalV=50;
       const interval = setInterval(() => {
         let arr;
-       
         //console.log(paths);
         arr = paths.map((path) => {
           const now = new Date();
           const date = new Date(path.date);
           const nowFixed = new Date(path.nowFixed);
-          const dateStart = new Date(path.dateStart);
-          
+          const dateStart = new Date(path.dateStart); 
           let rest = now.getTime() - date.getTime() - (nowFixed.getTime() - dateStart.getTime());
 
           const posAux = Math.floor( (rest/60000) * ((intervalV*intervaloTiempo)/60)); // aumentando la velocidad
-         
           //console.log(posAux);
-          
-
           if (posAux === path.ruta.length) {
             setRuta(null);
             return null;
@@ -216,44 +209,14 @@ const MapR=(props: simulacion )=>{
         setPaths(arr.filter((el) => el != null));
         // setPaths(...paths, pos)
       }, 500);
-       
       return () => clearInterval(interval);
     }, [paths]);
     
    //bloqueos
 
-   useEffect(() => {
-
-    const intervalV=50;
-    const interval = setInterval(() => {
-      let arr;
-     
-      //console.log(paths);
-      arr = paths.map((bloqueo) => {
-        const now = new Date();
-        const date = new Date(bloqueo.date);
-        const nowFixed = new Date(bloqueo.nowFixed);
-        const dateStart = new Date(bloqueo.dateStart);
-        let rest = now.getTime() - date.getTime() - (nowFixed.getTime() - dateStart.getTime());
-       // const pos = Math.floor(((new Date(path.startOfBreak) - new Date(path.startTime)) / 60000) * (speed / 60));
-        //console.log("asdlkasjdlsad");
-        const bloqueoAux = Math.floor( (rest/60000) * ((intervalV*intervaloTiempo)/60)); // aumentando la velocidad
-        //console.log(posAux);
-        if (bloqueoAux === bloqueo.ruta.length) {
-            setRuta(null);
-            return null;
-          } else return { ...path, pos: bloqueoAux };
-        });
-        setBloqueos(arr.filter((el) => el != null));
-    }, 500);
-    return () => clearInterval(interval);
-  }, [paths]);
-
     useEffect(() => {
 
-    
        console.log("Mapa 3 días");
-       
         axios
         .get(url + "/ejecutar/obtenerTresDias")
         
@@ -274,7 +237,6 @@ const MapR=(props: simulacion )=>{
         });
         
 
-          
           setPaths(
             pathsaux.map((path) => {
               return {
@@ -301,7 +263,6 @@ const MapR=(props: simulacion )=>{
               };
             })
           );
-           
       }, []);   
     
 
@@ -354,11 +315,9 @@ const MapR=(props: simulacion )=>{
                         : dir === 'left'
                         ? 'rotate(180deg)'
                         : 'rotate(0deg)',
-                  }}
-                  
+                  }}                  
                 >
                   <LocalShippingIcon style={{ color: '#35737D' }} onClick={() => setRuta(path.ruta)} />
-                  
                 </div>
               );
             }
