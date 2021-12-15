@@ -85,7 +85,8 @@ public class EjecucionController {
             List<EntidadVehiculo> listaVehiculos = new ArrayList<>();
             List<VehiculoModel> vehiculoModels = controlDatosPlanificador.getVehiculoModels();
             vehiculoModels.forEach(vehiculo -> listaVehiculos.add(new EntidadVehiculo(vehiculo)));
-            controlDatosPlanificador.setListaVehiculos(listaVehiculos);
+
+
 
             // Cargar bloqueos
             controlDatosPlanificador.setBlockList(bloqueoService.listaBloqueosDiaDia());
@@ -96,7 +97,11 @@ public class EjecucionController {
             MapaModel mapa = new MapaModel();
             controlDatosPlanificador.setMapaModel(new MapaModel(70,50,mapa.obtenerPlantarIntermedias()));
             Date fechaIni = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(fecha);
+
             controlDatosPlanificador.setFechaInicio(fechaIni);
+
+            controlDatosPlanificador.setListaVehiculos(listaVehiculos);
+
             var localDate = fechaIni.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
             // Para aumentar la fecha a 3 dentro de tres días
             localDate = localDate.plusDays(3);
