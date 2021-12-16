@@ -24,6 +24,7 @@ public class EntidadVehiculo implements Serializable {
     private double pesoTotal;
 
     private int estadoVehiculo;
+
     private Calendar fechaInicio;
 
     @Builder.Default
@@ -34,10 +35,10 @@ public class EntidadVehiculo implements Serializable {
 
 
     @Builder.Default
-    NodoModel nodoActual = null;
+    NodoModel nodoActual = new NodoModel();
 
     @Builder.Default
-    List<NodoModel> rutaVehiculo = null;
+    List<NodoModel> rutaVehiculo =new ArrayList<>();
 
     private double combustible;
 

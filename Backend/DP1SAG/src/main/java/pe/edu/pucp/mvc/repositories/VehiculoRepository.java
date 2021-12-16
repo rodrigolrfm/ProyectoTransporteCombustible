@@ -11,6 +11,8 @@ import pe.edu.pucp.mvc.models.EntidadVehiculo;
 import pe.edu.pucp.mvc.models.PedidoModel;
 import pe.edu.pucp.mvc.models.VehiculoModel;
 
+import java.sql.Timestamp;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,5 +33,14 @@ public interface VehiculoRepository extends CrudRepository<VehiculoModel, Intege
     @Query(value ="update vehiculo set estado_vehiculo = 0 where id_vehiculo = ?1 ;",nativeQuery = true)
     int updateEstadoVehiculotoVacio(Integer id);
 
+    @Transactional
+    @Modifying
+    @Query(value ="update vehiculo set estado_vehiculo = 1 where id_vehiculo = ?1 and fecha_inicio = ?2 ;",nativeQuery = true)
+    int updateEstadoVehiculoTiempoEstado(Integer id, Timestamp fecha);
+
+    @Transactional
+    @Modifying
+    @Query(value ="update vehiculo set fecha_inicio = ?1 ;",nativeQuery = true)
+    int ingresarFechasInicioInicializados(Timestamp fechaHora);
 
 }

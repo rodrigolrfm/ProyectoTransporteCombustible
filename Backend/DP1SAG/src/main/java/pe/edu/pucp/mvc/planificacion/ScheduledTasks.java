@@ -55,9 +55,7 @@ public class ScheduledTasks {
     private void postConstruct() {
 
         //Carga de velículos
-        vehiculoModels = vehiculoService.listaVehiculosDisponibles();
-        vehiculoModels.forEach(vehiculo -> listaVehiculos.add(new EntidadVehiculo(vehiculo)));
-
+        listaVehiculos = vehiculoService.listaVehiculosDisponibles();
         // Carga de información de los bloqueos
         blockList = bloqueoService.listaBloqueosDiaDia();
 

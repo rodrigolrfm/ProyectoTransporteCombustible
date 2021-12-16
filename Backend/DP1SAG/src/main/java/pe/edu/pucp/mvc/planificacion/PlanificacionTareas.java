@@ -2,6 +2,7 @@ package pe.edu.pucp.mvc.planificacion;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -48,89 +49,65 @@ public class PlanificacionTareas implements Runnable{
     private static final Logger log = LoggerFactory.getLogger(ScheduledTasks.class);
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
+    /*
     private List<PedidoModel> listaPedidos = new ArrayList<>();
-
     public List<VehiculoModel> vehiculoModels = new ArrayList<>();
-
     private List<EntidadVehiculo> listaVehiculos = new ArrayList<>();
-
     private List<NodoModel> blockList = new ArrayList<>();
-
     private List<BloqueoModel> bloqueos = new ArrayList<>();
-
     private List<PedidoModel> requestListDesdoblado = new ArrayList<>();
     private MapaModel mapaModel= null;
     private static int dia = 0;
     private static Calendar inicio = null;
     private static Calendar fin = null;
+    */
+    private static int dia = 0;
 
-    @Autowired
     private PedidoService pedidoService;
-
-    @Autowired
     private VehiculoService vehiculoService;
-
-    @Autowired
     private BloqueoService bloqueoService;
 
+    private List<EntidadVehiculo> listaVehiculos = new ArrayList<>();
+    private List<PedidoModel> requestListDesdoblado = new ArrayList<>();
+    private List<NodoModel> blockList = new ArrayList<>();
 
+    public PlanificacionTareas(Date fecha,List<EntidadVehiculo> listaVeh){
+        Calendar date = Calendar.getInstance();
+        date.setTime(fecha);
+        dia = date.get(Calendar.DATE);
+        this.listaVehiculos = listaVeh;
+    }
+    /*
     @PostConstruct
     private void postConstruct() {
-
-        // cargar fechas de inicio
-        inicio = Calendar.getInstance();
-        fin = Calendar.getInstance();
-        inicio.set(2021,11,13,0,0,0);
-        fin.set(2021,11,15,0,0,0);
-
-        // Carga de velículos
-        vehiculoModels = vehiculoService.listaVehiculosDisponibles();
-        vehiculoModels.forEach(vehiculo -> listaVehiculos.add(new EntidadVehiculo(vehiculo)));
-
-        // Carga de información de los bloqueos
-        blockList = bloqueoService.listaBloqueosDiaDia();
-        //bloqueos.forEach(bloqueo -> blockList.add(new NodoModel(bloqueo)));
-
-        // Depositos iniciales
-        ArrayList<PlantaModel> plantas = new ArrayList<>();
-        plantas.add(PlantaModel.builder().coordenadaX(12).coordenadaY(8).esPrincipal(true).build());
-        plantas.add(PlantaModel.builder().coordenadaX(42).coordenadaY(42).build());
-        plantas.add(PlantaModel.builder().coordenadaX(63).coordenadaY(3).build());
-        mapaModel = new MapaModel(70, 50, plantas);
-        // Se crea el mapa
-
-        mapaModel.setBlockList(blockList);
-
-        LocalDateTime now = LocalDateTime.now();
-        dia = now.getDayOfMonth();
-        // Inicializar las fechas de inicio de los vehículos
-        listaVehiculos.forEach(v -> {
-            // Fecha de inicio y copia de fecha de inicio
-            Calendar init = Calendar.getInstance();
-            init.set(now.getYear(), now.getMonth().getValue()-1, now.getDayOfMonth(), now.getHour(), now.getMinute(), now.getSecond());
-            v.setFechaInicio(init);
-            v.setNodoActual(plantas.get(0));
-            v.setCombustible(25);
-            v.setVelocidad(50);
-        });
-    }
-
-
+        Calendar date = Calendar.getInstance();
+        date.setTime(controlTarea.getFechaInicio());
+        dia = date.get(Calendar.DATE);
+    }*/
 
     @Override
     public void run() {
         // aqui deberia ir el algoritmo y un emitter
-        System.out.println("Running action: " + controlTarea.getTipoAction());
-        System.out.println("With Data: " + controlTarea.getDatos());
 
         try{
             EntidadRutas rutasFinal = EntidadRutas.builder().paths(new ArrayList<>()).build();
             int minimo = 5;
             // Split request list in minimum capacity
             int totalCapacity = 0;
+            Calendar inicio = Calendar.getInstance();
+            Calendar fin = Calendar.getInstance();
+            inicio.setTime(controlTarea.getFechaInicio());
+            fin.setTime(controlTarea.getFechaFin());
 
             //Carga de los pedidos
+
             requestListDesdoblado = pedidoService.obtenerPedidos3días(inicio,fin,dia);
+
+            listaVehiculos = vehiculoService.listaVehiculosDisponibles();
+            //listaVehiculos = vehiculoService.listaVehiculosDisponibles();
+
+            blockList = bloqueoService.listaBloqueosDiaDia();
+
 
             for(PedidoModel pedido:requestListDesdoblado){
                 totalCapacity += pedido.getCantidadGLP();
@@ -148,7 +125,7 @@ public class PlanificacionTareas implements Runnable{
             });
 
 
-            float totalTime=0;
+            float tiempoTotal=0;
             do {
 
                 listaVC.clear();
@@ -165,10 +142,9 @@ public class PlanificacionTareas implements Runnable{
                     for(Pair<EntidadVehiculo, PriorityQueue<Pair<Float, PedidoModel>>> lvc : listaVC){
                         EntidadVehiculo v = lvc.getKey();
                         PriorityQueue<Pair<Float, PedidoModel>> requestListArreange = lvc.getValue();
-                        float distance = v.getNodoActual().getDistancia(req),
-                                tiempoAproximado = (float)(distance/v.getVelocidad()),
-
-                                tiempoLlegadaLimite = req.getHorasLimite().getTimeInMillis() - v.getFechaInicio().getTimeInMillis();
+                        float distance = v.getNodoActual().getDistancia(req);
+                        float tiempoAproximado = (float)(distance/v.getVelocidad());
+                        float tiempoLlegadaLimite = req.getHorasLimite().getTimeInMillis() - v.getFechaInicio().getTimeInMillis();
 
                         if(tiempoLlegadaLimite > 0)
                             requestListArreange.add(new Pair<>((tiempoLlegadaLimite /tiempoAproximado),req));
@@ -234,14 +210,15 @@ public class PlanificacionTareas implements Runnable{
                     v.getListaPedidos().forEach(p -> { vertices.add(p); });
                     System.out.println(v.getListaPedidos());
                     if(!v.getListaPedidos().isEmpty())
-                        GeneticAlgorithm.Genetic(v, vertices, mapaModel);
+                        GeneticAlgorithm.Genetic(v, vertices, controlTarea.getMapaModel());
 
                 }
+                Timestamp fechaHoraNuevaVehiculo = null;
                 for(EntidadVehiculo v : listaVehiculos){
                     if(v.getRutaVehiculo() != null && !v.getRutaVehiculo().isEmpty()) { // si encontró una buana ruta.
                         v.getFechaInicio().add(Calendar.MINUTE, Math.round((float) Math.ceil(v.calculateTimeToDispatch())));
                         v.setNodoActual(v.getRutaVehiculo().get(v.getRutaVehiculo().size() - 1));
-                        totalTime += v.calculateTimeToDispatch();
+                        tiempoTotal += v.calculateTimeToDispatch();
                         // se guardan las rutas y los pedidos
                         // aquí se podría enviar cada vehículo con su ruta
                         SimpleDateFormat sdf;
@@ -250,8 +227,10 @@ public class PlanificacionTareas implements Runnable{
                         String text = sdf.format(v.getFechaInicio().getTime());
                         EntidadRuta rutaVehiculo = EntidadRuta.builder().startTime(text).path(v.getRutaVehiculoPositions(requestListDesdoblado)).endTime("F").build();
                         rutasFinal.agregarRuta(rutaVehiculo);
+                        //vehiculoService.actualizarEstadoVehiculoToVacio(v.getIdVehiculo());
+                        fechaHoraNuevaVehiculo = new Timestamp(v.getFechaInicio().getTime().getTime());
+                        vehiculoService.actualizarTiempoEstado(v.getIdVehiculo(), fechaHoraNuevaVehiculo);
                         v.clearVehicle();
-                        vehiculoService.actualizarEstadoVehiculoToVacio(v.getIdVehiculo());
                     }
                 }
 
@@ -285,9 +264,12 @@ public class PlanificacionTareas implements Runnable{
                             .name("3dias")
                             .data(rutasFinal)
             );
-            dia+=1;
+
             counter++;
-            if(counter==3){
+            if (counter%6==0){
+                dia+=1;
+            }
+            if(counter==18){
                 emitter.send(SseEmitter.event().name("STOP").data("ACABO"));
                 emitter.complete();
                 planificadorTareasServicios.eliminarPlanificadorTareas(uuid);

@@ -4,10 +4,12 @@ package pe.edu.pucp.mvc.controllers;
 import javafx.util.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.amqp.AbstractRabbitListenerContainerFactoryConfigurer;
+import org.springframework.boot.origin.SystemEnvironmentOrigin;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import pe.edu.pucp.algorithm.GeneticAlgorithm;
 import pe.edu.pucp.algorithm.Knapsack;
+import pe.edu.pucp.mvc.dtos.FechaDTO;
 import pe.edu.pucp.mvc.models.*;
 import pe.edu.pucp.mvc.planificacion.ControlTarea;
 import pe.edu.pucp.mvc.planificacion.PlanificacionTareas;
@@ -20,6 +22,7 @@ import pe.edu.pucp.utils.LecturaPedido;
 import pe.edu.pucp.utils.LecturaBloques;
 import pe.edu.pucp.utils.LecturaVehiculo;
 
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.ZoneId;
 import java.util.*;
@@ -43,6 +46,9 @@ public class EjecucionController {
 
     public static List<SseEmitter> sseEmitters = new ArrayList<>();
 
+    private static int controlador = 0;
+
+
     @GetMapping(value = "/obtenerRutas")
     public SseEmitter devolverRutas(){
         SseEmitter sseEmitter = new SseEmitter(Long.MAX_VALUE);
@@ -58,7 +64,7 @@ public class EjecucionController {
         now.add(Calendar.SECOND, 20);
         int min = now.get(Calendar.MINUTE);
         int sec = now.get(Calendar.SECOND);
-        return sec + " " + min + "/10 * * * ?";
+        return sec + " " + min + "/3 * * * ?";
     }
 
     /*
@@ -69,37 +75,51 @@ public class EjecucionController {
     }*/
 
     @GetMapping(value = "/obtenerTresDias")
-    public SseEmitter devolverRutasTresDias(String fecha){
+    public SseEmitter devolverRutasTresDias(@RequestBody FechaDTO fecha){
         SseEmitter emitter = null;
-
+        System.out.println("****+**");
         try{
+            System.out.println("--------");
             emitter = new SseEmitter(Long.MAX_VALUE);
             ControlTarea controlDatosPlanificador = ControlTarea.builder()
                     .tipoAction("Simulacion3Dias")
                     .datos("")
-                    .fecha(fecha)
+                    .fecha(fecha.getFechaIni())
                     .controlCron(generateCronExpression())
                     .build();
+
+            // cargar Servicios
+            controlDatosPlanificador.setPedidoService(new PedidoService());
+            controlDatosPlanificador.setBloqueoService(new BloqueoService());
+            controlDatosPlanificador.setVehiculoService(new VehiculoService());
             // Cargar vehículos
-            controlDatosPlanificador.setVehiculoModels(vehiculoService.listaVehiculosDisponibles());
-            List<EntidadVehiculo> listaVehiculos = new ArrayList<>();
-            List<VehiculoModel> vehiculoModels = controlDatosPlanificador.getVehiculoModels();
-            vehiculoModels.forEach(vehiculo -> listaVehiculos.add(new EntidadVehiculo(vehiculo)));
-
-
+            List<EntidadVehiculo> listaVehiculos = vehiculoService.listaVehiculosDisponibles();
 
             // Cargar bloqueos
             controlDatosPlanificador.setBlockList(bloqueoService.listaBloqueosDiaDia());
 
             //Cargar pedidos
-            controlDatosPlanificador.setListaPedidos(pedidoService.listaPedidosSinAtender());
+            //controlDatosPlanificador.setListaPedidos(pedidoService.obtenerPedidos3días());
+
 
             MapaModel mapa = new MapaModel();
             controlDatosPlanificador.setMapaModel(new MapaModel(70,50,mapa.obtenerPlantarIntermedias()));
-            Date fechaIni = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(fecha);
-
+            Date fechaIni = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(fecha.getFechaIni());
             controlDatosPlanificador.setFechaInicio(fechaIni);
 
+            Calendar aux= Calendar.getInstance();
+            aux.setTime(fechaIni);
+            Calendar init = Calendar.getInstance();
+            init.set(aux.get(Calendar.YEAR), aux.get(Calendar.MONTH), aux.get(Calendar.DATE), 0, 0, 0);
+            Timestamp fechaHora = new Timestamp(init.getTime().getTime());
+            listaVehiculos.forEach(v -> {
+                // Fecha de inicio y copia de fecha de inicio
+                v.setFechaInicio(init);
+                v.setNodoActual(controlDatosPlanificador.getMapaModel().getPlantas().get(0));
+                v.setCombustible(25);
+                v.setVelocidad(50);
+            });
+            vehiculoService.inicializarFechaInicioVehiculo(fechaHora);
             controlDatosPlanificador.setListaVehiculos(listaVehiculos);
 
             var localDate = fechaIni.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
@@ -109,14 +129,18 @@ public class EjecucionController {
             controlDatosPlanificador.setFechaFin(java.sql.Timestamp.valueOf(localDate));
             controlDatosPlanificador.setFechaReferencial(fechaIni);
 
+            PlanificacionTareas planificadorTareas = new PlanificacionTareas(fechaIni,listaVehiculos);
 
-            PlanificacionTareas planificadorTareas = new PlanificacionTareas();
             String uuid = UUID.randomUUID().toString();
             emitter.onCompletion(() -> planificadorTareasServicios.eliminarPlanificadorTareas(uuid));
             emitter.onTimeout(() -> planificadorTareasServicios.eliminarPlanificadorTareas(uuid));
             planificadorTareas.setControlTarea(controlDatosPlanificador);
             planificadorTareas.setEmitter(emitter);
             planificadorTareas.setUuid(uuid);
+            // cargar servicios
+            planificadorTareas.setBloqueoService(bloqueoService);
+            planificadorTareas.setPedidoService(pedidoService);
+            planificadorTareas.setVehiculoService(vehiculoService);
             planificadorTareas.setPlanificadorTareasServicios(planificadorTareasServicios);
             planificadorTareasServicios.planificarTareas(uuid, planificadorTareas, controlDatosPlanificador.getControlCron());
 
