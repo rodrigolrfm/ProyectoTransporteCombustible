@@ -2,7 +2,7 @@ import { makeStyles } from '@mui/styles';
 import HomeIcon from '@mui/icons-material/Home';
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import PersonPinIcon from '@mui/icons-material/PersonPin';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import EmojiPeopleIcon from '@mui/icons-material/EmojiPeople';
 import url from  'src/utils/constant';
 import axios from 'axios';
@@ -10,16 +10,21 @@ import BlockIcon from '@mui/icons-material/Block';
 import { IconButton } from '@mui/material';
 import LinearDeterminate from '../Bars/BarsR';
 import ModalMonitoreo from '../Custom/ModalMonitoreo';
+import { SettingsOverscanTwoTone } from '@mui/icons-material';
 
 //import { tiempo,prueba} from "src/content/applications/Transactions/PageHeader";
 //import { tiempo } from '../Tiempo/tiempo';
+
+//1 hora es -> 12.5 segundos
 
 const vectorX = 70;
 const vectorY = 50;
 const path = [ ];
 
-const intervaloTiempo=500;
 
+
+const intervaloTiempo=500;
+// 1 es tiempo real
 
 const bloqueosData = [
   {
@@ -124,15 +129,13 @@ const obtenerRuta = (path) => {
         else ruta.push({ ...path[i], next: 'right' });
       }
     }
-    console.log("xxxxxxxxxxxxxxx");
-    console.log(ruta);
+
     return ruta;
   };
 const obtenerBloqueo = (path) => {
     const bloqueo = [
       {x:20 , y:30},
     ];
-    console.log(bloqueo);
     return bloqueo;
   };
   
@@ -144,6 +147,7 @@ const implementarFecha = (startTime, dateTime) => {
   const dateTimeX = new Date(dateTime);
   const resultado = startTimeX.getTime() + (dateTimeX.getTime() - startTimeX.getTime())/intervaloTiempo;
   return new Date (resultado);
+  
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -182,46 +186,53 @@ const MapR=(props: simulacion )=>{
     const [paths, setPaths] = useState([]);
     const [bloqueos, setBloqueos] = useState([]);
 
-
     const classes = useStyles();
     const map = [];
-    useEffect(() => {
-      
-
+    const a = useRef<any>(null);
+    const b = useRef<any>(null);
+    const timerBool = useRef<any>(true);
+    //console.log(timerBool.current);
+    useEffect(() => {    
       const intervalV=50;
       const interval = setInterval(() => {
-        let arr;
-        //console.log(paths);
-        arr = paths.map((path) => {
+      let arr;
+      arr = paths.map((path,index) => {
+
           const now = new Date();
           const date = new Date(path.date);
           const nowFixed = new Date(path.nowFixed);
-          const dateStart = new Date(path.dateStart); 
+          const dateStart = new Date(path.dateStart);
           let rest = now.getTime() - date.getTime() - (nowFixed.getTime() - dateStart.getTime());
-
-          const posAux = Math.floor( (rest/60000) * ((intervalV*intervaloTiempo)/60)); // aumentando la velocidad
-          //console.log(posAux);
+          const posAux = Math.floor( (rest/60000) * ((intervalV*intervaloTiempo)/60)); // aumentando la velocidad posición del arreglo 
+            let tiempoRelativo = now.getTime() - (nowFixed.getTime() - dateStart.getTime());
+    
+            if(timerBool.current){
+              a.current = new Date(tiempoRelativo);
+              b.current = setInterval(() => {
+                //console.log("aasdasd", a);
+                a.current = new Date( a.current.getTime() + 10000);
+              }, 1000);
+              
+          }
+          timerBool.current = false;         
+          console.log("a",a.current);
           if (posAux === path.ruta.length) {
             setRuta(null);
             return null;
           } else return { ...path, pos: posAux };
         });
+
         setPaths(arr.filter((el) => el != null));
         // setPaths(...paths, pos)
       }, 500);
-      return () => clearInterval(interval);
+      return () => {clearInterval(interval); clearInterval(b.current)};
     }, [paths]);
-    
    //bloqueos
-
     useEffect(() => {
-
        console.log("Mapa 3 días");
         axios
         .get(url + "/ejecutar/obtenerTresDias")
-        
         .then((e) => {
-          
           setPaths(
             e.data.paths.map((path) => {
               return {
@@ -235,8 +246,6 @@ const MapR=(props: simulacion )=>{
             })
           );
         });
-        
-
           setPaths(
             pathsaux.map((path) => {
               return {
@@ -246,25 +255,16 @@ const MapR=(props: simulacion )=>{
                 date: implementarFecha(pathsaux[0].startTime,path.startTime),
                 dateStart: pathsaux[0].startTime,
                 nowFixed: new Date(),
+                primerPedido: pathsaux[0].startTime,
               };
             })
           );
           
-          setBloqueos(
-            bloqueosData.map((bloqueo) => {
-              return {
-                ...bloqueo.bloqueo,
-                bloqueos: obtenerBloqueo(bloqueo.bloqueo),
-                pos: 0,
-                date: implementarFecha(bloqueosData[0].startTime,bloqueo.startTime),
-                dateEnd: implementarFecha(bloqueosData[0].startTime,bloqueo.endTime),
-                dateStart: bloqueosData[0].startTime,
-                nowFixed: new Date(),
-              };
-            })
-          );
-      }, []);   
-    
+      }, []);
+
+    //BLOQUEOS
+   
+  
 
     for (let i = 0; i < vectorY; i++) { //50
       const squareRows = [];
