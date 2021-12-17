@@ -64,7 +64,7 @@ public class EjecucionController {
         now.add(Calendar.SECOND, 20);
         int min = now.get(Calendar.MINUTE);
         int sec = now.get(Calendar.SECOND);
-        return sec + " " + min + "/3 * * * ?";
+        return sec + " " + min + "/7 * * * ?";
     }
 
     /*
@@ -77,7 +77,7 @@ public class EjecucionController {
     @GetMapping(value = "/obtenerTresDias")
     public SseEmitter devolverRutasTresDias(@RequestBody FechaDTO fecha){
         SseEmitter emitter = null;
-        System.out.println("****+**");
+
         try{
             System.out.println("--------");
             emitter = new SseEmitter(Long.MAX_VALUE);
@@ -97,9 +97,6 @@ public class EjecucionController {
 
             // Cargar bloqueos
             controlDatosPlanificador.setBlockList(bloqueoService.listaBloqueosDiaDia());
-
-            //Cargar pedidos
-            //controlDatosPlanificador.setListaPedidos(pedidoService.obtenerPedidos3días());
 
 
             MapaModel mapa = new MapaModel();

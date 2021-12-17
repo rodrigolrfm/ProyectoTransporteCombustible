@@ -104,11 +104,12 @@ public class PlanificacionTareas implements Runnable{
             requestListDesdoblado = pedidoService.obtenerPedidos3días(inicio,fin,dia);
 
             listaVehiculos = vehiculoService.listaVehiculosDisponibles();
+            listaVehiculos.sort((v1, v2) -> Long.compare(v1.getFechaInicio().getTimeInMillis() , v2.getFechaInicio().getTimeInMillis()));
             //listaVehiculos = vehiculoService.listaVehiculosDisponibles();
 
             blockList = bloqueoService.listaBloqueosDiaDia();
 
-
+            var depositos = controlTarea.getMapaModel().getPlantas();
             for(PedidoModel pedido:requestListDesdoblado){
                 totalCapacity += pedido.getCantidadGLP();
             }
@@ -144,6 +145,10 @@ public class PlanificacionTareas implements Runnable{
                         PriorityQueue<Pair<Float, PedidoModel>> requestListArreange = lvc.getValue();
                         float distance = v.getNodoActual().getDistancia(req);
                         float tiempoAproximado = (float)(distance/v.getVelocidad());
+
+                        //System.out.println("Tiempo del carro : "+ v.getFechaInicio().getTime().toString());
+                        //System.out.println("Tiempo del pedido : "+ req.getHorasLimite().getTime().toString());
+
                         float tiempoLlegadaLimite = req.getHorasLimite().getTimeInMillis() - v.getFechaInicio().getTimeInMillis();
 
                         if(tiempoLlegadaLimite > 0)
@@ -172,30 +177,41 @@ public class PlanificacionTareas implements Runnable{
                         }catch(Exception error){
                             System.err.println("Coalpso Logístico" + error.getMessage());
                         }
-
-
                     }
                 }
 
-
+                int indice=0;
                 for(Pair<EntidadVehiculo, PriorityQueue<Pair<Float, PedidoModel>>> vc : listaVC){
                     // Se asigna los pedidos a los vehículos
-
-                    listaVehiculos.clear(); // se puede quitar esta lista intermedia
-                    listaVehiculos.add(vc.getKey());
+                    //listaVehiculos.clear(); // se puede quitar esta lista intermedia
+                    //listaVehiculos.add(vc.getKey());
 
                     //System.out.println("PQ: " + vc.getValue());
-                    int assigned = 0;
+                    int asignado = 0;
                     try {
-                        assigned += Knapsack.allocate(vc.getValue(), listaVehiculos, auxRequest);
+                        asignado += Knapsack.allocate(vc.getValue(), listaVehiculos, auxRequest);
                         //verificar si entra en el camión los pedidos.
+                        if (indice == listaVC.size() - 1) {
+                            continue;
+                        }
+                        Pair<EntidadVehiculo, PriorityQueue<Pair<Float, PedidoModel>>> vcNext = listaVC.get(indice + 1);
+                        /*EntidadVehiculo currentVehicle = vc.getKey();
+                        EntidadVehiculo nextVehicle = vcNext.getKey();
+                        if (currentVehicle.getFechaInicio().get(Calendar.DATE)
+                                != nextVehicle.getFechaInicio().get(Calendar.DATE)) {
+                            depositos.forEach((d) -> {
+                                d.set(d.getTotalCapacity());
+                            });
+                        }*/
                         if (!vc.getKey().getListaPedidos().isEmpty()){
                             vehiculoService.actualizarEstadoVehiculo(vc.getKey().getIdVehiculo());
                         }
+
                     }
                     catch (Exception e) {
                         System.out.println(e.getMessage());
                     }
+                    indice++;
                 }
 
                 listaVehiculos.clear(); // se puede eliminar esta lista intermedia

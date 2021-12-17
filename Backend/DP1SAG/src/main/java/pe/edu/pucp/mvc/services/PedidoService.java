@@ -75,19 +75,8 @@ public class PedidoService {
             */
             fromdata.set(inicio.get(Calendar.YEAR),inicio.get(Calendar.MONTH),dia,iniHora,0,0);
             todata.set(inicio.get(Calendar.YEAR),inicio.get(Calendar.MONTH),dia,finHora,0,0);
-            System.out.println(fromdata.get(Calendar.DAY_OF_MONTH));
-            System.out.println(todata.get(Calendar.DAY_OF_MONTH));
-            System.out.println(fromdata.getTime().toString());
-            System.out.println(fromdata.get(Calendar.HOUR));
-            System.out.println(todata.get(Calendar.HOUR));
-            System.out.println(todata.getTime().toString());
             for (PedidoModel pedido:listaPedidos) {
 
-                System.out.println((pedido.getFechaPedido().compareTo(fromdata)>=0));
-                System.out.println(pedido.getFechaPedido().compareTo(todata)<=0);
-                System.out.println(pedido.getFechaPedido().get(Calendar.DAY_OF_MONTH));
-                System.out.println(pedido.getFechaPedido().get(Calendar.HOUR));
-                System.out.println(pedido.getFechaPedido().getTime().toString());
                 if ((pedido.getFechaPedido().compareTo(fromdata)>=0) && ((pedido.getFechaPedido().compareTo(todata)<=0))){
                     newLista.add(pedido);
                 }
