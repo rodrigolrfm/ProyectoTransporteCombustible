@@ -232,9 +232,10 @@ public class PlanificacionTareas implements Runnable{
                         EntidadRuta rutaVehiculo = EntidadRuta.builder().startTime(text).path(v.getRutaVehiculoPositions(requestListDesdoblado)).endTime("F").build();
                         rutasFinal.agregarRuta(rutaVehiculo);
                         //vehiculoService.actualizarEstadoVehiculoToVacio(v.getIdVehiculo());
-                        fechaHoraNuevaVehiculo = new Timestamp(v.getFechaInicio().getTime().getTime());
+                        fechaHoraNuevaVehiculo = new Timestamp(v.getFechaInicio().getTimeInMillis());
                         vehiculoService.actualizarTiempoEstado(v.getIdVehiculo(), fechaHoraNuevaVehiculo);
                         v.clearVehicle();
+                        fechaHoraNuevaVehiculo = null;
                     }
 
                 }
