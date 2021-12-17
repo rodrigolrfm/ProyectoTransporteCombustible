@@ -64,7 +64,7 @@ public class EjecucionController {
         now.add(Calendar.SECOND, 20);
         int min = now.get(Calendar.MINUTE);
         int sec = now.get(Calendar.SECOND);
-        return sec + " " + min + "/12 * * * ?";
+        return sec + " " + min + "/10 * * * ?";
     }
 
     /*
