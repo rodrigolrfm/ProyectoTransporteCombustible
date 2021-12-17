@@ -41,4 +41,5 @@ public class AnalistaModel implements Serializable {
         this.usuarioAnalista = usuarioAnalista;
     }
 
+
 }
