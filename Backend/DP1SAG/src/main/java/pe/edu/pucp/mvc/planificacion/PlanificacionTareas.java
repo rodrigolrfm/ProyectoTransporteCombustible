@@ -218,6 +218,7 @@ public class PlanificacionTareas implements Runnable{
                 }
                 Timestamp fechaHoraNuevaVehiculo = null;
                 for(EntidadVehiculo v : listaVehiculos){
+
                     if(v.getRutaVehiculo() != null && !v.getRutaVehiculo().isEmpty()) { // si encontró una buana ruta.
                         v.getFechaInicio().add(Calendar.MINUTE, Math.round((float) Math.ceil(v.calculateTimeToDispatch())));
                         v.setNodoActual(v.getRutaVehiculo().get(v.getRutaVehiculo().size() - 1));
@@ -235,6 +236,7 @@ public class PlanificacionTareas implements Runnable{
                         vehiculoService.actualizarTiempoEstado(v.getIdVehiculo(), fechaHoraNuevaVehiculo);
                         v.clearVehicle();
                     }
+
                 }
 
                 // Se hace sort para las capacidadades
