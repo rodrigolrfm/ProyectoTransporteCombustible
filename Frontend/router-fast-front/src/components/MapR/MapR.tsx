@@ -2,7 +2,7 @@ import { makeStyles } from '@mui/styles';
 import HomeIcon from '@mui/icons-material/Home';
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import PersonPinIcon from '@mui/icons-material/PersonPin';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState,useCallback} from 'react';
 import EmojiPeopleIcon from '@mui/icons-material/EmojiPeople';
 import url from  'src/utils/constant';
 import axios from 'axios';
@@ -11,6 +11,8 @@ import { IconButton } from '@mui/material';
 import LinearDeterminate from '../Bars/BarsR';
 import ModalMonitoreo from '../Custom/ModalMonitoreo';
 import { SettingsOverscanTwoTone } from '@mui/icons-material';
+import simulacion3Dias from '../ServerEvents/serverMapR';
+
 
 //import { tiempo,prueba} from "src/content/applications/Transactions/PageHeader";
 //import { tiempo } from '../Tiempo/tiempo';
@@ -28,23 +30,34 @@ const intervaloTiempo=500;
 
 const bloqueosData = [
   {
-  "bloqueo": [
+  "bloqueo": 
   {x: 20, y: 30},
-  ],
-  startTime: "2021-11-11T01:30:51.969+00:00",
+  
+  startTime: "2021-11-11T01:30:59.969+00:00",
   endTime: "2021-11-11T02:30:51.969+00:00"
   },
   {
-  "bloqueo": [
-  {x: 45, y: 50},
-  ],
-  startTime: "2021-11-11T01:30:51.969+00:00",
-  endTime: "2021-11-11T02:30:51.969+00:00"
+  "bloqueo": 
+  {x: 20, y: 20},
+  
+  startTime: "2021-11-11T03:30:59.969+00:00",
+  endTime: "2021-11-11T04:30:51.969+00:00"
   },
+  {
+    "bloqueo": 
+    {x: 35, y: 35},
+    
+    startTime: "2021-11-11T02:30:59.969+00:00",
+    endTime: "2021-11-11T03:30:51.969+00:00"
+    }
 ]
 
 //const pathsaux=[]
 //const intervaloTiempo = prueba;
+
+const bloqueosActuales=[]
+
+
 
 const pathsaux =[
 
@@ -115,7 +128,64 @@ const pathsaux =[
              ],
     "startTime": "2021-11-11T02:30:51.969+00:00",
     "endTime": "2021-11-11T02:35:51.969+00:00"
-   }
+   },
+   { "path": [ 
+
+    {"destino": 0, "x": 12, "y": 8},
+    {"destino": 0, "x": 13, "y": 8},
+    {"destino": 0, "x": 14, "y": 8},
+    {"destino": 0, "x": 15, "y": 8},
+    {"destino": 0, "x": 16, "y": 8},
+    {"destino": 0, "x": 17, "y": 8},
+    {"destino": 0, "x": 18, "y": 8},
+    {"destino": 0, "x": 19, "y": 8},
+    {"destino": 0, "x": 20, "y": 8},
+    {"destino": 0, "x": 21, "y": 8},
+    {"destino": 0, "x": 22, "y": 8},
+    {"destino": 0, "x": 23, "y": 8},
+    {"destino": 0, "x": 24, "y": 8},
+    {"destino": 0, "x": 25, "y": 8},
+    {"destino": 0, "x": 26, "y": 8},
+    {"destino": 0, "x": 27, "y": 8},
+    {"destino": 0, "x": 28, "y": 8},
+    {"destino": 0, "x": 29, "y": 8},
+    {"destino": 0, "x": 30, "y": 8},
+    {"destino": 0, "x": 31, "y": 8},
+    {"destino": 0, "x": 32, "y": 8},
+    {"destino": 0, "x": 33, "y": 8},
+    {"destino": 0, "x": 34, "y": 8},
+    {"destino": 0, "x": 35, "y": 8},
+    {"destino": 0, "x": 36, "y": 8},
+    {"destino": 0, "x": 37, "y": 8},
+    {"destino": 0, "x": 36, "y": 8},
+    {"destino": 0, "x": 35, "y": 8},
+    {"destino": 0, "x": 34, "y": 8},
+    {"destino": 0, "x": 33, "y": 8},
+    {"destino": 0, "x": 32, "y": 8},
+    {"destino": 0, "x": 31, "y": 8},
+    {"destino": 0, "x": 30, "y": 8},
+    {"destino": 0, "x": 29, "y": 8},
+    {"destino": 0, "x": 28, "y": 8},
+    {"destino": 0, "x": 27, "y": 8},
+    {"destino": 0, "x": 26, "y": 8},
+    {"destino": 0, "x": 25, "y": 8},
+    {"destino": 0, "x": 24, "y": 8},
+    {"destino": 0, "x": 23, "y": 8},
+    {"destino": 0, "x": 22, "y": 8},
+    {"destino": 0, "x": 21, "y": 8},
+    {"destino": 0, "x": 20, "y": 8},
+    {"destino": 0, "x": 19, "y": 8},
+    {"destino": 0, "x": 18, "y": 8},
+    {"destino": 0, "x": 17, "y": 8},
+    {"destino": 0, "x": 16, "y": 8},
+    {"destino": 0, "x": 15, "y": 8},
+    {"destino": 0, "x": 14, "y": 8},
+    {"destino": 0, "x": 13, "y": 8},
+    {"destino": 0, "x": 12, "y": 8},
+   ],
+"startTime": "2021-11-11T03:30:51.969+00:00",
+"endTime": "2021-11-11T04:30:51.969+00:00"
+},
 ]
 
 const obtenerRuta = (path) => {
@@ -185,18 +255,52 @@ const MapR=(props: simulacion )=>{
     const [ruta, setRuta] = useState([]);
     const [paths, setPaths] = useState([]);
     const [bloqueos, setBloqueos] = useState([]);
+    const [relativo, setRelativo] = useState(0);
+    const [primero, setPrimero] = useState(true);
 
     const classes = useStyles();
     const map = [];
     const a = useRef<any>(null);
     const b = useRef<any>(null);
-    const timerBool = useRef<any>(true);
-    //console.log(timerBool.current);
-    useEffect(() => {    
+    //const timerBool = useRef<any>(true);
+    const boolTiempo = useRef<any>(true);
+
+    
+
+    let Relativo=0;
+    Relativo=(new Date(paths[0]?.dateStart)).getTime();
+    //setRelativo(Relativo || 0);
+    
+
+    useEffect(() => {   
+      //console.log("antes del if",primero); 
+      if (primero && !isNaN(Relativo)){
+        
+        setRelativo(Relativo);
+        setPrimero(false);
+        //console.log("fin del if",primero); 
+      }
+      else if(!primero){
+        
+       //console.log("relativo antes",relativo);
+      Relativo=relativo+266000;
+      setRelativo(Relativo);
+      const blocksList = bloqueosData.filter((item)=>Relativo>(new Date(item.startTime)).getTime() && Relativo<(new Date(item.endTime)).getTime()).map((item)=>({x:item.bloqueo.x, y:item.bloqueo.y}))
+       console.log("dentro de intervalo",bloqueosData.map((item)=>({start: (new Date(item.startTime)).getTime(),end: (new Date(item.endTime)).getTime()})),Relativo);
+       console.log(blocksList);
+       setBloqueos(blocksList);
+      
+      
+     // console.log("path",paths[0]);
+
+      }
+      //console.log("relativo",new Date(relativo));
       const intervalV=50;
       const interval = setInterval(() => {
       let arr;
-      arr = paths.map((path,index) => {
+      
+
+      arr = paths.map((path) => {
 
           const now = new Date();
           const date = new Date(path.date);
@@ -205,17 +309,21 @@ const MapR=(props: simulacion )=>{
           let rest = now.getTime() - date.getTime() - (nowFixed.getTime() - dateStart.getTime());
           const posAux = Math.floor( (rest/60000) * ((intervalV*intervaloTiempo)/60)); // aumentando la velocidad posición del arreglo 
             let tiempoRelativo = now.getTime() - (nowFixed.getTime() - dateStart.getTime());
-    
-            if(timerBool.current){
+            //console.log(boolTiempo,boolTiempo.current);
+           /*
+            if(boolTiempo.current){
               a.current = new Date(tiempoRelativo);
               b.current = setInterval(() => {
-                //console.log("aasdasd", a);
-                a.current = new Date( a.current.getTime() + 10000);
-              }, 1000);
-              
-          }
-          timerBool.current = false;         
-          console.log("a",a.current);
+                console.log("entraa dentro del if");
+                a.current = new Date( a.current.getTime() + 100000);
+              }, 10000);
+              boolTiempo.current = false;   
+              console.log("a",a.current);
+           }
+            */   
+           
+           
+          //console.log("a",a.current);
           if (posAux === path.ruta.length) {
             setRuta(null);
             return null;
@@ -225,11 +333,72 @@ const MapR=(props: simulacion )=>{
         setPaths(arr.filter((el) => el != null));
         // setPaths(...paths, pos)
       }, 500);
-      return () => {clearInterval(interval); clearInterval(b.current)};
+
+      return () => {clearInterval(interval)};
     }, [paths]);
-   //bloqueos
+    
+    
+    // const findBlocks = useCallback(
+    //   (relativo) => {
+    //      //console.log("relativo",new Date(relativo));
+    //   //if(!primero){
+    //     //console.log("dentro");
+    //    const interval2 = setInterval(() => {
+    //      const blocksList = bloqueosData.filter((item)=>relativo>(new Date(item.startTime)).getTime() && relativo<(new Date(item.endTime)).getTime()).map((item)=>({x:item.bloqueo.x, y:item.bloqueo.y}))
+    //      console.log("dentro de intervalo",bloqueosData.map((item)=>({start: (new Date(item.startTime)).getTime(),end: (new Date(item.endTime)).getTime()})),relativo);
+    //      console.log(blocksList);
+    //      setBloqueos(blocksList);
+ 
+    //    }, 5000);
+    //    return () => {clearInterval(interval2)};
+    //   // }
+ 
+    //   },
+    //   [],
+    // )
+
+   
+    
+
+    // useEffect(()=>{
+    //   // console.log("relativo",new Date(relativo));
+
+    //   if(!primero){
+    //   findBlocks(relativo);
+    //   }
+
+    // },[primero,findBlocks,relativo]);
+   
+    
+
     useEffect(() => {
        console.log("Mapa 3 días");
+      
+       //con server event
+       /*
+       const funcionRequest= (data)=>{
+        data = JSON.parse(data);
+      
+        let newData = data.paths?.map((path) => {
+          return {
+            ...path.path,
+            ruta: obtenerRuta(path.path),
+            pos: 0,
+            date: implementarFecha(data.paths[0].startTime,path.startTime),
+            dateStart: data.paths[0].startTime,
+            nowFixed: new Date(),
+          };
+        });
+        if(newData)
+          setPaths(newData);
+        };
+
+        simulacion3Dias(funcionRequest);
+       */
+      
+      // sin server events 
+
+       /*
         axios
         .get(url + "/ejecutar/obtenerTresDias")
         .then((e) => {
@@ -246,6 +415,11 @@ const MapR=(props: simulacion )=>{
             })
           );
         });
+      
+        */
+
+        //hardcodeo
+        
           setPaths(
             pathsaux.map((path) => {
               return {
@@ -259,7 +433,7 @@ const MapR=(props: simulacion )=>{
               };
             })
           );
-          
+        
       }, []);
 
     //BLOQUEOS

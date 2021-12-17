@@ -45,6 +45,8 @@ function PageHeader() {
     setStart(true);
 
   }
+
+  
   const sendFiles= ()=>{
     
     
@@ -123,7 +125,7 @@ function PageHeader() {
     console.log("bloqueo almacenado");
   }
   
-  const tiempo=900;
+ 
   return (
     <Grid container justifyContent="space-between" alignItems="center">
       <Grid item>

@@ -3,9 +3,17 @@ import url from  'src/utils/constant';
 
 
 let datax;
-const simulacion3Dias  = (funcionRequest) => {
+const fecha={
+   fecha: "2021-12-18 00:00:00"
 
-    var source = new EventSource(url +`/ejecutar/obtenerRutas`);
+}
+const simulacion3Dias  = (funcionRequest) => {
+    
+
+    var source = new EventSource(url +`/ejecutar/obtenerTresDias?fecha=2021-12-18%2000:00:00`, {
+        headers: { 'Content-Type': 'application/json' }
+    });
+    //var source = new EventSource(url +`/ejecutar/obtenerTresDias`);
 
     source.onopen = (event) => {
         console.log ("La conexión entre el cliente y el servidor es exitosa ......");
