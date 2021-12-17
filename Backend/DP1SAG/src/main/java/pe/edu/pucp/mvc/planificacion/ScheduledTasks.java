@@ -56,6 +56,7 @@ public class ScheduledTasks {
 
         //Carga de velículos
         listaVehiculos = vehiculoService.listaVehiculosDisponibles();
+        listaVehiculos.sort((v1, v2) -> Long.compare(v1.getFechaInicio().getTimeInMillis() , v2.getFechaInicio().getTimeInMillis()));
         // Carga de información de los bloqueos
         blockList = bloqueoService.listaBloqueosDiaDia();
 

@@ -48,19 +48,6 @@ public class PlanificacionTareas implements Runnable{
 
     private static final Logger log = LoggerFactory.getLogger(ScheduledTasks.class);
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-
-    /*
-    private List<PedidoModel> listaPedidos = new ArrayList<>();
-    public List<VehiculoModel> vehiculoModels = new ArrayList<>();
-    private List<EntidadVehiculo> listaVehiculos = new ArrayList<>();
-    private List<NodoModel> blockList = new ArrayList<>();
-    private List<BloqueoModel> bloqueos = new ArrayList<>();
-    private List<PedidoModel> requestListDesdoblado = new ArrayList<>();
-    private MapaModel mapaModel= null;
-    private static int dia = 0;
-    private static Calendar inicio = null;
-    private static Calendar fin = null;
-    */
     private static int dia = 0;
 
     private PedidoService pedidoService;
