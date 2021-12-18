@@ -537,6 +537,8 @@ const bloqueosData = [
 
 
 ]
+const pathsaux=[];
+/*
 const pathsaux =[
 
   { "path": [ 
@@ -666,7 +668,7 @@ const pathsaux =[
 },
 ]
 
-
+*/
 const obtenerRuta = (path) => {
     const ruta = [];
     for (let i = 0; i < path.length - 1; i++) {
@@ -855,7 +857,7 @@ const MapR=(props: simulacion )=>{
        console.log("Mapa 3 días");
       
        //con server event
-       /*
+       
        const funcionRequest= (data)=>{
         data = JSON.parse(data);
       
@@ -877,7 +879,7 @@ const MapR=(props: simulacion )=>{
 
         simulacion3Dias(funcionRequest);
       
-      */
+      
       // sin server events 
 
        /*
@@ -902,7 +904,7 @@ const MapR=(props: simulacion )=>{
 
         //hardcodeo
         
-        
+        /*
           setPaths(
             pathsaux.map((path) => {
               return {
@@ -918,7 +920,7 @@ const MapR=(props: simulacion )=>{
             })
           );
 
-
+          */
          
           
         

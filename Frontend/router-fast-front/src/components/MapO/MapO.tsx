@@ -14,6 +14,10 @@ import { HomeWork } from '@mui/icons-material';
 import EmojiPeople from '@mui/icons-material/EmojiPeople';
 import { Dialog } from '@mui/material';
 import * as moment from 'moment';
+
+
+
+
 import sendBlock from '../bloqueos/bloquedia';
 
 const vectorX = 70;
@@ -164,7 +168,7 @@ const MapO=(props: simulacion )=>{
       60 min ->3600000
 
       */
-      const intervalTime = 60000; //velocidad del camión
+      const intervalTime =60000; //velocidad del camión
       const interval = setInterval(() => {
         let arr;
         
@@ -232,44 +236,6 @@ const MapO=(props: simulacion )=>{
 
           simulacionDia(funcionRequest);
 
-          console.log('mostrando bloqueos');
-
-          //var dd=new Date();
-          //var date=dd.getFullYear() +' ' + dd.getMonth()
-          const semana=7;
-    
-          const fechaPedido=moment.default().format('YYYY/MM/DD HH:mm');
-          
-          const fechaFin=moment.default().add(semana,"days").format('YYYY/MM/DD HH:mm');
-          
-          console.log(fechaPedido);
-          console.log(fechaFin);
-    
-          const interval = setInterval(() => {
-    
-          const sendData= async ()=>{
-          
-            const data = {
-                  fechaInicio: fechaPedido,
-                  fechaFin: fechaFin
-                }
-                axios.post(url + '/bloqueo/getBloqueosFechas',JSON.stringify(data) , {
-                    headers: { 'Content-Type': 'application/json' }
-                })
-                
-                .then((r) => {
-                  console.log("entra al axios de bloqueos")
-                  setBloqueos(r.data);
-                  console.log(r);
-                  console.log(data);
-                  console.log("Bloqueos agregado exitosamente.");         
-                
-                });
-                
-          }
-    
-           }, 20000);
-           return () => clearInterval(interval);
 
     }, []);
     
@@ -306,8 +272,8 @@ const MapO=(props: simulacion )=>{
     */
 
 
-
-     /*
+   
+     
     
     useEffect(() => {
 
@@ -326,32 +292,32 @@ const MapO=(props: simulacion )=>{
 
       const interval = setInterval(() => {
 
-      const sendData= async ()=>{
       
-        const data = {
+      
+        const mario = {
               fechaInicio: fechaPedido,
               fechaFin: fechaFin
             }
-            axios.post(url + '/bloqueo/getBloqueosFechas',JSON.stringify(data) , {
+            axios.post(url + '/bloqueo/getBloqueosFechas',JSON.stringify(mario) , {
                 headers: { 'Content-Type': 'application/json' }
             })
             
             .then((r) => {
               console.log("entra al axios de bloqueos")
               setBloqueos(r.data);
-              console.log(r);
-              console.log(data);
+              console.log("r:",r.data);
+              //console.log(data);
               console.log("Bloqueos agregado exitosamente.");         
             
             });
             
-      }
+      
 
        }, 20000);
        return () => clearInterval(interval);
      }, []);
     
-    */
+    
       
 
     const handleClose = () => {
@@ -371,6 +337,7 @@ const MapO=(props: simulacion )=>{
       setBloqueos(bloqueosData);
     }, []);
     */
+   console.log("bloqueos data",bloqueos);
     
     //setPedidos(ruta?.filter(nodo => nodo.destino));
     for (let i = 0; i < vectorY; i++) { //50
@@ -393,7 +360,7 @@ const MapO=(props: simulacion )=>{
                   : '#D89F7B',
             }}
           >
-          {bloqueos?.find(({ x, y }) => x === j && y === i) && (
+          {bloqueos?.find(({ coordenadaX, coordenadaY }) => coordenadaX === j && coordenadaY === i) && (
             <div className={classes.icon}>
               <IconButton>
                 <BlockIcon style={{ color: 'red', fontSize: '20px' }} />

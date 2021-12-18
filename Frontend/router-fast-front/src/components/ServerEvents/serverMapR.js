@@ -10,7 +10,7 @@ const fecha={
 const simulacion3Dias  = (funcionRequest) => {
     
 
-    var source = new EventSource(url +`/ejecutar/obtenerTresDias?fecha=2021-12-18%2000:00:00`, {
+    var source = new EventSource(url +`/ejecutar/obtenerTresDias`, {
         headers: { 'Content-Type': 'application/json' }
     });
     //var source = new EventSource(url +`/ejecutar/obtenerTresDias`);

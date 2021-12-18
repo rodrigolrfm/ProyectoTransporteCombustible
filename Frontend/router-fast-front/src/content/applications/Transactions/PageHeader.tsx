@@ -75,7 +75,7 @@ function PageHeader() {
   
   const sendFileA = async () => {
     let formData = new FormData();
-    formData.append("filear", fileA);
+    formData.append("file", fileA);
 
     
     axios.post(`${url}/pedido/cargaMasivaPedidos` ,formData, {
@@ -94,11 +94,11 @@ function PageHeader() {
   
   const sendFileB = async () => {
     let formData = new FormData();
-    formData.append("file", fileA);
+    formData.append("file", fileB);
     
-    /*
+    
     // colocar servicio de la carga masiva de bloqueos
-    axios.post(`${url}/archivos/uploadPedidos` ,formData, { 
+    axios.post(`${url}/bloqueo/cargaMasivaBloqueos` ,formData, { 
       headers: {
         'Content-Type': 'multipart/form-data'
       }
@@ -113,7 +113,7 @@ function PageHeader() {
     }).catch((e) =>{
     setAlert({isOpen: true, message: 'Pedidos y Bloqueos cargados de manera exitosa.', type: 'success'})
     })
-    */
+    
 
   }
 

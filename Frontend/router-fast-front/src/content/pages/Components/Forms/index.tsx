@@ -183,9 +183,9 @@ function Forms() {
                   <Button variant="contained" onClick={simulacionDia} sx={{mt:1, mx:2, height: 50}} >
                   Empezar Operación
                   </Button>
-                  <Button variant="contained" onClick={sendBlock} sx={{mt:1, mx:2, height: 50}} >
+                  {/*<Button variant="contained" onClick={sendBlock} sx={{mt:1, mx:2, height: 50}} >
                   Pa probar tu bloqueo p
-                  </Button>
+                  </Button>*/}
                   </Box>
                 </Box>
               </CardContent>
