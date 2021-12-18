@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import pe.edu.pucp.mvc.models.BloqueoModel;
 import pe.edu.pucp.mvc.models.NodoModel;
+import pe.edu.pucp.mvc.models.ReporteBloqueo;
 import pe.edu.pucp.mvc.services.BloqueoService;
 import pe.edu.pucp.mvc.services.VehiculoService;
 
@@ -26,6 +27,10 @@ public class BloqueoController {
     @Autowired
     BloqueoService bloqueoService;
 
+/*    @PostMapping(value = "/getBloqueos")
+    public ReporteBloqueo getBloqueos() {
+
+    }*/
 
     @PostMapping(value = "/cargaMasivaBloqueos", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public void cargaMasivaBloqueo(@RequestParam("file") MultipartFile file) throws IOException {
@@ -59,7 +64,7 @@ public class BloqueoController {
                     NodoModel nodo = null;
                     // Se crea la clase bloqueo
                     BloqueoModel block = BloqueoModel.builder().inicioBloqueo(initDate).finBloqueo(endDate).build();
-                    bloqueoService.guardarBloqueo(block);
+                    //bloqueoService.guardarBloqueo(block);
 
                     try{
                         int x = Integer.parseInt(rowRequest[i+2]);
@@ -73,6 +78,8 @@ public class BloqueoController {
 
                         //Agregar bloqueo en la base de datos
                         blockedList.add(nodo);
+                        block.setCoordenadaX(Integer.parseInt(rowRequest[i]));
+                        block.setCoordenadaY(Integer.parseInt(rowRequest[i+1]));
                         bloqueoService.guardarBloqueo(block);
                         break;
                     }
@@ -92,6 +99,8 @@ public class BloqueoController {
                                     .coordenadaY(Integer.parseInt(rowRequest[i+1])+j).build();
                             nodo.getBlockList().add(block);
                             blockedList.add(nodo);
+                            block.setCoordenadaX(Integer.parseInt(rowRequest[i]));
+                            block.setCoordenadaY(Integer.parseInt(rowRequest[i+1])+j);
                             bloqueoService.guardarBloqueo(block);
                         }
 
@@ -102,6 +111,8 @@ public class BloqueoController {
                                     .coordenadaY(Integer.parseInt(rowRequest[i+1])-j).build();
                             nodo.getBlockList().add(block);
                             blockedList.add(nodo);
+                            block.setCoordenadaX(Integer.parseInt(rowRequest[i]));
+                            block.setCoordenadaY(Integer.parseInt(rowRequest[i+1])-j);
                             bloqueoService.guardarBloqueo(block);
                         }
                     }
@@ -112,6 +123,8 @@ public class BloqueoController {
                                     .coordenadaY(Integer.parseInt(rowRequest[i+1])).build();
                             nodo.getBlockList().add(block);
                             blockedList.add(nodo);
+                            block.setCoordenadaX(Integer.parseInt(rowRequest[i])+j);
+                            block.setCoordenadaY(Integer.parseInt(rowRequest[i+1]));
                             bloqueoService.guardarBloqueo(block);
                         }
                     }else{
@@ -121,6 +134,8 @@ public class BloqueoController {
                                     .coordenadaY(Integer.parseInt(rowRequest[i + 1])).build();
                             nodo.getBlockList().add(block);
                             blockedList.add(nodo);
+                            block.setCoordenadaX(Integer.parseInt(rowRequest[i]) - j);
+                            block.setCoordenadaY(Integer.parseInt(rowRequest[i+1]));
                             bloqueoService.guardarBloqueo(block);
                         }
                     }
