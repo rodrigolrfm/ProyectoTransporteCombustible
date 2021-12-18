@@ -16,4 +16,7 @@ public interface BloqueoRepository extends CrudRepository<BloqueoModel, Integer>
 
     @Query(value ="CALL OBTENER_BLOQUEOS_DIA_DIA();",nativeQuery = true)
     List<BloqueoModel> findBloqueosNodos();
+
+    @Query(value ="select * from bloqueo;",nativeQuery = true)
+    List<BloqueoModel> getBloqueos();
 }

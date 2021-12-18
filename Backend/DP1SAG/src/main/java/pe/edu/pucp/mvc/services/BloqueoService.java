@@ -28,4 +28,9 @@ public class BloqueoService {
         return listaNodos;
     }
 
+    public List<BloqueoModel> getBloqueos(){
+        List<BloqueoModel> bloqueos = new ArrayList<>();
+        bloqueos = bloqueoRepository.getBloqueos();
+        return bloqueos;
+    }
 }

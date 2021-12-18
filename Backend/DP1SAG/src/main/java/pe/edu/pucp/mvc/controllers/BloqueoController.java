@@ -19,6 +19,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.TimeZone;
 
 @RestController
 @RequestMapping("/bloqueo")
@@ -27,10 +29,21 @@ public class BloqueoController {
     @Autowired
     BloqueoService bloqueoService;
 
-/*    @PostMapping(value = "/getBloqueos")
-    public ReporteBloqueo getBloqueos() {
-
-    }*/
+    @PostMapping(value = "/getBloqueos")
+    public List<ReporteBloqueo> getBloqueos() {
+        List<BloqueoModel> bloqueos = bloqueoService.getBloqueos();
+        List<ReporteBloqueo> bloqueosList = new ArrayList<>();
+        for (BloqueoModel b : bloqueos){
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
+            sdf.setTimeZone(TimeZone.getTimeZone("America/Bogota"));
+            String inicio = sdf.format(b.getInicioBloqueo().getTime());
+            String fin =  sdf.format(b.getFinBloqueo().getTime());
+            bloqueosList.add(ReporteBloqueo.builder().inicioBloqueo(inicio)
+                            .finBloqueo(fin).coordenadaX(b.getCoordenadaX())
+                            .coordenadaY(b.getCoordenadaY()).build());
+        }
+        return bloqueosList;
+    }
 
     @PostMapping(value = "/cargaMasivaBloqueos", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public void cargaMasivaBloqueo(@RequestParam("file") MultipartFile file) throws IOException {
