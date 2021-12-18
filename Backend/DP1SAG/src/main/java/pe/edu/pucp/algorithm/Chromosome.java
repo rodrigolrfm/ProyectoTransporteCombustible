@@ -113,6 +113,8 @@ public class Chromosome {
                 mapaModelConfiguration, previousDeliveredDate, (int) v.getVelocidad(), this.route.get(this.route.size() - 1));
         partialRoute.removeIf(Objects::isNull);
         this.route.addAll(partialRoute);
+        this.route.add(finalDepot);
+
         distancia = partialRoute.size();
 
         if(distancia == 0)
@@ -122,8 +124,6 @@ public class Chromosome {
         
         if(gastoCombustible >= v.getCombustible())
             return -1.0;
-
-        this.route.add(finalDepot);
         
         return distanciaTotal;
     }
