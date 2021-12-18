@@ -140,9 +140,9 @@ public class PlanificacionTareas implements Runnable{
 
                         float tiempoLlegadaLimite = req.getHorasLimite().getTimeInMillis() - v.getFechaInicio().getTimeInMillis();
 
-                        if((tiempoLlegadaLimite > 0) && (tiempoLlegadaLimite>tiempoAproximado))
-                            requestListArreange.add(new Pair<>((tiempoLlegadaLimite /tiempoAproximado),req));
-                        else{
+                        if((tiempoLlegadaLimite > 0) && (tiempoLlegadaLimite>tiempoAproximado)) {
+                            requestListArreange.add(new Pair<>((tiempoLlegadaLimite / tiempoAproximado), req));
+                        }else{
                             System.out.println("idPedido colapsado: " + req.getIdNodo() + "-" + req.getIdExtendido());
                             colapso++;
                         }
@@ -239,7 +239,7 @@ public class PlanificacionTareas implements Runnable{
                         String text = sdf.format(v.getFechaInicio().getTime());
                         EntidadRuta rutaVehiculo = EntidadRuta.builder().startTime(text).path(v.getRutaVehiculoPositions(requestListDesdoblado)).endTime("F").build();
                         rutasFinal.agregarRuta(rutaVehiculo);
-                        fechaHoraNuevaVehiculo = new Timestamp(v.getFechaInicio().getTimeInMillis());
+                        //fechaHoraNuevaVehiculo = new Timestamp(v.getFechaInicio().getTimeInMillis());
                         vehiculoService.actualizarTiempoEstado(v.getIdVehiculo());
                     }
                     v.clearVehicle();
