@@ -290,7 +290,7 @@ public class EjecucionController {
                     // aquí se podría enviar cada vehículo con su ruta
                     SimpleDateFormat sdf;
                     sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
-                    sdf.setTimeZone(TimeZone.getTimeZone("CET"));
+                    sdf.setTimeZone(TimeZone.getTimeZone("America/Bogota"));
                     String text = sdf.format(v.getFechaInicio().getTime());
                     EntidadRuta rutaVehiculo = EntidadRuta.builder().startTime(text).path(v.getRutaVehiculoPositions(requestListDesdoblado)).endTime("Alap").build();
                     rutasFinal.agregarRuta(rutaVehiculo);
@@ -488,7 +488,7 @@ public class EjecucionController {
                     // aquí se podría enviar cada vehículo con su ruta
                     SimpleDateFormat sdf;
                     sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
-                    sdf.setTimeZone(TimeZone.getTimeZone("CET"));
+                    sdf.setTimeZone(TimeZone.getTimeZone("America/Bogota"));
                     String text = sdf.format(v.getFechaInicio().getTime());
                     EntidadRuta rutaVehiculo = EntidadRuta.builder().startTime(text).path(v.getRutaVehiculoPositions(requestListDesdoblado)).endTime("Alap").build();
                     rutasFinal.agregarRuta(rutaVehiculo);
