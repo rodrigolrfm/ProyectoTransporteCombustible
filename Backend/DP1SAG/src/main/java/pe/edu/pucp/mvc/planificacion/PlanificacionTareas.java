@@ -106,11 +106,13 @@ public class PlanificacionTareas implements Runnable{
             // lista que tendrá los vehículos y sus listas de pedidos ordenados por indice
             ArrayList<Pair<EntidadVehiculo, PriorityQueue<Pair<Float, PedidoModel>>>> listaVC = new ArrayList<>();
 
+
             // Tener un arreglo auxiliar de pedidos
-            List<PedidoModel> auxRequest = new ArrayList<>();
+            List<PedidoModel> auxRequest = requestListDesdoblado;
+            /*
             requestListDesdoblado.forEach(r -> {
                 auxRequest.add(r);
-            });
+            });*/
 
 
             float tiempoTotal=0;
@@ -138,7 +140,7 @@ public class PlanificacionTareas implements Runnable{
 
                         float tiempoLlegadaLimite = req.getHorasLimite().getTimeInMillis() - v.getFechaInicio().getTimeInMillis();
 
-                        if(tiempoLlegadaLimite > 0)
+                        if((tiempoLlegadaLimite > 0) && (tiempoLlegadaLimite>tiempoAproximado))
                             requestListArreange.add(new Pair<>((tiempoLlegadaLimite /tiempoAproximado),req));
                         else{
                             System.out.println("idPedido colapsado: " + req.getIdNodo() + "-" + req.getIdExtendido());
@@ -208,20 +210,27 @@ public class PlanificacionTareas implements Runnable{
 
                 //Algoritmo Genetico
                 ArrayList<NodoModel> vertices = new ArrayList<>(); // se puede quitar esta lista intermedia
-                for(EntidadVehiculo v : listaVehiculos){
-                    vertices.clear();
-                    v.getListaPedidos().forEach(p -> { vertices.add(p); });
-                    System.out.println(v.getListaPedidos());
-                    if(!v.getListaPedidos().isEmpty())
-                        GeneticAlgorithm.Genetic(v, vertices, controlTarea.getMapaModel());
-
-                }
                 Timestamp fechaHoraNuevaVehiculo = null;
-                for(EntidadVehiculo v : listaVehiculos){
+                for(EntidadVehiculo v : listaVehiculos) {
+                    vertices.clear();
+                    v.getListaPedidos().forEach(p -> {
+                        vertices.add(p);
+                    });
+                    System.out.println(v.getListaPedidos());
+                    if (!v.getListaPedidos().isEmpty()){
+                        try {
+                            GeneticAlgorithm.Genetic(v, vertices, controlTarea.getMapaModel());
+                        } catch (Exception ex){
+                            System.out.println(ex.getMessage());
+                        }
+                    }
 
-                    if(v.getRutaVehiculo() != null && !v.getRutaVehiculo().isEmpty()) { // si encontró una buana ruta.
+                    if((v.getRutaVehiculo() != null) && (!v.getRutaVehiculo().isEmpty())) { // si encontró una buana ruta.
+
                         v.getFechaInicio().add(Calendar.MINUTE, Math.round((float) Math.ceil(v.calculateTimeToDispatch())));
+
                         v.setNodoActual(v.getRutaVehiculo().get(v.getRutaVehiculo().size() - 1));
+
                         tiempoTotal += v.calculateTimeToDispatch();
                         // se guardan las rutas y los pedidos
                         // aquí se podría enviar cada vehículo con su ruta
@@ -231,13 +240,11 @@ public class PlanificacionTareas implements Runnable{
                         String text = sdf.format(v.getFechaInicio().getTime());
                         EntidadRuta rutaVehiculo = EntidadRuta.builder().startTime(text).path(v.getRutaVehiculoPositions(requestListDesdoblado)).endTime("F").build();
                         rutasFinal.agregarRuta(rutaVehiculo);
-                        //vehiculoService.actualizarEstadoVehiculoToVacio(v.getIdVehiculo());
                         fechaHoraNuevaVehiculo = new Timestamp(v.getFechaInicio().getTimeInMillis());
                         vehiculoService.actualizarTiempoEstado(v.getIdVehiculo(), fechaHoraNuevaVehiculo);
-                        v.clearVehicle();
-                        fechaHoraNuevaVehiculo = null;
                     }
-
+                    v.clearVehicle();
+                    fechaHoraNuevaVehiculo = null;
                 }
 
                 // Se hace sort para las capacidadades
@@ -245,10 +252,10 @@ public class PlanificacionTareas implements Runnable{
                 listaVehiculos.sort((v1, v2) -> Long.compare(v1.getFechaInicio().getTimeInMillis() , v2.getFechaInicio().getTimeInMillis()));
 
                 // Se filtra una nueva lista de los pedidos desdoblados
-                List<PedidoModel> aux = new ArrayList<>();
+                List<PedidoModel> nuevalistaPedidos = new ArrayList<>();
                 requestListDesdoblado.forEach(r -> {
                     if(!r.isAtendido()) {
-                        aux.add(r);
+                        nuevalistaPedidos.add(r);
                     }else{
                         pedidoService.actualizarPedidosAtentidosDesdoblado(r.getIdNodo(),r.getIdExtendido());
                     }
@@ -258,7 +265,7 @@ public class PlanificacionTareas implements Runnable{
 
                 });
 
-                requestListDesdoblado = aux;
+                requestListDesdoblado = nuevalistaPedidos;
 
             } while(!requestListDesdoblado.isEmpty());
 
