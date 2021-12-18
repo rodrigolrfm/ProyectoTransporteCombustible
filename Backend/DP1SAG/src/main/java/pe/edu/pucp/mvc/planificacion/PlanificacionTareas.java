@@ -217,26 +217,25 @@ public class PlanificacionTareas implements Runnable{
                         vertices.add(p);
                     });
                     System.out.println(v.getListaPedidos());
-                    if (!v.getListaPedidos().isEmpty()){
+                    if (!v.getListaPedidos().isEmpty()) {
                         try {
                             GeneticAlgorithm.Genetic(v, vertices, controlTarea.getMapaModel());
-                        } catch (Exception ex){
+                        } catch (Exception ex) {
                             System.out.println(ex.getMessage());
                         }
                     }
+                }
 
+                for(EntidadVehiculo v : listaVehiculos) {
                     if((v.getRutaVehiculo() != null) && (!v.getRutaVehiculo().isEmpty())) { // si encontró una buana ruta.
-
                         v.getFechaInicio().add(Calendar.MINUTE, Math.round((float) Math.ceil(v.calculateTimeToDispatch())));
-
                         v.setNodoActual(v.getRutaVehiculo().get(v.getRutaVehiculo().size() - 1));
-
                         tiempoTotal += v.calculateTimeToDispatch();
                         // se guardan las rutas y los pedidos
                         // aquí se podría enviar cada vehículo con su ruta
                         SimpleDateFormat sdf;
                         sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
-                        sdf.setTimeZone(TimeZone.getTimeZone("CET"));
+                        sdf.setTimeZone(TimeZone.getTimeZone("UTF"));
                         String text = sdf.format(v.getFechaInicio().getTime());
                         EntidadRuta rutaVehiculo = EntidadRuta.builder().startTime(text).path(v.getRutaVehiculoPositions(requestListDesdoblado)).endTime("F").build();
                         rutasFinal.agregarRuta(rutaVehiculo);

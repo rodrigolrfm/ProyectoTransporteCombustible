@@ -77,7 +77,6 @@ public class EjecucionController {
     @GetMapping(value = "/obtenerTresDias")
     public SseEmitter devolverRutasTresDias(@RequestBody FechaDTO fecha){
         SseEmitter emitter = null;
-
         try{
             System.out.println("--------");
             emitter = new SseEmitter(Long.MAX_VALUE);
@@ -119,15 +118,14 @@ public class EjecucionController {
             vehiculoService.inicializarFechaInicioVehiculo(fechaHora);
             controlDatosPlanificador.setListaVehiculos(listaVehiculos);
 
+
             var localDate = fechaIni.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
             // Para aumentar la fecha a 3 dentro de tres días
             localDate = localDate.plusDays(3);
             System.out.println(java.sql.Timestamp.valueOf(localDate));
             controlDatosPlanificador.setFechaFin(java.sql.Timestamp.valueOf(localDate));
             controlDatosPlanificador.setFechaReferencial(fechaIni);
-
             PlanificacionTareas planificadorTareas = new PlanificacionTareas(fechaIni,listaVehiculos);
-
             String uuid = UUID.randomUUID().toString();
             emitter.onCompletion(() -> planificadorTareasServicios.eliminarPlanificadorTareas(uuid));
             emitter.onTimeout(() -> planificadorTareasServicios.eliminarPlanificadorTareas(uuid));
@@ -140,7 +138,6 @@ public class EjecucionController {
             planificadorTareas.setVehiculoService(vehiculoService);
             planificadorTareas.setPlanificadorTareasServicios(planificadorTareasServicios);
             planificadorTareasServicios.planificarTareas(uuid, planificadorTareas, controlDatosPlanificador.getControlCron());
-
         }catch (Exception ex){
             System.out.println(ex.getMessage());
         }
