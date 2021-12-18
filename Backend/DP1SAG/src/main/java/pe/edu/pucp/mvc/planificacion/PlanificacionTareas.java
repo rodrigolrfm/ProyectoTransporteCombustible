@@ -108,11 +108,11 @@ public class PlanificacionTareas implements Runnable{
 
 
             // Tener un arreglo auxiliar de pedidos
-            List<PedidoModel> auxRequest = requestListDesdoblado;
-            /*
+            List<PedidoModel> auxRequest = new ArrayList<>();
+
             requestListDesdoblado.forEach(r -> {
                 auxRequest.add(r);
-            });*/
+            });
 
 
             float tiempoTotal=0;
