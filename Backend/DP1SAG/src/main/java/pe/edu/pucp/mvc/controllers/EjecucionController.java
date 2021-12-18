@@ -64,7 +64,7 @@ public class EjecucionController {
         now.add(Calendar.SECOND, 20);
         int min = now.get(Calendar.MINUTE);
         int sec = now.get(Calendar.SECOND);
-        return sec + " " + min + "/10 * * * ?";
+        return sec + " " + min + "/5 * * * ?";
     }
 
     /*
@@ -75,19 +75,24 @@ public class EjecucionController {
     }*/
 
     @GetMapping(value = "/obtenerTresDias")
-    public SseEmitter devolverRutasTresDias(@RequestBody FechaDTO fecha){
+    public SseEmitter devolverRutasTresDias(){
+
+        String fecha = "2021-12-20 00:00:00";
+
         SseEmitter emitter = null;
+        System.out.println("fecha:   " + fecha);
         try{
             System.out.println("--------");
             emitter = new SseEmitter(Long.MAX_VALUE);
             ControlTarea controlDatosPlanificador = ControlTarea.builder()
                     .tipoAction("Simulacion3Dias")
                     .datos("")
-                    .fecha(fecha.getFechaIni())
+                    .fecha(fecha)
                     .controlCron(generateCronExpression())
                     .build();
 
             // cargar Servicios
+            System.out.println("fecha:   " + fecha);
             controlDatosPlanificador.setPedidoService(new PedidoService());
             controlDatosPlanificador.setBloqueoService(new BloqueoService());
             controlDatosPlanificador.setVehiculoService(new VehiculoService());
@@ -100,7 +105,7 @@ public class EjecucionController {
 
             MapaModel mapa = new MapaModel();
             controlDatosPlanificador.setMapaModel(new MapaModel(70,50,mapa.obtenerPlantarIntermedias()));
-            Date fechaIni = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(fecha.getFechaIni());
+            Date fechaIni = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(fecha);
             controlDatosPlanificador.setFechaInicio(fechaIni);
 
             Calendar aux= Calendar.getInstance();
