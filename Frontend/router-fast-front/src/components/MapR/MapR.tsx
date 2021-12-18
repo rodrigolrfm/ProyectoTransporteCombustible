@@ -28,10 +28,11 @@ const path = [ ];
 const intervaloTiempo=500;
 // 1 es tiempo real
 
+/*
 const bloqueosData = [
   {
   "bloqueo": 
-  {x: 20, y: 30},
+  {x: 10, y: 30},
   
   startTime: "2021-11-11T01:30:59.969+00:00",
   endTime: "2021-11-11T02:30:51.969+00:00"
@@ -51,14 +52,16 @@ const bloqueosData = [
     endTime: "2021-11-11T03:30:51.969+00:00"
     }
 ]
+*/
+
 
 //const pathsaux=[]
 //const intervaloTiempo = prueba;
 
 const bloqueosActuales=[]
 
-
-
+/*
+//json de rutas y bloqueos
 const pathsaux =[
 
   { "path": [ 
@@ -116,7 +119,13 @@ const pathsaux =[
               {"destino": 0, "x": 12, "y": 8},
              ],
     "startTime": "2021-11-11T01:30:51.969+00:00",
-    "endTime": "2021-11-11T02:05:51.969+00:00"
+    "endTime": "2021-11-11T02:05:51.969+00:00",
+    "bloqueo": 
+     {x: 20, y: 30},
+  
+    startTime: "2021-11-11T01:30:59.969+00:00",
+    endTime: "2021-11-11T02:30:51.969+00:00"
+  
    },
    { "path": [
       {"destino": 0, "x": 12, "y": 8},
@@ -127,7 +136,13 @@ const pathsaux =[
       {"destino": 0, "x": 12, "y": 13}
              ],
     "startTime": "2021-11-11T02:30:51.969+00:00",
-    "endTime": "2021-11-11T02:35:51.969+00:00"
+    "endTime": "2021-11-11T02:35:51.969+00:00",
+    "bloqueo": 
+    {x: 20, y: 20},
+  
+    startTime: "2021-11-11T03:30:59.969+00:00",
+    endTime: "2021-11-11T04:30:51.969+00:00"
+
    },
    { "path": [ 
 
@@ -184,9 +199,473 @@ const pathsaux =[
     {"destino": 0, "x": 12, "y": 8},
    ],
 "startTime": "2021-11-11T03:30:51.969+00:00",
-"endTime": "2021-11-11T04:30:51.969+00:00"
+"endTime": "2021-11-11T04:30:51.969+00:00",
+"bloqueo": 
+    {x: 35, y: 35},
+    
+    startTime: "2021-11-11T02:30:59.969+00:00",
+    endTime: "2021-11-11T03:30:51.969+00:00"
+    
 },
 ]
+*/
+
+const bloqueosData = [
+  {"bloqueo":
+        {x: 29,
+        y: 30},
+        startTime: "2021-12-11T01:22:00.000-05:00",
+        endTime: "2021-12-11T01:42:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 30,
+        y: 21},
+        startTime: "2021-12-11T01:22:00.000-05:00",
+        endTime: "2021-12-11T01:42:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 39,
+        y: 20},
+        startTime: "2021-12-11T01:22:00.000-05:00",
+        endTime: "2021-12-11T01:42:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 40,
+        y: 11},
+        startTime: "2021-12-11T01:22:00.000-05:00",
+        endTime: "2021-12-11T01:42:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 40,
+        y: 10},
+        startTime: "2021-12-11T01:22:00.000-05:00",
+        endTime: "2021-12-11T01:42:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 35,
+        y: 26},
+        startTime: "2021-12-11T03:15:00.000-05:00",
+        endTime: "2021-12-11T07:20:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 44,
+        y: 25},
+        startTime: "2021-12-11T03:15:00.000-05:00",
+        endTime: "2021-12-11T07:20:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 45,
+        y: 25},
+        startTime: "2021-12-11T03:15:00.000-05:00",
+        endTime: "2021-12-11T07:20:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 34,
+        y: 10},
+        startTime: "2021-12-11T05:35:00.000-05:00",
+        endTime: "2021-12-11T11:27:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 35,
+        y: 10},
+        startTime: "2021-12-11T05:35:00.000-05:00",
+        endTime: "2021-12-11T11:27:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 44,
+        y: 45},
+        startTime: "2021-12-11T19:15:00.000-05:00",
+        endTime: "2021-12-11T21:13:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 45,
+        y: 41},
+        startTime: "2021-12-11T19:15:00.000-05:00",
+        endTime: "2021-12-11T21:13:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 45,
+        y: 40},
+        startTime: "2021-12-11T19:15:00.000-05:00",
+        endTime: "2021-12-11T21:13:00.000-05:00"
+    },
+
+   
+    {"bloqueo":
+        {x: 10,
+        y: 39},
+        startTime: "2021-12-11T21:02:00.000-05:00",
+        endTime: "2021-12-12T01:19:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 34,
+        y: 40},
+        startTime: "2021-12-11T21:02:00.000-05:00",
+        endTime: "2021-12-12T01:19:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 35,
+        y: 40},
+        startTime: "2021-12-11T21:02:00.000-05:00",
+        endTime: "2021-12-12T01:19:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 5,
+        y: 34},
+        startTime: "2021-12-11T22:26:00.000-05:00",
+        endTime: "2021-12-12T03:58:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 5,
+        y: 35},
+        startTime: "2021-12-11T22:26:00.000-05:00",
+        endTime: "2021-12-12T03:58:00.000-05:00"
+    },
+
+    // Dia 12
+    {"bloqueo":
+        {x: 20,
+        y: 34},
+        startTime: "2021-12-12T00:17:00.000-05:00",
+        endTime: "2021-12-12T04:52:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 20,
+        y: 35},
+        startTime: "2021-12-12T00:17:00.000-05:00",
+        endTime: "2021-12-12T04:52:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 29,
+        y: 30},
+        startTime: "2021-12-12T02:32:00.000-05:00",
+        endTime: "2021-12-12T03:12:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 30,
+        y: 21},
+        startTime: "2021-12-12T02:32:00.000-05:00",
+        endTime: "2021-12-12T03:12:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 39,
+        y: 20},
+        startTime: "2021-12-12T02:32:00.000-05:00",
+        endTime: "2021-12-12T03:12:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 40,
+        y: 11},
+        startTime: "2021-12-12T02:32:00.000-05:00",
+        endTime: "2021-12-12T03:12:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 40,
+        y: 10},
+        startTime: "2021-12-12T02:32:00.000-05:00",
+        endTime: "2021-12-12T03:12:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 35,
+        y: 26},
+        startTime: "2021-12-12T04:16:00.000-05:00",
+        endTime: "2021-12-12T04:24:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 44,
+        y: 25},
+        startTime: "2021-12-12T04:16:00.000-05:00",
+        endTime: "2021-12-12T04:24:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 45,
+        y: 25},
+        startTime: "2021-12-12T04:16:00.000-05:00",
+        endTime: "2021-12-12T04:24:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 34,
+        y: 10},
+        startTime: "2021-12-12T05:38:00.000-05:00",
+        endTime: "2021-12-12T11:45:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 35,
+        y: 10},
+        startTime: "2021-12-12T05:38:00.000-05:00",
+        endTime: "2021-12-12T11:45:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 10,
+        y: 39},
+        startTime: "2021-12-12T20:04:00.000-05:00",
+        endTime: "2021-12-13T03:16:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 34,
+        y: 40},
+        startTime: "2021-12-12T20:04:00.000-05:00",
+        endTime: "2021-12-13T03:16:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 35,
+        y: 40},
+        startTime: "2021-12-12T20:04:00.000-05:00",
+        endTime: "2021-12-13T03:16:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 15,
+        y: 34},
+        startTime: "2021-12-12T22:17:00.000-05:00",
+        endTime: "2021-12-13T05:25:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 15,
+        y: 35},
+        startTime: "2021-12-12T22:17:00.000-05:00",
+        endTime: "2021-12-13T05:25:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 44,
+        y: 35},
+        startTime: "2021-12-13T00:50:00.000-05:00",
+        endTime: "2021-12-13T03:58:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 45,
+        y: 35},
+        startTime: "2021-12-13T00:50:00.000-05:00",
+        endTime: "2021-12-13T03:58:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 29,
+        y: 30},
+        startTime: "2021-12-13T02:30:00.000-05:00",
+        endTime: "2021-12-13T04:57:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 30,
+        y: 21},
+        startTime: "2021-12-13T02:30:00.000-05:00",
+        endTime: "2021-12-13T04:57:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 39,
+        y: 20},
+        startTime: "2021-12-13T02:30:00.000-05:00",
+        endTime: "2021-12-13T04:57:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 40,
+        y: 11},
+        startTime: "2021-12-13T02:30:00.000-05:00",
+        endTime: "2021-12-13T04:57:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 40,
+        y: 10},
+        startTime: "2021-12-13T02:30:00.000-05:00",
+        endTime: "2021-12-13T04:57:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 35,
+        y: 26},
+        startTime: "2021-12-13T04:57:00.000-05:00",
+        endTime: "2021-12-13T09:12:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 44,
+        y: 25},
+        startTime: "2021-12-13T04:57:00.000-05:00",
+        endTime: "2021-12-13T09:12:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 45,
+        y: 25},
+        startTime: "2021-12-13T04:57:00.000-05:00",
+        endTime: "2021-12-13T09:12:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 44,
+        y: 45},
+        startTime: "2021-12-13T19:20:00.000-05:00",
+        endTime: "2021-12-14T00:56:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 45,
+        y: 41},
+        startTime: "2021-12-13T19:20:00.000-05:00",
+        endTime: "2021-12-14T00:56:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 45,
+        y: 40},
+        startTime: "2021-12-13T19:20:00.000-05:00",
+        endTime: "2021-12-14T00:56:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 10,
+        y: 39},
+        startTime: "2021-12-13T21:28:00.000-05:00",
+        endTime: "2021-12-14T02:02:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 34,
+        y: 40},
+        startTime: "2021-12-13T21:28:00.000-05:00",
+        endTime: "2021-12-14T02:02:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 35,
+        y: 40},
+        startTime: "2021-12-13T21:28:00.000-05:00",
+        endTime: "2021-12-14T02:02:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 5,
+        y: 34},
+        startTime: "2021-12-13T23:14:00.000-05:00",
+        endTime: "2021-12-14T03:14:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 5,
+        y: 35},
+        startTime: "2021-12-13T23:14:00.000-05:00",
+        endTime: "2021-12-14T03:14:00.000-05:00"
+    },
+
+
+
+]
+const pathsaux =[
+
+  { "path": [ 
+
+              {"destino": 0, "x": 12, "y": 8},
+              {"destino": 0, "x": 13, "y": 8},
+              {"destino": 0, "x": 14, "y": 8},
+              {"destino": 0, "x": 15, "y": 8},
+              {"destino": 0, "x": 16, "y": 8},
+              {"destino": 0, "x": 17, "y": 8},
+              {"destino": 0, "x": 18, "y": 8},
+              {"destino": 0, "x": 19, "y": 8},
+              {"destino": 0, "x": 20, "y": 8},
+              {"destino": 0, "x": 21, "y": 8},
+              {"destino": 0, "x": 22, "y": 8},
+              {"destino": 0, "x": 23, "y": 8},
+              {"destino": 0, "x": 24, "y": 8},
+              {"destino": 0, "x": 25, "y": 8},
+              {"destino": 0, "x": 26, "y": 8},
+              {"destino": 0, "x": 27, "y": 8},
+              {"destino": 0, "x": 28, "y": 8},
+              {"destino": 0, "x": 29, "y": 8},
+              {"destino": 0, "x": 30, "y": 8},
+              {"destino": 0, "x": 31, "y": 8},
+              {"destino": 0, "x": 32, "y": 8},
+              {"destino": 0, "x": 33, "y": 8},
+              {"destino": 0, "x": 34, "y": 8},
+              {"destino": 0, "x": 35, "y": 8},
+              {"destino": 0, "x": 36, "y": 8},
+              {"destino": 0, "x": 37, "y": 8},
+              {"destino": 0, "x": 36, "y": 8},
+              {"destino": 0, "x": 35, "y": 8},
+              {"destino": 0, "x": 34, "y": 8},
+              {"destino": 0, "x": 33, "y": 8},
+              {"destino": 0, "x": 32, "y": 8},
+              {"destino": 0, "x": 31, "y": 8},
+              {"destino": 0, "x": 30, "y": 8},
+              {"destino": 0, "x": 29, "y": 8},
+              {"destino": 0, "x": 28, "y": 8},
+              {"destino": 0, "x": 27, "y": 8},
+              {"destino": 0, "x": 26, "y": 8},
+              {"destino": 0, "x": 25, "y": 8},
+              {"destino": 0, "x": 24, "y": 8},
+              {"destino": 0, "x": 23, "y": 8},
+              {"destino": 0, "x": 22, "y": 8},
+              {"destino": 0, "x": 21, "y": 8},
+              {"destino": 0, "x": 20, "y": 8},
+              {"destino": 0, "x": 19, "y": 8},
+              {"destino": 0, "x": 18, "y": 8},
+              {"destino": 0, "x": 17, "y": 8},
+              {"destino": 0, "x": 16, "y": 8},
+              {"destino": 0, "x": 15, "y": 8},
+              {"destino": 0, "x": 14, "y": 8},
+              {"destino": 0, "x": 13, "y": 8},
+              {"destino": 0, "x": 12, "y": 8},
+             ],
+    "startTime": "2021-12-11T01:22:00.000-05:00",
+    "endTime": "2021-12-11T02:05:00.000-05:00"
+   },
+   { "path": [
+      {"destino": 0, "x": 12, "y": 8},
+      {"destino": 0, "x": 12, "y": 9},
+      {"destino": 0, "x": 12, "y": 10},
+      {"destino": 0, "x": 12, "y": 11},
+      {"destino": 0, "x": 12, "y": 12},
+      {"destino": 0, "x": 12, "y": 13}
+             ],
+    "startTime": "2021-12-11T02:22:00.000-05:00",
+    "endTime": "2021-12-11T03:35:00.000-05:00"
+   },
+   { "path": [ 
+
+    {"destino": 0, "x": 12, "y": 8},
+    {"destino": 0, "x": 13, "y": 8},
+    {"destino": 0, "x": 14, "y": 8},
+    {"destino": 0, "x": 15, "y": 8},
+    {"destino": 0, "x": 16, "y": 8},
+    {"destino": 0, "x": 17, "y": 8},
+    {"destino": 0, "x": 18, "y": 8},
+    {"destino": 0, "x": 19, "y": 8},
+    {"destino": 0, "x": 20, "y": 8},
+    {"destino": 0, "x": 21, "y": 8},
+    {"destino": 0, "x": 22, "y": 8},
+    {"destino": 0, "x": 23, "y": 8},
+    {"destino": 0, "x": 24, "y": 8},
+    {"destino": 0, "x": 25, "y": 8},
+    {"destino": 0, "x": 26, "y": 8},
+    {"destino": 0, "x": 27, "y": 8},
+    {"destino": 0, "x": 28, "y": 8},
+    {"destino": 0, "x": 29, "y": 8},
+    {"destino": 0, "x": 30, "y": 8},
+    {"destino": 0, "x": 31, "y": 8},
+    {"destino": 0, "x": 32, "y": 8},
+    {"destino": 0, "x": 33, "y": 8},
+    {"destino": 0, "x": 34, "y": 8},
+    {"destino": 0, "x": 35, "y": 8},
+    {"destino": 0, "x": 36, "y": 8},
+    {"destino": 0, "x": 37, "y": 8},
+    {"destino": 0, "x": 36, "y": 8},
+    {"destino": 0, "x": 35, "y": 8},
+    {"destino": 0, "x": 34, "y": 8},
+    {"destino": 0, "x": 33, "y": 8},
+    {"destino": 0, "x": 32, "y": 8},
+    {"destino": 0, "x": 31, "y": 8},
+    {"destino": 0, "x": 30, "y": 8},
+    {"destino": 0, "x": 29, "y": 8},
+    {"destino": 0, "x": 28, "y": 8},
+    {"destino": 0, "x": 27, "y": 8},
+    {"destino": 0, "x": 26, "y": 8},
+    {"destino": 0, "x": 25, "y": 8},
+    {"destino": 0, "x": 24, "y": 8},
+    {"destino": 0, "x": 23, "y": 8},
+    {"destino": 0, "x": 22, "y": 8},
+    {"destino": 0, "x": 21, "y": 8},
+    {"destino": 0, "x": 20, "y": 8},
+    {"destino": 0, "x": 19, "y": 8},
+    {"destino": 0, "x": 18, "y": 8},
+    {"destino": 0, "x": 17, "y": 8},
+    {"destino": 0, "x": 16, "y": 8},
+    {"destino": 0, "x": 15, "y": 8},
+    {"destino": 0, "x": 14, "y": 8},
+    {"destino": 0, "x": 13, "y": 8},
+    {"destino": 0, "x": 12, "y": 8},
+   ],
+"startTime": "2021-12-11T03:22:00.000-05:00",
+"endTime": "2021-12-11T04:30:00.000-05:00"
+},
+]
+
 
 const obtenerRuta = (path) => {
     const ruta = [];
@@ -202,6 +681,7 @@ const obtenerRuta = (path) => {
 
     return ruta;
   };
+
 const obtenerBloqueo = (path) => {
     const bloqueo = [
       {x:20 , y:30},
@@ -387,15 +867,17 @@ const MapR=(props: simulacion )=>{
             date: implementarFecha(data.paths[0].startTime,path.startTime),
             dateStart: data.paths[0].startTime,
             nowFixed: new Date(),
+            primerPedido: pathsaux[0].startTime,
           };
         });
         if(newData)
           setPaths(newData);
         };
 
+
         simulacion3Dias(funcionRequest);
-       */
       
+      */
       // sin server events 
 
        /*
@@ -420,6 +902,7 @@ const MapR=(props: simulacion )=>{
 
         //hardcodeo
         
+        
           setPaths(
             pathsaux.map((path) => {
               return {
@@ -430,11 +913,30 @@ const MapR=(props: simulacion )=>{
                 dateStart: pathsaux[0].startTime,
                 nowFixed: new Date(),
                 primerPedido: pathsaux[0].startTime,
+                
               };
             })
           );
+
+
+         
+          
         
       }, []);
+
+
+      /*
+    useEffect(() => {
+      console.log('mostrando bloqueos');
+
+      const interval = setInterval(() => {
+         axios.get(url+ ' se requiere servicio de la ruta que mande los bloqueos en la fecha designada').then((e) => { 
+           setBloqueos(e.data);
+         });
+       },);
+       return () => clearInterval(interval);
+     }, []);
+    */
 
     //BLOQUEOS
    

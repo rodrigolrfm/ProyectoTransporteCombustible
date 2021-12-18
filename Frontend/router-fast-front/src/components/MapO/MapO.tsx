@@ -7,13 +7,14 @@ import url from  'src/utils/constant';
 import axios from 'axios';
 import BlockIcon from '@mui/icons-material/Block';
 import { Card, CardContent, IconButton ,CardActionArea,CardMedia, Typography} from '@mui/material';
-import simulacionDia, { startSimulation } from '../ServerEvents/serverEvents';
+import simulacionDia from '../ServerEvents/serverEvents';
 import Grid from '@mui/material/Grid';
 import ModalMonitoreo from '../Custom/ModalMonitoreo';
 import { HomeWork } from '@mui/icons-material';
 import EmojiPeople from '@mui/icons-material/EmojiPeople';
 import { Dialog } from '@mui/material';
-
+import * as moment from 'moment';
+import sendBlock from '../bloqueos/bloquedia';
 
 const vectorX = 70;
 const vectorY = 50;
@@ -231,7 +232,46 @@ const MapO=(props: simulacion )=>{
 
           simulacionDia(funcionRequest);
 
-    }, [startSimulation]);
+          console.log('mostrando bloqueos');
+
+          //var dd=new Date();
+          //var date=dd.getFullYear() +' ' + dd.getMonth()
+          const semana=7;
+    
+          const fechaPedido=moment.default().format('YYYY/MM/DD HH:mm');
+          
+          const fechaFin=moment.default().add(semana,"days").format('YYYY/MM/DD HH:mm');
+          
+          console.log(fechaPedido);
+          console.log(fechaFin);
+    
+          const interval = setInterval(() => {
+    
+          const sendData= async ()=>{
+          
+            const data = {
+                  fechaInicio: fechaPedido,
+                  fechaFin: fechaFin
+                }
+                axios.post(url + '/bloqueo/getBloqueosFechas',JSON.stringify(data) , {
+                    headers: { 'Content-Type': 'application/json' }
+                })
+                
+                .then((r) => {
+                  console.log("entra al axios de bloqueos")
+                  setBloqueos(r.data);
+                  console.log(r);
+                  console.log(data);
+                  console.log("Bloqueos agregado exitosamente.");         
+                
+                });
+                
+          }
+    
+           }, 20000);
+           return () => clearInterval(interval);
+
+    }, []);
     
     /*
     export default funcion= () => {
@@ -257,7 +297,7 @@ const MapO=(props: simulacion )=>{
       console.log('mostrando bloqueos');
 
       const interval = setInterval(() => {
-         axios.get(url+ ' se requiere servicio de la ruta que mande los bloqueos en la fecha designada').then((e) => { // URL DE BLOQUEOS 
+         axios.get(url+ ' se requiere servicio de la ruta que mande los bloqueos en la fecha designada').then((e) => { 
            setBloqueos(e.data);
          });
        }, 20000);
@@ -265,9 +305,60 @@ const MapO=(props: simulacion )=>{
      }, []);
     */
 
+
+
+     /*
+    
+    useEffect(() => {
+
+      console.log('mostrando bloqueos');
+
+      //var dd=new Date();
+      //var date=dd.getFullYear() +' ' + dd.getMonth()
+      const semana=7;
+
+      const fechaPedido=moment.default().format('YYYY/MM/DD HH:mm');
+      
+      const fechaFin=moment.default().add(semana,"days").format('YYYY/MM/DD HH:mm');
+      
+      console.log(fechaPedido);
+      console.log(fechaFin);
+
+      const interval = setInterval(() => {
+
+      const sendData= async ()=>{
+      
+        const data = {
+              fechaInicio: fechaPedido,
+              fechaFin: fechaFin
+            }
+            axios.post(url + '/bloqueo/getBloqueosFechas',JSON.stringify(data) , {
+                headers: { 'Content-Type': 'application/json' }
+            })
+            
+            .then((r) => {
+              console.log("entra al axios de bloqueos")
+              setBloqueos(r.data);
+              console.log(r);
+              console.log(data);
+              console.log("Bloqueos agregado exitosamente.");         
+            
+            });
+            
+      }
+
+       }, 20000);
+       return () => clearInterval(interval);
+     }, []);
+    
+    */
+      
+
     const handleClose = () => {
       setOpenInfo(false);
     };
+
+
 
     const handleClickOpen = (ruta) => {
       setRuta(ruta);
@@ -352,16 +443,16 @@ const MapO=(props: simulacion )=>{
                   }}  
                 >
     
-                      <LocalShippingIcon
+                      {/*<LocalShippingIcon
                         style={{
                           color: path.vehicle.status === 'DAMAGED' ? '#D3D3D3' : 'orange',
                           fontSize: '30px',
                         }}
           
-                       />
+                      />*/}
                 
 
-                  {/*<LocalShippingIcon style={{ color: '#35737D' }} onClick={() => handleClickOpen(path.ruta)} */}
+                  <LocalShippingIcon style={{ color: '#35737D' }} onClick={() => handleClickOpen(path.ruta)} />
                   
                   
                 </div>

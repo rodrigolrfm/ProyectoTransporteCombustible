@@ -1,7 +1,7 @@
 import url from  'src/utils/constant';
 
 
-export const startSimulation=false;
+//export const startSimulation=false;
 let datax;
 const simulacionDia  = (funcionRequest) => {
     
@@ -14,10 +14,10 @@ const simulacionDia  = (funcionRequest) => {
     
     source.addEventListener("RUTAS", (event) => {
         console.log("xd");
-        startSimulation=true;
+       // startSimulation=true;
         datax=event.data;
         //console.log(x);
-        funcionRequest(event.data);
+        funcionRequest(datax);
     });
 
     /* 

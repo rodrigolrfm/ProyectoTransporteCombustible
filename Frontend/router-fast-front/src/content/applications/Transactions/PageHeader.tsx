@@ -97,6 +97,7 @@ function PageHeader() {
     formData.append("file", fileA);
     
     /*
+    // colocar servicio de la carga masiva de bloqueos
     axios.post(`${url}/archivos/uploadPedidos` ,formData, { 
       headers: {
         'Content-Type': 'multipart/form-data'

@@ -2,13 +2,476 @@ import { makeStyles } from '@mui/styles';
 import HomeIcon from '@mui/icons-material/Home';
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import PersonPinIcon from '@mui/icons-material/PersonPin';
-import { useEffect, useState } from 'react';
+import { useEffect, useState , useRef} from 'react';
 import url from  'src/utils/constant';
 import axios from 'axios';
 import ModalMonitoreo from '../Custom/ModalMonitoreo';
 import { Dialog } from '@mui/material';
+import { IconButton } from '@mui/material';
+import BlockIcon from '@mui/icons-material/Block';
 const vectorX = 70;
 const vectorY = 50;
+
+const intervaloTiempo=500;
+
+//hardcodeo
+
+const bloqueosData = [
+  {"bloqueo":
+        {x: 29,
+        y: 30},
+        startTime: "2021-12-11T01:22:00.000-05:00",
+        endTime: "2021-12-11T01:42:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 30,
+        y: 21},
+        startTime: "2021-12-11T01:22:00.000-05:00",
+        endTime: "2021-12-11T01:42:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 39,
+        y: 20},
+        startTime: "2021-12-11T01:22:00.000-05:00",
+        endTime: "2021-12-11T01:42:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 40,
+        y: 11},
+        startTime: "2021-12-11T01:22:00.000-05:00",
+        endTime: "2021-12-11T01:42:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 40,
+        y: 10},
+        startTime: "2021-12-11T01:22:00.000-05:00",
+        endTime: "2021-12-11T01:42:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 35,
+        y: 26},
+        startTime: "2021-12-11T03:15:00.000-05:00",
+        endTime: "2021-12-11T07:20:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 44,
+        y: 25},
+        startTime: "2021-12-11T03:15:00.000-05:00",
+        endTime: "2021-12-11T07:20:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 45,
+        y: 25},
+        startTime: "2021-12-11T03:15:00.000-05:00",
+        endTime: "2021-12-11T07:20:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 34,
+        y: 10},
+        startTime: "2021-12-11T05:35:00.000-05:00",
+        endTime: "2021-12-11T11:27:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 35,
+        y: 10},
+        startTime: "2021-12-11T05:35:00.000-05:00",
+        endTime: "2021-12-11T11:27:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 44,
+        y: 45},
+        startTime: "2021-12-11T19:15:00.000-05:00",
+        endTime: "2021-12-11T21:13:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 45,
+        y: 41},
+        startTime: "2021-12-11T19:15:00.000-05:00",
+        endTime: "2021-12-11T21:13:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 45,
+        y: 40},
+        startTime: "2021-12-11T19:15:00.000-05:00",
+        endTime: "2021-12-11T21:13:00.000-05:00"
+    },
+
+   
+    {"bloqueo":
+        {x: 10,
+        y: 39},
+        startTime: "2021-12-11T21:02:00.000-05:00",
+        endTime: "2021-12-12T01:19:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 34,
+        y: 40},
+        startTime: "2021-12-11T21:02:00.000-05:00",
+        endTime: "2021-12-12T01:19:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 35,
+        y: 40},
+        startTime: "2021-12-11T21:02:00.000-05:00",
+        endTime: "2021-12-12T01:19:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 5,
+        y: 34},
+        startTime: "2021-12-11T22:26:00.000-05:00",
+        endTime: "2021-12-12T03:58:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 5,
+        y: 35},
+        startTime: "2021-12-11T22:26:00.000-05:00",
+        endTime: "2021-12-12T03:58:00.000-05:00"
+    },
+
+    // Dia 12
+    {"bloqueo":
+        {x: 20,
+        y: 34},
+        startTime: "2021-12-12T00:17:00.000-05:00",
+        endTime: "2021-12-12T04:52:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 20,
+        y: 35},
+        startTime: "2021-12-12T00:17:00.000-05:00",
+        endTime: "2021-12-12T04:52:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 29,
+        y: 30},
+        startTime: "2021-12-12T02:32:00.000-05:00",
+        endTime: "2021-12-12T03:12:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 30,
+        y: 21},
+        startTime: "2021-12-12T02:32:00.000-05:00",
+        endTime: "2021-12-12T03:12:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 39,
+        y: 20},
+        startTime: "2021-12-12T02:32:00.000-05:00",
+        endTime: "2021-12-12T03:12:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 40,
+        y: 11},
+        startTime: "2021-12-12T02:32:00.000-05:00",
+        endTime: "2021-12-12T03:12:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 40,
+        y: 10},
+        startTime: "2021-12-12T02:32:00.000-05:00",
+        endTime: "2021-12-12T03:12:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 35,
+        y: 26},
+        startTime: "2021-12-12T04:16:00.000-05:00",
+        endTime: "2021-12-12T04:24:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 44,
+        y: 25},
+        startTime: "2021-12-12T04:16:00.000-05:00",
+        endTime: "2021-12-12T04:24:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 45,
+        y: 25},
+        startTime: "2021-12-12T04:16:00.000-05:00",
+        endTime: "2021-12-12T04:24:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 34,
+        y: 10},
+        startTime: "2021-12-12T05:38:00.000-05:00",
+        endTime: "2021-12-12T11:45:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 35,
+        y: 10},
+        startTime: "2021-12-12T05:38:00.000-05:00",
+        endTime: "2021-12-12T11:45:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 10,
+        y: 39},
+        startTime: "2021-12-12T20:04:00.000-05:00",
+        endTime: "2021-12-13T03:16:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 34,
+        y: 40},
+        startTime: "2021-12-12T20:04:00.000-05:00",
+        endTime: "2021-12-13T03:16:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 35,
+        y: 40},
+        startTime: "2021-12-12T20:04:00.000-05:00",
+        endTime: "2021-12-13T03:16:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 15,
+        y: 34},
+        startTime: "2021-12-12T22:17:00.000-05:00",
+        endTime: "2021-12-13T05:25:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 15,
+        y: 35},
+        startTime: "2021-12-12T22:17:00.000-05:00",
+        endTime: "2021-12-13T05:25:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 44,
+        y: 35},
+        startTime: "2021-12-13T00:50:00.000-05:00",
+        endTime: "2021-12-13T03:58:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 45,
+        y: 35},
+        startTime: "2021-12-13T00:50:00.000-05:00",
+        endTime: "2021-12-13T03:58:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 29,
+        y: 30},
+        startTime: "2021-12-13T02:30:00.000-05:00",
+        endTime: "2021-12-13T04:57:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 30,
+        y: 21},
+        startTime: "2021-12-13T02:30:00.000-05:00",
+        endTime: "2021-12-13T04:57:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 39,
+        y: 20},
+        startTime: "2021-12-13T02:30:00.000-05:00",
+        endTime: "2021-12-13T04:57:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 40,
+        y: 11},
+        startTime: "2021-12-13T02:30:00.000-05:00",
+        endTime: "2021-12-13T04:57:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 40,
+        y: 10},
+        startTime: "2021-12-13T02:30:00.000-05:00",
+        endTime: "2021-12-13T04:57:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 35,
+        y: 26},
+        startTime: "2021-12-13T04:57:00.000-05:00",
+        endTime: "2021-12-13T09:12:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 44,
+        y: 25},
+        startTime: "2021-12-13T04:57:00.000-05:00",
+        endTime: "2021-12-13T09:12:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 45,
+        y: 25},
+        startTime: "2021-12-13T04:57:00.000-05:00",
+        endTime: "2021-12-13T09:12:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 44,
+        y: 45},
+        startTime: "2021-12-13T19:20:00.000-05:00",
+        endTime: "2021-12-14T00:56:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 45,
+        y: 41},
+        startTime: "2021-12-13T19:20:00.000-05:00",
+        endTime: "2021-12-14T00:56:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 45,
+        y: 40},
+        startTime: "2021-12-13T19:20:00.000-05:00",
+        endTime: "2021-12-14T00:56:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 10,
+        y: 39},
+        startTime: "2021-12-13T21:28:00.000-05:00",
+        endTime: "2021-12-14T02:02:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 34,
+        y: 40},
+        startTime: "2021-12-13T21:28:00.000-05:00",
+        endTime: "2021-12-14T02:02:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 35,
+        y: 40},
+        startTime: "2021-12-13T21:28:00.000-05:00",
+        endTime: "2021-12-14T02:02:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 5,
+        y: 34},
+        startTime: "2021-12-13T23:14:00.000-05:00",
+        endTime: "2021-12-14T03:14:00.000-05:00"
+    },
+    {"bloqueo":
+        {x: 5,
+        y: 35},
+        startTime: "2021-12-13T23:14:00.000-05:00",
+        endTime: "2021-12-14T03:14:00.000-05:00"
+    },
+
+
+
+]
+const pathsaux =[
+
+  { "path": [ 
+
+              {"destino": 0, "x": 12, "y": 8},
+              {"destino": 0, "x": 13, "y": 8},
+              {"destino": 0, "x": 14, "y": 8},
+              {"destino": 0, "x": 15, "y": 8},
+              {"destino": 0, "x": 16, "y": 8},
+              {"destino": 0, "x": 17, "y": 8},
+              {"destino": 0, "x": 18, "y": 8},
+              {"destino": 0, "x": 19, "y": 8},
+              {"destino": 0, "x": 20, "y": 8},
+              {"destino": 0, "x": 21, "y": 8},
+              {"destino": 0, "x": 22, "y": 8},
+              {"destino": 0, "x": 23, "y": 8},
+              {"destino": 0, "x": 24, "y": 8},
+              {"destino": 0, "x": 25, "y": 8},
+              {"destino": 0, "x": 26, "y": 8},
+              {"destino": 0, "x": 27, "y": 8},
+              {"destino": 0, "x": 28, "y": 8},
+              {"destino": 0, "x": 29, "y": 8},
+              {"destino": 0, "x": 30, "y": 8},
+              {"destino": 0, "x": 31, "y": 8},
+              {"destino": 0, "x": 32, "y": 8},
+              {"destino": 0, "x": 33, "y": 8},
+              {"destino": 0, "x": 34, "y": 8},
+              {"destino": 0, "x": 35, "y": 8},
+              {"destino": 0, "x": 36, "y": 8},
+              {"destino": 0, "x": 37, "y": 8},
+              {"destino": 0, "x": 36, "y": 8},
+              {"destino": 0, "x": 35, "y": 8},
+              {"destino": 0, "x": 34, "y": 8},
+              {"destino": 0, "x": 33, "y": 8},
+              {"destino": 0, "x": 32, "y": 8},
+              {"destino": 0, "x": 31, "y": 8},
+              {"destino": 0, "x": 30, "y": 8},
+              {"destino": 0, "x": 29, "y": 8},
+              {"destino": 0, "x": 28, "y": 8},
+              {"destino": 0, "x": 27, "y": 8},
+              {"destino": 0, "x": 26, "y": 8},
+              {"destino": 0, "x": 25, "y": 8},
+              {"destino": 0, "x": 24, "y": 8},
+              {"destino": 0, "x": 23, "y": 8},
+              {"destino": 0, "x": 22, "y": 8},
+              {"destino": 0, "x": 21, "y": 8},
+              {"destino": 0, "x": 20, "y": 8},
+              {"destino": 0, "x": 19, "y": 8},
+              {"destino": 0, "x": 18, "y": 8},
+              {"destino": 0, "x": 17, "y": 8},
+              {"destino": 0, "x": 16, "y": 8},
+              {"destino": 0, "x": 15, "y": 8},
+              {"destino": 0, "x": 14, "y": 8},
+              {"destino": 0, "x": 13, "y": 8},
+              {"destino": 0, "x": 12, "y": 8},
+             ],
+    "startTime": "2021-12-11T01:22:00.000-05:00",
+    "endTime": "2021-12-11T02:05:00.000-05:00"
+   },
+   { "path": [
+      {"destino": 0, "x": 12, "y": 8},
+      {"destino": 0, "x": 12, "y": 9},
+      {"destino": 0, "x": 12, "y": 10},
+      {"destino": 0, "x": 12, "y": 11},
+      {"destino": 0, "x": 12, "y": 12},
+      {"destino": 0, "x": 12, "y": 13}
+             ],
+    "startTime": "2021-12-11T02:22:00.000-05:00",
+    "endTime": "2021-12-11T03:35:00.000-05:00"
+   },
+   { "path": [ 
+
+    {"destino": 0, "x": 12, "y": 8},
+    {"destino": 0, "x": 13, "y": 8},
+    {"destino": 0, "x": 14, "y": 8},
+    {"destino": 0, "x": 15, "y": 8},
+    {"destino": 0, "x": 16, "y": 8},
+    {"destino": 0, "x": 17, "y": 8},
+    {"destino": 0, "x": 18, "y": 8},
+    {"destino": 0, "x": 19, "y": 8},
+    {"destino": 0, "x": 20, "y": 8},
+    {"destino": 0, "x": 21, "y": 8},
+    {"destino": 0, "x": 22, "y": 8},
+    {"destino": 0, "x": 23, "y": 8},
+    {"destino": 0, "x": 24, "y": 8},
+    {"destino": 0, "x": 25, "y": 8},
+    {"destino": 0, "x": 26, "y": 8},
+    {"destino": 0, "x": 27, "y": 8},
+    {"destino": 0, "x": 28, "y": 8},
+    {"destino": 0, "x": 29, "y": 8},
+    {"destino": 0, "x": 30, "y": 8},
+    {"destino": 0, "x": 31, "y": 8},
+    {"destino": 0, "x": 32, "y": 8},
+    {"destino": 0, "x": 33, "y": 8},
+    {"destino": 0, "x": 34, "y": 8},
+    {"destino": 0, "x": 35, "y": 8},
+    {"destino": 0, "x": 36, "y": 8},
+    {"destino": 0, "x": 37, "y": 8},
+    {"destino": 0, "x": 36, "y": 8},
+    {"destino": 0, "x": 35, "y": 8},
+    {"destino": 0, "x": 34, "y": 8},
+    {"destino": 0, "x": 33, "y": 8},
+    {"destino": 0, "x": 32, "y": 8},
+    {"destino": 0, "x": 31, "y": 8},
+    {"destino": 0, "x": 30, "y": 8},
+    {"destino": 0, "x": 29, "y": 8},
+    {"destino": 0, "x": 28, "y": 8},
+    {"destino": 0, "x": 27, "y": 8},
+    {"destino": 0, "x": 26, "y": 8},
+    {"destino": 0, "x": 25, "y": 8},
+    {"destino": 0, "x": 24, "y": 8},
+    {"destino": 0, "x": 23, "y": 8},
+    {"destino": 0, "x": 22, "y": 8},
+    {"destino": 0, "x": 21, "y": 8},
+    {"destino": 0, "x": 20, "y": 8},
+    {"destino": 0, "x": 19, "y": 8},
+    {"destino": 0, "x": 18, "y": 8},
+    {"destino": 0, "x": 17, "y": 8},
+    {"destino": 0, "x": 16, "y": 8},
+    {"destino": 0, "x": 15, "y": 8},
+    {"destino": 0, "x": 14, "y": 8},
+    {"destino": 0, "x": 13, "y": 8},
+    {"destino": 0, "x": 12, "y": 8},
+   ],
+"startTime": "2021-12-11T03:22:00.000-05:00",
+"endTime": "2021-12-11T04:30:00.000-05:00"
+},
+]
+
 
 const obtenerRuta = (path) => {
     const ruta = [];
@@ -68,75 +531,94 @@ const MapC=(props: simulacion )=>{
     const [openInfo, setOpenInfo] = useState(false);
     const [ruta, setRuta] = useState([]);
     const [paths, setPaths] = useState([]);
+    const [bloqueos, setBloqueos] = useState([]);
+    const [relativo, setRelativo] = useState(0);
+    const [primero, setPrimero] = useState(true);
+
     const classes = useStyles();
     const map = [];
-    useEffect(() => {
+    const a = useRef<any>(null);
+    const b = useRef<any>(null);
+    //const timerBool = useRef<any>(true);
+    const boolTiempo = useRef<any>(true);
 
-      const intervalTime = 500;
-      const interval = setInterval(() => {
-        let arr;
+    
+
+    let Relativo=0;
+    Relativo=(new Date(paths[0]?.dateStart)).getTime();
+    //setRelativo(Relativo || 0);
+    
+
+    useEffect(() => {   
+      //console.log("antes del if",primero); 
+      if (primero && !isNaN(Relativo)){
         
-        //console.log(paths);
-        arr = paths.map((path) => {
+        setRelativo(Relativo);
+        setPrimero(false);
+        //console.log("fin del if",primero); 
+      }
+      else if(!primero){
+        
+       //console.log("relativo antes",relativo);
+      Relativo=relativo+266000;
+      setRelativo(Relativo);
+      const blocksList = bloqueosData.filter((item)=>Relativo>(new Date(item.startTime)).getTime() && Relativo<(new Date(item.endTime)).getTime()).map((item)=>({x:item.bloqueo.x, y:item.bloqueo.y}))
+       console.log("dentro de intervalo",bloqueosData.map((item)=>({start: (new Date(item.startTime)).getTime(),end: (new Date(item.endTime)).getTime()})),Relativo);
+       console.log(blocksList);
+       setBloqueos(blocksList);
+      
+      
+     // console.log("path",paths[0]);
+
+      }
+      //console.log("relativo",new Date(relativo));
+      const intervalV=50;
+      const interval = setInterval(() => {
+      let arr;
+      
+
+      arr = paths.map((path) => {
+
           const now = new Date();
           const date = new Date(path.date);
           const nowFixed = new Date(path.nowFixed);
           const dateStart = new Date(path.dateStart);
-          
           let rest = now.getTime() - date.getTime() - (nowFixed.getTime() - dateStart.getTime());
-          
-          //console.log("asdlkasjdlsad");
-          const posAux = Math.floor(rest / intervalTime); // restar los milisegundos para igual
-          //al tiempo de inicio del primer pedido 
-          //console.log(posAux);
+          const posAux = Math.floor( (rest/60000) * ((intervalV*intervaloTiempo)/60)); // aumentando la velocidad posición del arreglo 
+            let tiempoRelativo = now.getTime() - (nowFixed.getTime() - dateStart.getTime());
+            //console.log(boolTiempo,boolTiempo.current);
+           /*
+            if(boolTiempo.current){
+              a.current = new Date(tiempoRelativo);
+              b.current = setInterval(() => {
+                console.log("entraa dentro del if");
+                a.current = new Date( a.current.getTime() + 100000);
+              }, 10000);
+              boolTiempo.current = false;   
+              console.log("a",a.current);
+           }
+            */   
+           
+           
+          //console.log("a",a.current);
           if (posAux === path.ruta.length) {
             setRuta(null);
             return null;
           } else return { ...path, pos: posAux };
         });
+
         setPaths(arr.filter((el) => el != null));
-        console.log(paths);
         // setPaths(...paths, pos)
-      }, intervalTime);
-      return () => clearInterval(interval);
+      }, 500);
+
+      return () => {clearInterval(interval)};
     }, [paths]);
+
+
+    /*
     useEffect(() => {
 
-      /*
-
-      let serverURL = new EventSource(url + "/archivos/simularRutas");
-      let data = [];
-          
-      // Inicializa el sentEvent 
-      serverURL.onopen=function (event) {
-          console.log ("Conexión cliente servidor");
-      }
-      serverURL.addEventListener("MAPAS", function(e) {
-          console.log(event);
-          data = JSON.parse(event.data);
-          if(data.flag == 3){
-            // Cerrar conexión
-              serverURL.close();
-          }
-          setPaths(
-            data.paths.map((path) => {
-              return {
-                ...path.path,
-                ruta: obtenerRuta(path.path),
-                pos: 0,
-                date: implementarFecha(data.paths[0].startTime,path.startTime),
-                dateStart: data.paths[0].startTime,
-                nowFixed: new Date(),
-              };
-            })
-        })
-
-      serverURL.οnerrοr=function (event) {
-          serverURL.close();
-      }
-
-      /*
-      */
+     
         console.log("Mapa Colapso");
         axios
         .post(url + "/ejecutar/simularRutasColapso")
@@ -155,6 +637,80 @@ const MapC=(props: simulacion )=>{
           );
         });              
     }, []);   
+   */
+
+    useEffect(() => {
+      console.log("Mapa Colapso Logistico");
+     
+      //con server event
+      /*
+      const funcionRequest= (data)=>{
+       data = JSON.parse(data);
+     
+       let newData = data.paths?.map((path) => {
+         return {
+           ...path.path,
+           ruta: obtenerRuta(path.path),
+           pos: 0,
+           date: implementarFecha(data.paths[0].startTime,path.startTime),
+           dateStart: data.paths[0].startTime,
+           nowFixed: new Date(),
+           primerPedido: paths[0].startTime,
+         };
+       });
+       if(newData)
+         setPaths(newData);
+       };
+
+
+       simulacionColapso(funcionRequest);
+     
+     */
+     // sin server events 
+
+      /*
+       axios
+       .get(url + "/ejecutar/simularRutasColapso")
+       .then((e) => {
+         setPaths(
+           e.data.paths.map((path) => {
+             return {
+               ...path.path,
+               ruta: obtenerRuta(path.path),
+               pos: 0,
+               date: implementarFecha(e.data.paths[0].startTime,path.startTime),
+               dateStart: e.data.paths[0].startTime,
+               nowFixed: new Date(),
+             };
+           })
+         );
+       });
+     
+       */
+
+       //hardcodeo
+       
+       
+         setPaths(
+           pathsaux.map((path) => {
+             return {
+               ...path.path,
+               ruta: obtenerRuta(path.path),
+               pos: 0,
+               date: implementarFecha(pathsaux[0].startTime,path.startTime),
+               dateStart: pathsaux[0].startTime,
+               nowFixed: new Date(),
+               primerPedido: pathsaux[0].startTime,
+               
+             };
+           })
+         );
+
+
+        
+         
+       
+     }, []);
 
     const handleClose = () => {
       setOpenInfo(false);
@@ -185,6 +741,14 @@ const MapC=(props: simulacion )=>{
                   : '#D89F7B',
             }}
           >
+           {bloqueos?.find(({ x, y }) => x === j && y === i) && (
+            <div className={classes.icon}>
+              <IconButton>
+                <BlockIcon style={{ color: 'red', fontSize: '20px' }} />
+              </IconButton>
+            </div>
+          )}
+
             {ruta?.find(({ x, y }) => x === j && y === i )?.destino ? (
             <div className={classes.icon} style={{ transform: 'rotate(0deg)' }}>
               <PersonPinIcon style={{ color: '#424774'}} />

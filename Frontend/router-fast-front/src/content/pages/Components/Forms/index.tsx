@@ -20,6 +20,7 @@ import * as moment from 'moment';
 import CustomSnackbar from 'src/components/Custom/CustomSnackbar';
 import { SettingsInputAntennaTwoTone } from '@mui/icons-material';
 import simulacionDia from 'src/components/ServerEvents/serverEvents';
+import sendBlock from 'src/components/bloqueos/bloquedia';
 
 const Input = styled('input')({
   display: 'none',
@@ -181,6 +182,9 @@ function Forms() {
                   </Button>
                   <Button variant="contained" onClick={simulacionDia} sx={{mt:1, mx:2, height: 50}} >
                   Empezar Operación
+                  </Button>
+                  <Button variant="contained" onClick={sendBlock} sx={{mt:1, mx:2, height: 50}} >
+                  Pa probar tu bloqueo p
                   </Button>
                   </Box>
                 </Box>

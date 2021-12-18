@@ -7,10 +7,10 @@ const fecha={
    fecha: "2021-12-18 00:00:00"
 
 }
-const simulacion3Dias  = (funcionRequest) => {
+const simulacionColapso  = (funcionRequest) => {
     
 
-    var source = new EventSource(url +`/ejecutar/obtenerTresDias?fecha=2021-12-18%2000:00:00`, {
+    var source = new EventSource(url +`/ejecutar/simularRutasColapso?fecha=2021-12-18%2000:00:00`, {
         headers: { 'Content-Type': 'application/json' }
     });
     //var source = new EventSource(url +`/ejecutar/obtenerTresDias`);
@@ -21,7 +21,7 @@ const simulacion3Dias  = (funcionRequest) => {
     
     
     source.addEventListener("RUTAS", (event) => {
-        console.log("server event para tres dias");
+        console.log("server event para colapso logistico");
         datax=event.data;
         //console.log(datax);
         funcionRequest(event.data);
@@ -48,4 +48,4 @@ const simulacion3Dias  = (funcionRequest) => {
     });
     */
 }
-export default simulacion3Dias;
+export default simulacionColapso;
