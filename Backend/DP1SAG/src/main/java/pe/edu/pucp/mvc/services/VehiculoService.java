@@ -30,6 +30,8 @@ public class VehiculoService {
         plantas.add(PlantaModel.builder().coordenadaX(42).coordenadaY(42).build());
         plantas.add(PlantaModel.builder().coordenadaX(63).coordenadaY(3).build());
         listaVehiculos.forEach(v->v.setNodoActual(plantas.get(0)));
+
+        
         return listaVehiculos;
     }
 
