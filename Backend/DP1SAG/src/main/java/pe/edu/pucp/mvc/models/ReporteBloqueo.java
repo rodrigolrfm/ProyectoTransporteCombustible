@@ -8,5 +8,5 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ReporteBloqueo {
-
+    private int h;
 }
