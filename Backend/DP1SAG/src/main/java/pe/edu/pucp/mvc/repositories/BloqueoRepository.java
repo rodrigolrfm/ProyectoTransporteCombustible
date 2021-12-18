@@ -19,4 +19,7 @@ public interface BloqueoRepository extends CrudRepository<BloqueoModel, Integer>
 
     @Query(value ="select * from bloqueo;",nativeQuery = true)
     List<BloqueoModel> getBloqueos();
+
+    @Query(value ="call get_bloqueos_rango_fechas(?1, ?2);",nativeQuery = true)
+    List<BloqueoModel> getBloqueosFechas(String fechaIni, String fechaFin);
 }

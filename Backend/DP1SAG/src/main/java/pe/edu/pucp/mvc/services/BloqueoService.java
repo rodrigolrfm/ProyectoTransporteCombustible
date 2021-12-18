@@ -29,8 +29,14 @@ public class BloqueoService {
     }
 
     public List<BloqueoModel> getBloqueos(){
-        List<BloqueoModel> bloqueos = new ArrayList<>();
+        List<BloqueoModel> bloqueos;
         bloqueos = bloqueoRepository.getBloqueos();
+        return bloqueos;
+    }
+
+    public List<BloqueoModel> getBloqueosFechas(String fechaIni, String fechaFin) {
+        List<BloqueoModel> bloqueos;
+        bloqueos = bloqueoRepository.getBloqueosFechas(fechaIni, fechaFin);
         return bloqueos;
     }
 }
