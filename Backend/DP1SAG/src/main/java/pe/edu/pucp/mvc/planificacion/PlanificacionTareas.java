@@ -240,7 +240,7 @@ public class PlanificacionTareas implements Runnable{
                         EntidadRuta rutaVehiculo = EntidadRuta.builder().startTime(text).path(v.getRutaVehiculoPositions(requestListDesdoblado)).endTime("F").build();
                         rutasFinal.agregarRuta(rutaVehiculo);
                         fechaHoraNuevaVehiculo = new Timestamp(v.getFechaInicio().getTimeInMillis());
-                        vehiculoService.actualizarTiempoEstado(v.getIdVehiculo(), fechaHoraNuevaVehiculo);
+                        vehiculoService.actualizarTiempoEstado(v.getIdVehiculo());
                     }
                     v.clearVehicle();
                     fechaHoraNuevaVehiculo = null;

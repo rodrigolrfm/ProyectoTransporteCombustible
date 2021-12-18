@@ -41,8 +41,13 @@ public class VehiculoService {
         vehiculoRepository.updateEstadoVehiculotoVacio(id);
     }
 
+    /*
     public int actualizarTiempoEstado(int id, Timestamp fechaInicio){
         return vehiculoRepository.updateEstadoVehiculoTiempoEstado(id,fechaInicio);
+    }*/
+
+    public int actualizarTiempoEstado(int id){
+        return vehiculoRepository.updateEstadoVehiculoTiempoEstado(id);
     }
 
     public int inicializarFechaInicioVehiculo(Timestamp fechaHora){

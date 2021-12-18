@@ -33,10 +33,17 @@ public interface VehiculoRepository extends CrudRepository<VehiculoModel, Intege
     @Query(value ="update vehiculo set estado_vehiculo = 0 where id_vehiculo = ?1 ;",nativeQuery = true)
     int updateEstadoVehiculotoVacio(Integer id);
 
+    /*
     @Transactional
     @Modifying
     @Query(value ="update vehiculo set estado_vehiculo = 0 , fecha_inicio = ?2  where id_vehiculo = ?1 ;",nativeQuery = true)
     int updateEstadoVehiculoTiempoEstado(Integer id, Timestamp fecha);
+    */
+    @Transactional
+    @Modifying
+    @Query(value ="update vehiculo set estado_vehiculo = 0 where id_vehiculo = ?1 ;",nativeQuery = true)
+    int updateEstadoVehiculoTiempoEstado(Integer id);
+
 
     @Transactional
     @Modifying
