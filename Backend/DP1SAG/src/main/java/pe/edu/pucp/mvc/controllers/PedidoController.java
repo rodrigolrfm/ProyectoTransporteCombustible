@@ -13,10 +13,7 @@ import pe.edu.pucp.mvc.services.VehiculoService;
 import java.io.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 
 @RestController
@@ -81,7 +78,7 @@ public class PedidoController {
         int glpTotal = 0;
         List<PedidoModel> listaPedidos = new ArrayList<>();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm");
-
+        sdf.setTimeZone(TimeZone.getTimeZone("America/Bogota"));
         try {
             String content = new String(file.getBytes());
             Reader inputString = new StringReader(content);

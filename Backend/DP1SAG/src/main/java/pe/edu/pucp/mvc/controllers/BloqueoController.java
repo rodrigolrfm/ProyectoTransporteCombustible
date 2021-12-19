@@ -76,7 +76,7 @@ public class BloqueoController {
     @PostMapping(value = "/cargaMasivaBloqueos", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public void cargaMasivaBloqueo(@RequestParam("file") MultipartFile file) throws IOException {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm");
-
+        sdf.setTimeZone(TimeZone.getTimeZone("America/Bogota"));
         ArrayList<NodoModel> blockedList = new ArrayList<>();
         try{
 
@@ -119,9 +119,11 @@ public class BloqueoController {
 
                         //Agregar bloqueo en la base de datos
                         blockedList.add(nodo);
-                        block.setCoordenadaX(Integer.parseInt(rowRequest[i]));
-                        block.setCoordenadaY(Integer.parseInt(rowRequest[i+1]));
-                        bloqueoService.guardarBloqueo(block);
+                        BloqueoModel bloqueo = BloqueoModel.builder().inicioBloqueo(initDate).finBloqueo(endDate)
+                                .coordenadaX(Integer.parseInt(rowRequest[i])).coordenadaY(Integer.parseInt(rowRequest[i+1])).build();
+                        //block.setCoordenadaX(Integer.parseInt(rowRequest[i]));
+                        //block.setCoordenadaY(Integer.parseInt(rowRequest[i+1]));
+                        bloqueoService.guardarBloqueo(bloqueo);
                         break;
                     }
                     int canty=0;
@@ -140,9 +142,11 @@ public class BloqueoController {
                                     .coordenadaY(Integer.parseInt(rowRequest[i+1])+j).build();
                             nodo.getBlockList().add(block);
                             blockedList.add(nodo);
-                            block.setCoordenadaX(Integer.parseInt(rowRequest[i]));
-                            block.setCoordenadaY(Integer.parseInt(rowRequest[i+1])+j);
-                            bloqueoService.guardarBloqueo(block);
+                            BloqueoModel bloqueo = BloqueoModel.builder().inicioBloqueo(initDate).finBloqueo(endDate)
+                                    .coordenadaX(Integer.parseInt(rowRequest[i])).coordenadaY(Integer.parseInt(rowRequest[i+1])+j).build();
+                            //block.setCoordenadaX(Integer.parseInt(rowRequest[i]));
+                            //block.setCoordenadaY(Integer.parseInt(rowRequest[i+1])+j);
+                            bloqueoService.guardarBloqueo(bloqueo);
                         }
 
                     }else{
@@ -152,9 +156,11 @@ public class BloqueoController {
                                     .coordenadaY(Integer.parseInt(rowRequest[i+1])-j).build();
                             nodo.getBlockList().add(block);
                             blockedList.add(nodo);
-                            block.setCoordenadaX(Integer.parseInt(rowRequest[i]));
-                            block.setCoordenadaY(Integer.parseInt(rowRequest[i+1])-j);
-                            bloqueoService.guardarBloqueo(block);
+                            BloqueoModel bloqueo = BloqueoModel.builder().inicioBloqueo(initDate).finBloqueo(endDate)
+                                    .coordenadaX(Integer.parseInt(rowRequest[i])).coordenadaY(Integer.parseInt(rowRequest[i+1])-j).build();
+                            //block.setCoordenadaX(Integer.parseInt(rowRequest[i]));
+                            //block.setCoordenadaY(Integer.parseInt(rowRequest[i+1])-j);
+                            bloqueoService.guardarBloqueo(bloqueo);
                         }
                     }
                     if(cantx>0){
@@ -164,9 +170,11 @@ public class BloqueoController {
                                     .coordenadaY(Integer.parseInt(rowRequest[i+1])).build();
                             nodo.getBlockList().add(block);
                             blockedList.add(nodo);
-                            block.setCoordenadaX(Integer.parseInt(rowRequest[i])+j);
-                            block.setCoordenadaY(Integer.parseInt(rowRequest[i+1]));
-                            bloqueoService.guardarBloqueo(block);
+                            BloqueoModel bloqueo = BloqueoModel.builder().inicioBloqueo(initDate).finBloqueo(endDate)
+                                    .coordenadaX(Integer.parseInt(rowRequest[i])+j).coordenadaY(Integer.parseInt(rowRequest[i+1])).build();
+                            //block.setCoordenadaX(Integer.parseInt(rowRequest[i])+j);
+                            //block.setCoordenadaY(Integer.parseInt(rowRequest[i+1]));
+                            bloqueoService.guardarBloqueo(bloqueo);
                         }
                     }else{
                         for(int j =0 ;j<Math.abs(cantx);j++) {
@@ -175,9 +183,11 @@ public class BloqueoController {
                                     .coordenadaY(Integer.parseInt(rowRequest[i + 1])).build();
                             nodo.getBlockList().add(block);
                             blockedList.add(nodo);
-                            block.setCoordenadaX(Integer.parseInt(rowRequest[i]) - j);
-                            block.setCoordenadaY(Integer.parseInt(rowRequest[i+1]));
-                            bloqueoService.guardarBloqueo(block);
+                            BloqueoModel bloqueo = BloqueoModel.builder().inicioBloqueo(initDate).finBloqueo(endDate)
+                                    .coordenadaX(Integer.parseInt(rowRequest[i])-j).coordenadaY(Integer.parseInt(rowRequest[i+1])).build();
+                            //block.setCoordenadaX(Integer.parseInt(rowRequest[i]) - j);
+                            //block.setCoordenadaY(Integer.parseInt(rowRequest[i+1]));
+                            bloqueoService.guardarBloqueo(bloqueo);
                         }
                     }
                 }
