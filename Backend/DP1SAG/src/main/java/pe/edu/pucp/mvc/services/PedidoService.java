@@ -16,7 +16,7 @@ import java.util.List;
 public class PedidoService {
 
     private static int iniHora = 0;
-    private static int finHora = 4;
+    private static int finHora = 12;
     private static int cantRepeticionesxDia = 0;
     @Autowired
     PedidoRepository pedidoRepository;
@@ -58,35 +58,20 @@ public class PedidoService {
         Calendar fromdata = Calendar.getInstance();
         Calendar todata = Calendar.getInstance();
 
-        if(!(cantRepeticionesxDia==6)){
-            /*
-            fromdata.set(Calendar.MONTH,inicio.get(Calendar.MONTH)-1);
-            fromdata.set(Calendar.YEAR,inicio.get(Calendar.YEAR));
-            fromdata.set(Calendar.DAY_OF_MONTH,dia);
-            fromdata.set(Calendar.HOUR,iniHora);
-            fromdata.set(Calendar.SECOND,0);
-            fromdata.set(Calendar.MINUTE,0);
-            todata.set(Calendar.MONTH,inicio.get(Calendar.MONTH)-1);
-            todata.set(Calendar.YEAR,inicio.get(Calendar.YEAR));
-            todata.set(Calendar.DAY_OF_MONTH,dia);
-            todata.set(Calendar.HOUR,finHora);
-            todata.set(Calendar.SECOND,0);
-            todata.set(Calendar.MINUTE,0);
-            */
+        if(!(cantRepeticionesxDia==2)){
             fromdata.set(inicio.get(Calendar.YEAR),inicio.get(Calendar.MONTH),dia,iniHora,0,0);
             todata.set(inicio.get(Calendar.YEAR),inicio.get(Calendar.MONTH),dia,finHora,0,0);
             for (PedidoModel pedido:listaPedidos) {
-
                 if ((pedido.getFechaPedido().compareTo(fromdata)>=0) && ((pedido.getFechaPedido().compareTo(todata)<=0))){
                     newLista.add(pedido);
                 }
             }
-            iniHora+=4;
-            finHora+=4;
+            iniHora+=12;
+            finHora+=12;
             cantRepeticionesxDia+=1;
         }else{
             iniHora = 0;
-            finHora = 4;
+            finHora = 12;
             cantRepeticionesxDia = 1;
             fromdata.set(inicio.get(Calendar.YEAR),inicio.get(Calendar.MONTH),dia,iniHora,0,0);
             todata.set(inicio.get(Calendar.YEAR),inicio.get(Calendar.MONTH),dia,finHora,0,0);

@@ -270,10 +270,10 @@ public class PlanificacionTareas implements Runnable{
             );
 
             counter++;
-            if (counter%6==0){
+            if (counter%2==0){
                 dia+=1;
             }
-            if(counter==18){
+            if(counter==6){
                 emitter.send(SseEmitter.event().name("STOP").data("ACABO"));
                 emitter.complete();
                 planificadorTareasServicios.eliminarPlanificadorTareas(uuid);
