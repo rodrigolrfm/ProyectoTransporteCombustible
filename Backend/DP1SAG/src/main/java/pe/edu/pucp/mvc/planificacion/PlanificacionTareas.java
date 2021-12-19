@@ -86,9 +86,10 @@ public class PlanificacionTareas implements Runnable{
             listaVehiculos.sort((v1, v2) -> Long.compare(v1.getFechaInicio().getTimeInMillis() , v2.getFechaInicio().getTimeInMillis()));
             //listaVehiculos = vehiculoService.listaVehiculosDisponibles();
 
+            MapaModel mapa = controlTarea.getMapaModel();
             blockList = bloqueoService.listaBloqueosDiaDia();
-
-            var depositos = controlTarea.getMapaModel().getPlantas();
+            mapa.setBlockList(blockList);
+            var depositos = mapa;
             for(PedidoModel pedido:requestListDesdoblado){
                 totalCapacity += pedido.getCantidadGLP();
             }
@@ -211,7 +212,7 @@ public class PlanificacionTareas implements Runnable{
                     System.out.println(v.getListaPedidos());
                     if (!v.getListaPedidos().isEmpty()) {
                         try {
-                            GeneticAlgorithm.Genetic(v, vertices, controlTarea.getMapaModel());
+                            GeneticAlgorithm.Genetic(v, vertices, mapa);
                         } catch (Exception ex) {
                             System.out.println(ex.getMessage());
                         }
