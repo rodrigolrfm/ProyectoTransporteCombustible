@@ -104,7 +104,9 @@ public class EjecucionController {
 
 
             MapaModel mapa = new MapaModel();
-            controlDatosPlanificador.setMapaModel(new MapaModel(70,50,mapa.obtenerPlantarIntermedias()));
+            MapaModel mapaVer = new MapaModel(70,50,mapa.obtenerPlantarIntermedias());
+            mapaVer.setBlockList(bloqueoService.listaBloqueosDiaDia());
+            controlDatosPlanificador.setMapaModel(mapaVer);
             Date fechaIni = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(fecha);
             controlDatosPlanificador.setFechaInicio(fechaIni);
 
