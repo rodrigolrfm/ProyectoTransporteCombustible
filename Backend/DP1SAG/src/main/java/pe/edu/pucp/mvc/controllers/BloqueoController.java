@@ -6,10 +6,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import pe.edu.pucp.mvc.dtos.FechaDTO;
-import pe.edu.pucp.mvc.models.BloqueoModel;
-import pe.edu.pucp.mvc.models.NodoModel;
-import pe.edu.pucp.mvc.models.RangoModel;
-import pe.edu.pucp.mvc.models.ReporteBloqueo;
+import pe.edu.pucp.mvc.models.*;
 import pe.edu.pucp.mvc.services.BloqueoService;
 import pe.edu.pucp.mvc.services.VehiculoService;
 
@@ -27,6 +24,22 @@ public class BloqueoController {
 
     @Autowired
     BloqueoService bloqueoService;
+
+    @PostMapping(value = "/getBloqueos3dias")
+    public List<ReporteBloqueo3Dias> getBloqueos3dias() {
+        List<BloqueoModel> bloqueos = bloqueoService.getBloqueos3dias();
+        List<ReporteBloqueo3Dias> bloqueosList = new ArrayList<>();
+        for (BloqueoModel b : bloqueos){
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
+            sdf.setTimeZone(TimeZone.getTimeZone("America/Bogota"));
+            String inicio = sdf.format(b.getInicioBloqueo().getTime());
+            String fin =  sdf.format(b.getFinBloqueo().getTime());
+            bloqueosList.add(ReporteBloqueo3Dias.builder().startTime(inicio)
+                        .endTime(fin).bloqueo(CoordenadaModel.builder().x(b.getCoordenadaX())
+                            .y(b.getCoordenadaY()).build()).build());
+        }
+        return bloqueosList;
+    }
 
     @PostMapping(value = "/getBloqueosFechas",  consumes = MediaType.APPLICATION_JSON_VALUE)
     public List<ReporteBloqueo> getBloqueosFechas(@RequestBody RangoModel rango) {

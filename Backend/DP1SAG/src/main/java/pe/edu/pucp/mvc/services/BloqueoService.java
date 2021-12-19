@@ -39,4 +39,10 @@ public class BloqueoService {
         bloqueos = bloqueoRepository.getBloqueosFechas(fechaIni, fechaFin);
         return bloqueos;
     }
+
+    public List<BloqueoModel> getBloqueos3dias() {
+        List<BloqueoModel> bloqueos;
+        bloqueos = bloqueoRepository.getBloqueos3dias();
+        return bloqueos;
+    }
 }
