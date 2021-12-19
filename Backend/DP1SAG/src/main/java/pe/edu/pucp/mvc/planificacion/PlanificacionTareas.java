@@ -44,8 +44,6 @@ public class PlanificacionTareas implements Runnable{
     private SseEmitter emitter;
     @Builder.Default
     private int counter = 0;
-
-
     private static final Logger log = LoggerFactory.getLogger(ScheduledTasks.class);
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
     private static int dia = 0;
@@ -87,8 +85,10 @@ public class PlanificacionTareas implements Runnable{
             //listaVehiculos = vehiculoService.listaVehiculosDisponibles();
 
             MapaModel mapa = controlTarea.getMapaModel();
-            blockList = bloqueoService.listaBloqueosDiaDia();
+            blockList = bloqueoService.getBloqueosFechas3dias(inicio,fin,dia);
             mapa.setBlockList(blockList);
+
+
             var depositos = mapa;
             for(PedidoModel pedido:requestListDesdoblado){
                 totalCapacity += pedido.getCantidadGLP();

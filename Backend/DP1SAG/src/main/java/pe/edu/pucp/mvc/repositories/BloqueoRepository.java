@@ -7,6 +7,7 @@ import pe.edu.pucp.mvc.models.BloqueoModel;
 import pe.edu.pucp.mvc.models.NodoModel;
 import pe.edu.pucp.mvc.models.VehiculoModel;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,7 +25,7 @@ public interface BloqueoRepository extends CrudRepository<BloqueoModel, Integer>
     List<BloqueoModel> getBloqueosFechas(String fechaIni, String fechaFin);
 
     @Query(value ="SELECT * FROM bloqueo WHERE ( ?1 <= fin_bloqueo ) AND ( ?2 >= inicio_bloqueo ) AND (day(inicio_bloqueo) = ?3 );",nativeQuery = true)
-    List<BloqueoModel> getBloqueosFechasIntervarlo3dias(String fechaIni, String fechaFin, int dia);
+    List<BloqueoModel> getBloqueosFechasIntervarlo3dias(Timestamp fechaIni, Timestamp fechaFin, int dia);
 
     @Query(value = "call get_bloqueos_3_dias()", nativeQuery = true)
     List<BloqueoModel> getBloqueos3dias();

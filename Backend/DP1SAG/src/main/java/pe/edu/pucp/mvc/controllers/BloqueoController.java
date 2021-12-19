@@ -58,17 +58,17 @@ public class BloqueoController {
     }
 
     @PostMapping(value = "/getBloqueosFechasRangoTres",  consumes = MediaType.APPLICATION_JSON_VALUE)
-    public List<ReporteBloqueo> getBloqueosFechas(@RequestBody RangoModelDia rango) throws ParseException {
+    public List<ReporteBloqueo3Dias> getBloqueosFechas(@RequestBody RangoModelDia rango) throws ParseException {
         List<BloqueoModel> bloqueos = bloqueoService.getBloqueosFechas3dias(rango.getFechaInicio(), rango.getFechaFin(),20);
-        List<ReporteBloqueo> bloqueosList = new ArrayList<>();
+        List<ReporteBloqueo3Dias> bloqueosList = new ArrayList<>();
         for (BloqueoModel b : bloqueos){
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
             sdf.setTimeZone(TimeZone.getTimeZone("America/Bogota"));
             String inicio = sdf.format(b.getInicioBloqueo().getTime());
             String fin =  sdf.format(b.getFinBloqueo().getTime());
-            bloqueosList.add(ReporteBloqueo.builder().inicioBloqueo(inicio)
-                    .finBloqueo(fin).coordenadaX(b.getCoordenadaX())
-                    .coordenadaY(b.getCoordenadaY()).build());
+            bloqueosList.add(ReporteBloqueo3Dias.builder().startTime(inicio)
+                    .endTime(fin).bloqueo(CoordenadaModel.builder().x(b.getCoordenadaX())
+                            .y(b.getCoordenadaY()).build()).build());
         }
         return bloqueosList;
     }

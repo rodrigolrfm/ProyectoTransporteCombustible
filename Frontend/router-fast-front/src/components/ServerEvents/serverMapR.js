@@ -1,6 +1,8 @@
 import url from  'src/utils/constant';
 
 let datax;
+let dataBloqueos;
+
 const fecha={
    fecha: "2021-12-18 00:00:00"
 
@@ -22,6 +24,13 @@ const simulacion3Dias  = (funcionRequest) => {
         funcionRequest(event.data);
     });
 
+    source.addEventListener("bloqueostres", (event) => {
+        console.log("server event de bloqueos para tres dias");
+        dataBloqueos=event.data;
+        //console.log(datax);
+        funcionRequest(event.data);
+    });
+
     /* 
     source.addEventListener("bloqueo", function(event) {
         funcionBlock(event.data);
@@ -36,7 +45,11 @@ const simulacion3Dias  = (funcionRequest) => {
     
     source.addEventListener("STOP", function(e) {
         console.log("finalización de 3 días");
+        // AQUI IRE EL MODAL DE HOJA DE RUTAS
+
+
         source = null;
+
     });
     
 }
