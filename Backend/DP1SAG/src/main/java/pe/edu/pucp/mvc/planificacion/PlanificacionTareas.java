@@ -64,13 +64,6 @@ public class PlanificacionTareas implements Runnable{
         dia = date.get(Calendar.DATE);
         this.listaVehiculos = listaVeh;
     }
-    /*
-    @PostConstruct
-    private void postConstruct() {
-        Calendar date = Calendar.getInstance();
-        date.setTime(controlTarea.getFechaInicio());
-        dia = date.get(Calendar.DATE);
-    }*/
 
     @Override
     public void run() {
