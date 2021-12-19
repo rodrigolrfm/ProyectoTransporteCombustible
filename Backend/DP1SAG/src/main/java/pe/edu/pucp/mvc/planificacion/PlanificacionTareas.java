@@ -68,6 +68,9 @@ public class PlanificacionTareas implements Runnable{
 
         try{
             EntidadRutas rutasFinal = EntidadRutas.builder().paths(new ArrayList<>()).build();
+
+            TodoTresDias todoTresDias = TodoTresDias.builder().build();
+
             int minimo = 5;
             // Split request list in minimum capacity
             int totalCapacity = 0;
@@ -75,6 +78,9 @@ public class PlanificacionTareas implements Runnable{
             Calendar fin = Calendar.getInstance();
             inicio.setTime(controlTarea.getFechaInicio());
             fin.setTime(controlTarea.getFechaFin());
+            List<ReporteBloqueo3Dias> reportesBloqueo3Dias = bloqueoService.getBloqueosJson3dias(inicio,fin,dia);
+
+            todoTresDias.setBloqueoTresDias(reportesBloqueo3Dias);
 
             //Carga de los pedidos
 
@@ -86,6 +92,8 @@ public class PlanificacionTareas implements Runnable{
 
             MapaModel mapa = controlTarea.getMapaModel();
             blockList = bloqueoService.getBloqueosFechas3dias(inicio,fin,dia);
+
+
             mapa.setBlockList(blockList);
 
 
@@ -239,6 +247,7 @@ public class PlanificacionTareas implements Runnable{
                     fechaHoraNuevaVehiculo = null;
                 }
 
+                todoTresDias.setArregloRutas(rutasFinal);
                 // Se hace sort para las capacidadades
 
                 listaVehiculos.sort((v1, v2) -> Long.compare(v1.getFechaInicio().getTimeInMillis() , v2.getFechaInicio().getTimeInMillis()));
@@ -267,7 +276,7 @@ public class PlanificacionTareas implements Runnable{
             emitter.send(
                     SseEmitter.event()
                             .name("3dias")
-                            .data(rutasFinal)
+                            .data(todoTresDias)
             );
 
             counter++;

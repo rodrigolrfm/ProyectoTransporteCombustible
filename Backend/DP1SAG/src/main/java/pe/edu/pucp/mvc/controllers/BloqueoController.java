@@ -57,6 +57,7 @@ public class BloqueoController {
         return bloqueosList;
     }
 
+    /*
     @PostMapping(value = "/getBloqueosFechasRangoTres",  consumes = MediaType.APPLICATION_JSON_VALUE)
     public List<ReporteBloqueo3Dias> getBloqueosFechas(@RequestBody RangoModelDia rango) throws ParseException {
         List<BloqueoModel> bloqueos = bloqueoService.getBloqueosFechas3dias(rango.getFechaInicio(), rango.getFechaFin(),20);
@@ -72,7 +73,7 @@ public class BloqueoController {
         }
         return bloqueosList;
     }
-
+    */
 
     @PostMapping(value = "/getBloqueos")
     public List<ReporteBloqueo> getBloqueos() {
