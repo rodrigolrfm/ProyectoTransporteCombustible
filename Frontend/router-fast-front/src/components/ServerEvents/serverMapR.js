@@ -1,7 +1,5 @@
 import url from  'src/utils/constant';
 
-
-
 let datax;
 const fecha={
    fecha: "2021-12-18 00:00:00"
@@ -9,7 +7,6 @@ const fecha={
 }
 const simulacion3Dias  = (funcionRequest) => {
     
-
     var source = new EventSource(url +`/ejecutar/obtenerTresDias`, {
         headers: { 'Content-Type': 'application/json' }
     });
@@ -17,10 +14,8 @@ const simulacion3Dias  = (funcionRequest) => {
 
     source.onopen = (event) => {
         console.log ("La conexión entre el cliente y el servidor es exitosa ......");
-    }
-    
-    
-    source.addEventListener("RUTAS", (event) => {
+    }    
+    source.addEventListener("3dias", (event) => {
         console.log("server event para tres dias");
         datax=event.data;
         //console.log(datax);
@@ -38,14 +33,11 @@ const simulacion3Dias  = (funcionRequest) => {
         source = null;
         //funcionError();
     });
-    /*
-
-    source.addEventListener("Routes_end", function(e) {
-        console.log ("Fin de ejecución...");
-        source.close();
+    
+    source.addEventListener("STOP", function(e) {
+        console.log("finalización de 3 días");
         source = null;
-        funcionEnd();
     });
-    */
+    
 }
 export default simulacion3Dias;

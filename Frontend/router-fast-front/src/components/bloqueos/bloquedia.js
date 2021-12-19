@@ -16,8 +16,6 @@ const sendBlock= ()=>{
     console.log(fechaFin);
 
     const interval = setInterval(() => {
-
-    
     
       const data = {
             fechaInicio: fechaPedido,

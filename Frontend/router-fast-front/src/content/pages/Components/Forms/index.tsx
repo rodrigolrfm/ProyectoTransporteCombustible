@@ -1,8 +1,6 @@
 import { Helmet } from 'react-helmet-async';
-import PageTitle from 'src/components/PageTitle';
-import { useState } from 'react';
 
-import PageTitleWrapper from 'src/components/PageTitleWrapper';
+import { useState } from 'react';
 import { Container, Grid, Card, CardHeader, CardContent, Divider , Button } from '@mui/material';
 
 import MapO from 'src/components/MapO/MapO';
@@ -11,14 +9,11 @@ import TextField from '@mui/material/TextField';
 import { styled } from '@mui/material/styles';
 import FormControl from '@mui/material/FormControl';
 import * as React from 'react';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DateTimePicker from '@mui/lab/DateTimePicker';
 import axios from 'axios';
 import url from  'src/utils/constant';
 import * as moment from 'moment';
 import CustomSnackbar from 'src/components/Custom/CustomSnackbar';
-import { SettingsInputAntennaTwoTone } from '@mui/icons-material';
 import simulacionDia from 'src/components/ServerEvents/serverEvents';
 import sendBlock from 'src/components/bloqueos/bloquedia';
 
@@ -58,9 +53,9 @@ function Forms() {
         
         .then((r) => {
           setAlert({isOpen: true, message: 'Pedido agregado exitosamente.', type: 'success'})
-          console.log(r);
-          console.log(data);
-          console.log("Pedido agregado exitosamente.");         
+          //console.log(r);
+          //console.log(data);
+          //console.log("Pedido agregado exitosamente.");         
         
         });
         setPosicionX(" ");
@@ -93,17 +88,17 @@ function Forms() {
                 <Box
                   component="form"
                   sx={{
-                    '& .MuiTextField-root': { m: 1, width: '20ch' },
+                    '& .MuiTextField-root': { m: 1, width: '25ch' },
                   }}
                   noValidate
                   autoComplete="off"
                 >
-                  <Box>
                     <TextField
                       required
                       id="outlined-required"
                       label="Posición X"
                       type="number"
+                      style = {{width:'15ch'}}             
                       value= {posicionX}
                       name = {posicionX}
                       onChange={e => setPosicionX(e.target.value)}
@@ -116,6 +111,7 @@ function Forms() {
                       id="outlined-required"
                       label="Posición Y"
                       type="number"
+                      style = {{width:'15ch'}}    
                       value= {posicionY}
                       name = {posicionY}
                       onChange={e => setPosicionY(e.target.value)}              
@@ -128,6 +124,7 @@ function Forms() {
                       id="outlined-required"
                       label="Capacidad"
                       type="number"
+                      style = {{width:'15ch'}}    
                       value= {capacidad}
                       name = {capacidad}
                       onChange={e => setCapacidad(e.target.value)}   
@@ -149,7 +146,6 @@ function Forms() {
 
                         renderInput={(props) => <TextField {...props} />}
                         label="Fecha Pedido"
-                        
                         value={value}
                         onChange={(newValue) => {
                         setValue(newValue);
@@ -160,6 +156,7 @@ function Forms() {
                       id="outlined-required"
                       label="Horas Limite"
                       type="number"
+                      style = {{width:'15ch'}}    
                       value= {horaslimite}
                       name = {horaslimite}
                       onChange={e => setHoraLimite(e.target.value)}   
@@ -177,16 +174,15 @@ function Forms() {
                       }}
                     />*/}
 
-                    <Button variant="contained" onClick={sendData} sx={{mt:1, mx:2, height: 50}} >
+                    <Button variant="contained" onClick={sendData} sx={{mt:1, mx:2, height: 50 , width:'15ch'}} >
                   Agregar Pedido
                   </Button>
-                  <Button variant="contained" onClick={simulacionDia} sx={{mt:1, mx:2, height: 50}} >
+                  {/*<Button variant="contained" onClick={simulacionDia} sx={{mt:1, mx:2, height: 50, width:'15ch'}} >
                   Empezar Operación
                   </Button>
-                  {/*<Button variant="contained" onClick={sendBlock} sx={{mt:1, mx:2, height: 50}} >
+                  <Button variant="contained" onClick={sendBlock} sx={{mt:1, mx:2, height: 50}} >
                   Pa probar tu bloqueo p
                   </Button>*/}
-                  </Box>
                 </Box>
               </CardContent>
             </Card>

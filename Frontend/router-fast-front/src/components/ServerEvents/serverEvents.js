@@ -4,6 +4,7 @@ import url from  'src/utils/constant';
 //export const startSimulation=false;
 let datax;
 const simulacionDia  = (funcionRequest) => {
+    console.log("entrando al server event")
     
     var source = new EventSource(url +`/ejecutar/obtenerRutas`);
 
@@ -19,7 +20,6 @@ const simulacionDia  = (funcionRequest) => {
         //console.log(x);
         funcionRequest(datax);
     });
-
     /* 
     source.addEventListener("v_blocks", function(event) {
         funcionBlock(event.data);

@@ -61,7 +61,7 @@ const obtenerRuta = (path) => {
     return ruta;
   };
   
-//const ruta = obtenerRuta(path);
+const ruta = obtenerRuta(path);
 /*
 const obtenerPosicion = (path, speed) => {
   let pos;
@@ -96,7 +96,7 @@ const useStyles = makeStyles((theme) => ({
   
     map: {
       backgroundColor: '#F8DBB1',
-      marginTop: '72px',
+      marginTop: '35px',
     },
     row: {
       display: 'flex',
@@ -168,7 +168,7 @@ const MapO=(props: simulacion )=>{
       60 min ->3600000
 
       */
-      const intervalTime =60000; //velocidad del camión
+      const intervalTime =10; //velocidad del camión
       const interval = setInterval(() => {
         let arr;
         
@@ -198,47 +198,33 @@ const MapO=(props: simulacion )=>{
           } else return { ...path, pos: posAux };
         });
         setCaminos(arr.filter((el) => el != null));
-        console.log(caminos);
+        //console.log(caminos);
         // setPaths(...paths, pos)
       }, intervalTime);
       return () => clearInterval(interval);
     }, [caminos]);
-         
+
     useEffect(() => {
-      
-        const funcionRequest= (data)=>{
-          data = JSON.parse(data);
-          /*
-          let newData = data.paths?.map((path) => {
-            return {
-              ...path.path,
-              ruta: obtenerRuta(path.path),
-              pos: 0,
-              date: implementarFecha(data.paths[0].startTime,path.startTime),
-              dateStart: data.paths[0].startTime,
-              nowFixed: new Date(),
-            };
-          });
-          */
-          let newData = data.paths?.map((path) => {
-            return {
-              ...path.path,
-              ruta: obtenerRuta(path.path),
-              pos: 0,
-              date: implementarFecha(data.paths[0].startTime,path.startTime),
-              dateStart: data.paths[0].startTime,
-              nowFixed: new Date(),
-            };
-          });
-          if(newData)
-            setCaminos(newData);
+
+      const funcionRequest= (data)=>{
+        data = JSON.parse(data);
+        let newData = data.paths?.map((path) => {
+          return {
+            ...path.path,
+            ruta: obtenerRuta(path.path),
+            pos: 0,
+            date: implementarFecha(data.paths[0].startTime,path.startTime),
+            dateStart: data.paths[0].startTime,
+            nowFixed: new Date(),
           };
-
-          simulacionDia(funcionRequest);
-
-
-    }, []);
-    
+        });
+        if(newData)
+          setCaminos(newData);
+        };
+        console.log("evnviando");
+        simulacionDia(funcionRequest);
+    },[]);
+        
     /*
     export default funcion= () => {
       const [sendRequest, setSendRequest] = useState(false);
@@ -271,13 +257,9 @@ const MapO=(props: simulacion )=>{
      }, []);
     */
 
-
-   
-     
-    
     useEffect(() => {
 
-      console.log('mostrando bloqueos');
+      //console.log('mostrando bloqueos');
 
       //var dd=new Date();
       //var date=dd.getFullYear() +' ' + dd.getMonth()
@@ -287,12 +269,10 @@ const MapO=(props: simulacion )=>{
       
       const fechaFin=moment.default().add(semana,"days").format('YYYY/MM/DD HH:mm');
       
-      console.log(fechaPedido);
-      console.log(fechaFin);
+      //console.log(fechaPedido);
+      //console.log(fechaFin);
 
       const interval = setInterval(() => {
-
-      
       
         const mario = {
               fechaInicio: fechaPedido,
@@ -301,19 +281,15 @@ const MapO=(props: simulacion )=>{
             axios.post(url + '/bloqueo/getBloqueosFechas',JSON.stringify(mario) , {
                 headers: { 'Content-Type': 'application/json' }
             })
-            
             .then((r) => {
-              console.log("entra al axios de bloqueos")
+              //console.log("entra al axios de bloqueos")
               setBloqueos(r.data);
-              console.log("r:",r.data);
+              //console.log("r:",r.data);
               //console.log(data);
-              console.log("Bloqueos agregado exitosamente.");         
+              //console.log("Bloqueos agregado exitosamente.");         
             
             });
-            
-      
-
-       }, 20000);
+       }, 2000);
        return () => clearInterval(interval);
      }, []);
     
@@ -337,7 +313,7 @@ const MapO=(props: simulacion )=>{
       setBloqueos(bloqueosData);
     }, []);
     */
-   console.log("bloqueos data",bloqueos);
+   //console.log("bloqueos data",bloqueos);
     
     //setPedidos(ruta?.filter(nodo => nodo.destino));
     for (let i = 0; i < vectorY; i++) { //50
@@ -367,25 +343,6 @@ const MapO=(props: simulacion )=>{
               </IconButton>
             </div>
           )}
-          {/*
-            nodos:[
-              {
-                x:12,
-                y:15,
-              },
-              {
-                x: 20,
-                y: 35,
-              },
-              {
-                x:45,
-                y:18,
-              }
-              
-
-            ]
-          */}
-
             {ruta?.find(({ x, y }) => x === j && y === i)?.destino ? (
             <div className={classes.icon} style={{ transform: 'rotate(0deg)' }}>
               <EmojiPeople style={{ color: '#424774'}} />
