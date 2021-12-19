@@ -10,7 +10,7 @@ const fecha={
 const simulacionColapso  = (funcionRequest) => {
     
 
-    var source = new EventSource(url +`/ejecutar/simularRutasColapso?fecha=2021-12-18%2000:00:00`, {
+    var source = new EventSource(url +`/ejecutar/simularRutasColapso`, {
         headers: { 'Content-Type': 'application/json' }
     });
     //var source = new EventSource(url +`/ejecutar/obtenerTresDias`);
