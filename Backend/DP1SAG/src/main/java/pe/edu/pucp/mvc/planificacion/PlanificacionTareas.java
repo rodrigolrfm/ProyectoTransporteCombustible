@@ -67,7 +67,6 @@ public class PlanificacionTareas implements Runnable{
 
     @Override
     public void run() {
-        // aqui deberia ir el algoritmo y un emitter
 
         try{
             EntidadRutas rutasFinal = EntidadRutas.builder().paths(new ArrayList<>()).build();
