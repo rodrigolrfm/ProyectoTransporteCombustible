@@ -11,10 +11,12 @@ import java.io.IOException;
 import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.text.ParseException;
+import java.util.TimeZone;
 
 public class LecturaBloques {
     public static ArrayList<NodoModel> lectura(String path) throws Exception{
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+        sdf.setTimeZone(TimeZone.getTimeZone("America/Bogota"));
         ArrayList<NodoModel> blockedList = new ArrayList<>();
         try{
             File file = new File(path);

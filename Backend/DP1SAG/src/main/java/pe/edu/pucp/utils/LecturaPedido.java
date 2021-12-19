@@ -4,16 +4,14 @@ import pe.edu.pucp.mvc.models.PedidoModel;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.ArrayList;
+import java.util.*;
 import java.io.*;
 
 public class LecturaPedido {
     public static List<PedidoModel> lectura(String path) throws IOException , Exception{
         List<PedidoModel> requestList = new ArrayList<PedidoModel>();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+        sdf.setTimeZone(TimeZone.getTimeZone("America/Bogota"));
         int glpTotal = 0;
         try {
             File file = new File(path);
