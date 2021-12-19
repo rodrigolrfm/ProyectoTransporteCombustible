@@ -3,7 +3,6 @@ import HomeIcon from '@mui/icons-material/Home';
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import { useEffect,  useState,useCallback } from 'react';
 import EmojiPeopleIcon from '@mui/icons-material/EmojiPeople';
-import url from  'src/utils/constant';
 import axios from 'axios';
 import BlockIcon from '@mui/icons-material/Block';
 import { IconButton } from '@mui/material';
@@ -11,14 +10,12 @@ import simulacion3Dias from '../ServerEvents/serverMapR';
 import { HomeWork } from '@mui/icons-material';
 import bloqueosData from './BloqueosR';
 
-//import { tiempo,prueba} from "src/content/applications/Transactions/PageHeader";
-//import { tiempo } from '../Tiempo/tiempo';
 //1 hora es -> 12.5 segundos
 const vectorX = 70;
 const vectorY = 50;
 const path = [ ];
-const intervaloTiempo=200; // 500, 200
-const avance = 115* 1000; // 288 , 115
+const intervaloTiempo=500; // 500, 200
+const avance = 286* 1000; // 288 , 115
 //500 es a 15 minutos
 // 1 es tiempo real
 
@@ -205,9 +202,7 @@ const useStyles = makeStyles((theme) => ({
       bottom: '0px',
       zIndex: 1,
       transform: 'rotate(90deg)',
-
-
-    }
+    },
   }));
 
 interface simulacion{simulacion : number}; // Integer
@@ -391,7 +386,7 @@ const MapR=(props: simulacion )=>{
             }}
           >
             {bloqueos?.find(({ x, y }) => x === j && y === i) && (
-            <div className={classes.icon}>
+            <div className={classes.iconb}>
               <IconButton>
                 <BlockIcon style={{ color: 'red', fontSize: '20px' }} />
               </IconButton>
