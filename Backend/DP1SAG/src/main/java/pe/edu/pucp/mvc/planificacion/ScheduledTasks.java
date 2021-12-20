@@ -77,7 +77,7 @@ public class ScheduledTasks {
         listaVehiculos.forEach(v -> {
             // Fecha de inicio y copia de fecha de inicio
             Calendar init = Calendar.getInstance();
-            init.set(now.getYear(), now.getMonth().getValue()-1, now.getDayOfMonth(), now.getHour(), now.getMinute(), now.getSecond());
+            init.set(now.getYear(), now.getMonth().getValue()-1, now.getDayOfMonth(), 0, 0, 0);
             v.setFechaInicio(init);
             v.setNodoActual(plantas.get(0));
             v.setCombustible(25);
@@ -101,7 +101,7 @@ public class ScheduledTasks {
             listaVehiculos.forEach(v -> {
                 // Fecha de inicio y copia de fecha de inicio
                 Calendar init = Calendar.getInstance();
-                init.set(now.getYear(), now.getMonth().getValue()-1, now.getDayOfMonth(), now.getHour(), now.getMinute(), now.getSecond());
+                init.set(now.getYear(), now.getMonth().getValue()-1, now.getDayOfMonth(), 0, 0, 0);
                 v.setFechaInicio(init);
                 //v.setNodoActual(plantas.get(0));
                 v.setCombustible(25);
