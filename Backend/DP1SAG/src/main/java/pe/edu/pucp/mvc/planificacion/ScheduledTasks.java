@@ -31,6 +31,7 @@ public class ScheduledTasks {
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
     private static int value = 1;
     private int i = 0;
+    private static LocalDateTime now;
 
     private List<PedidoModel> listaPedidos = new ArrayList<>();
     public List<VehiculoModel> vehiculoModels = new ArrayList<>();
@@ -70,7 +71,7 @@ public class ScheduledTasks {
         // Se crea el mapa
         mapaModel.setBlockList(blockList);
 
-        LocalDateTime now = LocalDateTime.now();
+        now = LocalDateTime.now();
 
         // Inicializar las fechas de inicio de los vehículos
         listaVehiculos.forEach(v -> {
@@ -96,8 +97,20 @@ public class ScheduledTasks {
             //Carga de los pedidos
             requestListDesdoblado = pedidoService.listaPedidosSinAtender();
 
+            listaVehiculos = vehiculoService.listaVehiculosDisponibles();
+            listaVehiculos.forEach(v -> {
+                // Fecha de inicio y copia de fecha de inicio
+                Calendar init = Calendar.getInstance();
+                init.set(now.getYear(), now.getMonth().getValue()-1, now.getDayOfMonth(), now.getHour(), now.getMinute(), now.getSecond());
+                v.setFechaInicio(init);
+                //v.setNodoActual(plantas.get(0));
+                v.setCombustible(25);
+                v.setVelocidad(50);
+            });
+
             for(PedidoModel pedido:requestListDesdoblado){
                 totalCapacity += pedido.getCantidadGLP();
+                System.out.println(pedido.getFechaPedido().getTime());
             }
 
             System.out.println("Total Capacity: " + totalCapacity);
@@ -247,7 +260,7 @@ public class ScheduledTasks {
             System.out.println("Antes del if");
             if (emi!=null){
                 System.out.println("Entro al if");
-                System.out.println(rutasFinal);
+                //System.out.println(rutasFinal);
                 emi.send(SseEmitter.event().name("RUTAS").data(rutasFinal));
             }
             System.out.println("Salio del if");
