@@ -244,9 +244,12 @@ public class ScheduledTasks {
         } while(!requestListDesdoblado.isEmpty());
             Collections.sort(rutasFinal.getPaths());
 
+            System.out.println("Antes del if");
             if (emi!=null){
+                System.out.println("Entro al if");
                 emi.send(SseEmitter.event().name("RUTAS").data(rutasFinal));
             }
+            System.out.println("Salio del if");
         }catch (Exception ex){
             System.out.println(ex.getMessage());
         }
