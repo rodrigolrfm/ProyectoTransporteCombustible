@@ -106,6 +106,7 @@ public class ScheduledTasks {
                 //v.setNodoActual(plantas.get(0));
                 v.setCombustible(25);
                 v.setVelocidad(50);
+                System.out.println("Hora vehiculo:: " + v.getFechaInicio().getTime());
             });
 
             for(PedidoModel pedido:requestListDesdoblado){
