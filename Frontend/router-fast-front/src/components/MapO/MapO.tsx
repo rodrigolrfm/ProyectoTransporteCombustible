@@ -2,7 +2,7 @@ import { makeStyles } from '@mui/styles';
 import HomeIcon from '@mui/icons-material/Home';
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import PersonPinIcon from '@mui/icons-material/PersonPin';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import url from  'src/utils/constant';
 import axios from 'axios';
 import BlockIcon from '@mui/icons-material/Block';
@@ -118,7 +118,15 @@ const MapO=(props: simulacion )=>{
     const [sendRequest, setSendRequest] = useState(false);
     const classes = useStyles();
     const map = [];
-
+    /*
+    const listaInt = useRef([]);
+    const lista = useCallback(()=> {
+      console.log("entro al callback"); 
+      if(!caminos.length && listaInt.current.length){
+      setCaminos(listaInt.current.shift()); 
+    }
+  },[listaInt]);
+  */
     /*
     useEffect(() => {
       //const pos=5;
@@ -163,17 +171,23 @@ const MapO=(props: simulacion )=>{
       const intervalTime = 72000; //velocidad del camión //   1 
       const interval = setInterval(() => {
         let arr;
+        /*
         
+        if(!caminos.length && listaInt.current.length){
+          setCaminos(listaInt.current.shift());
+        }
+        */
+
         //console.log(paths);
         arr = caminos.map((path) => {
+
+
           const now = new Date();
           const date = new Date(path.date);
           const nowFixed = new Date(path.nowFixed);
           const dateStart = new Date(path.dateStart);
           
           let rest = now.getTime() - date.getTime() - (nowFixed.getTime() - dateStart.getTime());
-          
-          //console.log("asdlkasjdlsad");
           let posAux = Math.floor(rest / intervalTime); // restar los milisegundos para igual
           //camion averiado
           /*
@@ -189,9 +203,11 @@ const MapO=(props: simulacion )=>{
             return null;
           } else return { ...path, pos: posAux };
         });
+
         setCaminos(arr.filter((el) => el != null));
         //console.log(caminos);
         // setPaths(...paths, pos)
+
       }, intervalTime);
       return () => clearInterval(interval);
     }, [caminos]);
@@ -209,7 +225,8 @@ const MapO=(props: simulacion )=>{
             nowFixed: new Date(),
           };
         });
-        if(newData)
+        if(newData?.length)
+          //listaInt.current.push(newData);
           setCaminos(newData);
         };
         console.log("enviando");

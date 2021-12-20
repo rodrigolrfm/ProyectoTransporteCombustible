@@ -1,5 +1,5 @@
 import url from  'src/utils/constant';
-
+import Alert from '@mui/material/Alert';
 let datax;
 let dataBloqueos;
 
@@ -37,18 +37,19 @@ const simulacion3Dias  = (funcionRequest) => {
     })
     */
     source.addEventListener("error", (e) => {
-        console.log ("Error de ejecución ...");
-        source.close();
-        source = null;
+        console.log("finalización de 3 días");
+        //console.log ("Error de ejecución ...");
+        //source.close();
+        //source = null;
         //funcionError();
     });
     
     source.addEventListener("STOP", function(e) {
         console.log("finalización de 3 días");
         // AQUI IRE EL MODAL DE HOJA DE RUTAS
+        //<Alert severity="success">Simulación de 3 días finalizada!</Alert>
 
-
-        source = null;
+        //source = null;
 
     });
     

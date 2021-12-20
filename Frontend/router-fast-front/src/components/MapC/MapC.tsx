@@ -239,9 +239,9 @@ const MapC=(props: simulacion )=>{
       Relativo= relativo + avance;
       setRelativo(Relativo);
       const blocksList = bloqueosDataColapso.filter((item)=>Relativo>(new Date(item.startTime)).getTime() && Relativo<(new Date(item.endTime)).getTime()).map((item)=>({x:item.bloqueo.x, y:item.bloqueo.y}))
-       console.log("dentro de intervalo",bloqueosDataColapso.map((item)=>({start: (new Date(item.startTime)).getTime(),end: (new Date(item.endTime)).getTime()})),Relativo);
-       console.log(blocksList);
-       setBloqueos(blocksList);
+       //console.log("dentro de intervalo",bloqueosDataColapso.map((item)=>({start: (new Date(item.startTime)).getTime(),end: (new Date(item.endTime)).getTime()})),Relativo);
+       //console.log(blocksList);
+       //setBloqueos(blocksList);
       
      // console.log("path",paths[0]);
       }
@@ -294,9 +294,9 @@ const MapC=(props: simulacion )=>{
         //console.log("dentro");
        const interval2 = setInterval(() => {
          const blocksList = bloqueosDataColapso.filter((item)=>relativo>(new Date(item.startTime)).getTime() && relativo<(new Date(item.endTime)).getTime()).map((item)=>({x:item.bloqueo.x, y:item.bloqueo.y}))
-         console.log("dentro de intervalo",bloqueosDataColapso.map((item)=>({start: (new Date(item.startTime)).getTime(),end: (new Date(item.endTime)).getTime()})),relativo);
-         console.log(blocksList);
-         setBloqueos(blocksList);
+         //console.log("dentro de intervalo",bloqueosDataColapso.map((item)=>({start: (new Date(item.startTime)).getTime(),end: (new Date(item.endTime)).getTime()})),relativo);
+         //console.log(blocksList);
+         //setBloqueos(blocksList);
  
        }, 5000);
        return () => {clearInterval(interval2)};
@@ -312,14 +312,14 @@ const MapC=(props: simulacion )=>{
        
        const funcionRequest= (data)=>{
         data = JSON.parse(data);
-      
-        let newData = data.paths?.map((path) => {
+        setBloqueos(data.bloqueoTresDias);
+        let newData = data.arregloRutas.paths?.map((path) => {
           return {
             ...path.path,
             ruta: obtenerRuta(path.path),
             pos: 0,
-            date: implementarFecha(data.paths[0].startTime,path.startTime),
-            dateStart: data.paths[0].startTime,
+            date: implementarFecha(data.arregloRutas.paths[0].startTime,path.startTime),
+            dateStart: data.arregloRutas.paths[0].startTime,
             nowFixed: new Date(),
           };
         });
@@ -391,8 +391,9 @@ const MapC=(props: simulacion )=>{
                   : '#D89F7B',
             }}
           >
-            {bloqueos?.find(({ x, y }) => x === j && y === i) && (
-            <div className={classes.icon}>
+             {bloqueos?.find((bloqueo) => {
+              return (bloqueo.bloqueo.x === j && bloqueo.bloqueo.y === i)}) && (
+            <div className={classes.iconb}>
               <IconButton>
                 <BlockIcon style={{ color: 'red', fontSize: '20px' }} />
               </IconButton>

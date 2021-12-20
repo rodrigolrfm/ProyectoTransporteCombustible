@@ -1,7 +1,5 @@
 import url from  'src/utils/constant';
 
-
-
 let datax;
 const fecha={
    fecha: "2021-12-18 00:00:00"
@@ -10,7 +8,7 @@ const fecha={
 const simulacionColapso  = (funcionRequest) => {
     
 
-    var source = new EventSource(url +`/ejecutar/simularRutasColapso`, {
+    var source = new EventSource(url +`/ejecutar/obtenerColapso`, {
         headers: { 'Content-Type': 'application/json' }
     });
     //var source = new EventSource(url +`/ejecutar/obtenerTresDias`);
@@ -20,7 +18,7 @@ const simulacionColapso  = (funcionRequest) => {
     }
     
     
-    source.addEventListener("RUTAS", (event) => {
+    source.addEventListener("SIMULCOLAPSO", (event) => {
         console.log("server event para colapso logistico");
         datax=event.data;
         //console.log(datax);
@@ -33,19 +31,15 @@ const simulacionColapso  = (funcionRequest) => {
     })
     */
     source.addEventListener("error", (e) => {
-        console.log ("Error de ejecución ...");
-        source.close();
-        source = null;
+        console.log ("Colapso Logístico ...");
+        //source.close();
+        //source = null;
         //funcionError();
     });
-    /*
-
-    source.addEventListener("Routes_end", function(e) {
-        console.log ("Fin de ejecución...");
-        source.close();
-        source = null;
-        funcionEnd();
+    
+    source.addEventListener("CALAPSO", function(e) {
+        console.log ("Ocurre el colapso...");
     });
-    */
+    
 }
 export default simulacionColapso;
