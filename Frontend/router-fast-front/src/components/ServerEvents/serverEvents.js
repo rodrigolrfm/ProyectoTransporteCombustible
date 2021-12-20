@@ -1,9 +1,8 @@
 import url from  'src/utils/constant';
-
-
-//export const startSimulation=false;
 let datax;
 //const hojasR=[];
+
+
 const simulacionDia  = (funcionRequest) => {
     console.log("entrando al server event")
     
@@ -12,14 +11,14 @@ const simulacionDia  = (funcionRequest) => {
     source.onopen = (event) => {
         console.log ("La conexión entre el cliente y el servidor es exitosa ......");
     }
-    
-    
+        
     source.addEventListener("RUTAS", (event) => {
-        console.log("xd");
+        //console.log("xd");
        // startSimulation=true;
         datax=event.data;
        // hojasR.push(datax);
         //console.log(x);
+        console.log("even listener");
         funcionRequest(datax);
     });
     /* 
@@ -40,6 +39,9 @@ const simulacionDia  = (funcionRequest) => {
         //console.log(hojasR);
         source.close();
         source = null;
+    });
+    source.addEventListener("error", (e) => {
+        console.log ("Error de ejecución ...");
     });
     
 }

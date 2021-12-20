@@ -15,9 +15,6 @@ import EmojiPeople from '@mui/icons-material/EmojiPeople';
 import { Dialog } from '@mui/material';
 import * as moment from 'moment';
 
-
-
-
 import sendBlock from '../bloqueos/bloquedia';
 
 const vectorX = 70;
@@ -42,11 +39,6 @@ const bloqueosData = [
     {x: 25, y: 30},
     {x: 30, y: 30}
   ]
-
-
-
-
-
 const obtenerRuta = (path) => {
     const ruta = [];
     for (let i = 0; i < path.length - 1; i++) {
@@ -165,10 +157,10 @@ const MapO=(props: simulacion )=>{
       Tiempo real:
       
       1 min -> 60000
+      60 seg -> 60 000
       60 min ->3600000
-
       */
-      const intervalTime =10; //velocidad del camión
+      const intervalTime = 72000; //velocidad del camión //   1 
       const interval = setInterval(() => {
         let arr;
         
@@ -205,7 +197,6 @@ const MapO=(props: simulacion )=>{
     }, [caminos]);
 
     useEffect(() => {
-
       const funcionRequest= (data)=>{
         data = JSON.parse(data);
         let newData = data.paths?.map((path) => {
@@ -221,7 +212,7 @@ const MapO=(props: simulacion )=>{
         if(newData)
           setCaminos(newData);
         };
-        console.log("evnviando");
+        console.log("enviando");
         simulacionDia(funcionRequest);
     },[]);
         
@@ -242,8 +233,6 @@ const MapO=(props: simulacion )=>{
       );
       }
     */
-
-
     /*
     useEffect(() => {
       console.log('mostrando bloqueos');
@@ -258,15 +247,11 @@ const MapO=(props: simulacion )=>{
     */
 
     useEffect(() => {
-
       //console.log('mostrando bloqueos');
-
       //var dd=new Date();
       //var date=dd.getFullYear() +' ' + dd.getMonth()
       const semana=7;
-
       const fechaPedido=moment.default().format('YYYY/MM/DD HH:mm');
-      
       const fechaFin=moment.default().add(semana,"days").format('YYYY/MM/DD HH:mm');
       
       //console.log(fechaPedido);
@@ -287,32 +272,19 @@ const MapO=(props: simulacion )=>{
               //console.log("r:",r.data);
               //console.log(data);
               //console.log("Bloqueos agregado exitosamente.");         
-            
             });
-       }, 2000);
+       }, 200000);
        return () => clearInterval(interval);
      }, []);
-    
-    
-      
 
     const handleClose = () => {
       setOpenInfo(false);
     };
 
-
-
     const handleClickOpen = (ruta) => {
       setRuta(ruta);
       setOpenInfo(true);
     }
-    
-    /*
-    useEffect(() => {
-      console.log(bloqueosData);
-      setBloqueos(bloqueosData);
-    }, []);
-    */
    //console.log("bloqueos data",bloqueos);
     
     //setPedidos(ruta?.filter(nodo => nodo.destino));

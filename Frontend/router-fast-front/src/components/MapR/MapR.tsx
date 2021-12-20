@@ -461,7 +461,7 @@ const MapR=(props: simulacion )=>{
           Hoja de Ruta
         </Typography>
         <Typography variant="h5" component="div">
-          
+
         </Typography>
       </CardContent>
     </Card>

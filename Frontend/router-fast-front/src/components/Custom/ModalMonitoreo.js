@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { makeStyles } from '@mui/styles';
 import CloseIcon from '@mui/icons-material/Close';
-import { IconButton, Typography } from '@mui/material';
+import { IconButton, Typography, Button } from '@mui/material';
 
 const useStyles = makeStyles((theme) => ({
   container: {

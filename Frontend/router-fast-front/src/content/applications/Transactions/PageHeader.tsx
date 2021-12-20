@@ -8,7 +8,6 @@ import MapR from 'src/components/MapR/MapR';
 import MapC from 'src/components/MapC/MapC';
 import url from  'src/utils/constant';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-
 import BarsR from 'src/components/Bars/BarsR';
 import { StyledEngineProvider } from '@mui/material';
 
@@ -43,16 +42,10 @@ function PageHeader() {
 
   const cargarFiles=()=>{
     setStart(true);
-
   }
-
   
   const sendFiles= ()=>{
-    
-    
-    // a 3 días  -> true -> 1
-
-    
+    // a 3 días  -> true -> 1    
     if( tipo == "1"){
       setSimulacion(1);
     }
@@ -68,7 +61,7 @@ function PageHeader() {
       sendFileA();
       sendFileB();
       console.log("Envio de archivos..")
-      console.log("Tipo:", tipo)
+      //console.log("Tipo:", tipo)
     }
   },[start])
 
@@ -83,13 +76,12 @@ function PageHeader() {
         'Content-Type': 'multipart/form-data'
       }
     }).then((r) => {
-    setAlert({isOpen: true, message: 'Pedidos y Bloqueos cargados de manera exitosa.', type: 'success'})
+    setAlert({isOpen: true, message: 'Pedidos cargados de manera exitosa.', type: 'success'})
     setFilesCheck(filesCheck+1)
     
   }).catch((e) =>{
-    setAlert({isOpen: true, message: 'Pedidos y Bloqueos cargados de manera exitosa.', type: 'success'})
+    setAlert({isOpen: true, message: 'Pedidoscargados de manera exitosa.', type: 'success'})
   })
-  
   }
   
   const sendFileB = async () => {
@@ -107,11 +99,11 @@ function PageHeader() {
     
     
     .then((r) => {
-    setAlert({isOpen: true, message: 'Pedidos cargados de manera exitosa.', type: 'success'})
+    setAlert({isOpen: true, message: 'Bloqueos cargados de manera exitosa.', type: 'success'})
     setFilesCheck(filesCheck+1)
     
     }).catch((e) =>{
-    setAlert({isOpen: true, message: 'Pedidos y Bloqueos cargados de manera exitosa.', type: 'success'})
+    setAlert({isOpen: true, message: 'Bloqueos cargados de manera exitosa.', type: 'success'})
     })
     
 
@@ -180,8 +172,7 @@ function PageHeader() {
           </Grid>
           <Grid item xs={2}>
           <Button variant="contained"  onClick={sendFiles}>
-            Empezar Simulación
-          
+            Empezar Simulación   
           </Button>
           
         </Grid>

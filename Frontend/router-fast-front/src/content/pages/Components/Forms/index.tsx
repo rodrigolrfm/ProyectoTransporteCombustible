@@ -8,6 +8,7 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import { styled } from '@mui/material/styles';
 import FormControl from '@mui/material/FormControl';
+import UploadTwoToneIcon from '@mui/icons-material/UploadTwoTone';
 import * as React from 'react';
 import DateTimePicker from '@mui/lab/DateTimePicker';
 import axios from 'axios';
@@ -16,6 +17,7 @@ import * as moment from 'moment';
 import CustomSnackbar from 'src/components/Custom/CustomSnackbar';
 import simulacionDia from 'src/components/ServerEvents/serverEvents';
 import sendBlock from 'src/components/bloqueos/bloquedia';
+import { SentimentDissatisfiedOutlined } from '@mui/icons-material';
 
 const Input = styled('input')({
   display: 'none',
@@ -32,6 +34,27 @@ function Forms() {
   //const [horaslimite, setHoraLimite] = React.useState(new Date());
   const [value, setValue] = React.useState(new Date());
   const [horaslimite, setHoraLimite] = useState('')
+  const [fileA, setFileA] = useState(null)
+
+
+  const uploadFile = (file) => {
+    setFileA(file);
+  }
+
+  const sendFile = async () =>{
+    let formData = new FormData();
+    formData.append("file", fileA);
+
+    axios.post(`${url}/pedido/cargaMasivaPedidos` ,formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    }).then((r) => {
+    setAlert({isOpen: true, message: 'Pedidos cargados de manera exitosa.', type: 'success'})
+    }).catch((e) =>{
+    setAlert({isOpen: true, message: 'Error.', type: 'error'})
+    })
+  }
 
 
   const sendData= async ()=>{
@@ -58,10 +81,10 @@ function Forms() {
           //console.log("Pedido agregado exitosamente.");         
         
         });
-        setPosicionX(" ");
-        setPosicionY(" ");
-        setCapacidad(" ");
-        setHoraLimite(" ");
+        //setPosicionX(" ");
+        //setPosicionY(" ");
+        //setCapacidad(" ");
+        //setHoraLimite(" ");
   }
 
  
@@ -177,6 +200,15 @@ function Forms() {
                     <Button variant="contained" onClick={sendData} sx={{mt:1, mx:2, height: 50 , width:'15ch'}} >
                   Agregar Pedido
                   </Button>
+                  <Button
+                  startIcon={<UploadTwoToneIcon />} 
+                  variant="contained" id="bt-subir-pedidos" component="label" sx={{mt:1, mx:2, height: 50 , width:'15ch'}}>
+                  <Input accept="text/csv,.csv,.txt"  hidden multiple type="file" onChange={(e) => uploadFile(e.target.files[0])} />
+              Carga de Pedidos
+            </Button>
+            <Button variant="contained"  onClick={sendFile}>
+            Iniciar  
+          </Button>
                   {/*<Button variant="contained" onClick={simulacionDia} sx={{mt:1, mx:2, height: 50, width:'15ch'}} >
                   Empezar Operación
                   </Button>
