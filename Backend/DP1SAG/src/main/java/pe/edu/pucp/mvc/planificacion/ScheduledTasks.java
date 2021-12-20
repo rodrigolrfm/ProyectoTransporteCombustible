@@ -247,6 +247,7 @@ public class ScheduledTasks {
             System.out.println("Antes del if");
             if (emi!=null){
                 System.out.println("Entro al if");
+                System.out.println(rutasFinal);
                 emi.send(SseEmitter.event().name("RUTAS").data(rutasFinal));
             }
             System.out.println("Salio del if");
