@@ -85,7 +85,7 @@ public class ScheduledTasks {
         });
     }
 
-    @Scheduled(fixedRate = 60000)
+    @Scheduled(fixedRate = 120000)
     public void reportCurrentTime() throws Exception {
 
         EntidadRutas rutasFinal = EntidadRutas.builder().paths(new ArrayList<>()).build();
