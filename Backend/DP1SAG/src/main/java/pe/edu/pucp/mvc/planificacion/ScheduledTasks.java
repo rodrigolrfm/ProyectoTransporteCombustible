@@ -96,6 +96,7 @@ public class ScheduledTasks {
             //Carga de los pedidos
             requestListDesdoblado = pedidoService.listaPedidosSinAtender();
 
+
             for(PedidoModel pedido:requestListDesdoblado){
                 totalCapacity += pedido.getCantidadGLP();
             }

@@ -11,10 +11,7 @@ import pe.edu.pucp.algorithm.GeneticAlgorithm;
 import pe.edu.pucp.algorithm.Knapsack;
 import pe.edu.pucp.mvc.dtos.FechaDTO;
 import pe.edu.pucp.mvc.models.*;
-import pe.edu.pucp.mvc.planificacion.ControlTarea;
-import pe.edu.pucp.mvc.planificacion.PlanificacionTareas;
-import pe.edu.pucp.mvc.planificacion.PlanificadorTareasServicios;
-import pe.edu.pucp.mvc.planificacion.ScheduledTasks;
+import pe.edu.pucp.mvc.planificacion.*;
 import pe.edu.pucp.mvc.services.BloqueoService;
 import pe.edu.pucp.mvc.services.PedidoService;
 import pe.edu.pucp.mvc.services.VehiculoService;
@@ -67,6 +64,15 @@ public class EjecucionController {
         return sec + " " + min + "/5 * * * ?";
     }
 
+
+    private String generateCronExpressionColapso() {
+        Calendar now = Calendar.getInstance();
+        now.add(Calendar.SECOND, 20);
+        int min = now.get(Calendar.MINUTE);
+        int sec = now.get(Calendar.SECOND);
+        return sec + " " + min + "/8 * * * ?";
+    }
+
     /*
     @GetMapping(value = "/obtenerTresDias")
     public void devolverRutasTresDias(){
@@ -77,7 +83,7 @@ public class EjecucionController {
     @GetMapping(value = "/obtenerTresDias")
     public SseEmitter devolverRutasTresDias(){
 
-        String fecha = "2021-12-20 00:00:00";
+        String fecha = "2021-12-23 00:00:00";
 
         SseEmitter emitter = null;
         System.out.println("fecha:   " + fecha);
@@ -151,6 +157,86 @@ public class EjecucionController {
         return emitter;
 
     }
+
+
+    @GetMapping(value = "/obtenerColapso")
+    public SseEmitter devolverRutasColapso(){
+
+        String fecha = "2021-12-15 00:00:00";
+
+        SseEmitter emitter = null;
+        System.out.println("fecha:   " + fecha);
+        try{
+            System.out.println("--------");
+            emitter = new SseEmitter(Long.MAX_VALUE);
+            ControlTarea controlDatosPlanificador = ControlTarea.builder()
+                    .tipoAction("SimulacionColapso")
+                    .datos("")
+                    .fecha(fecha)
+                    .controlCron(generateCronExpressionColapso())
+                    .build();
+
+            // cargar Servicios
+            System.out.println("fecha:   " + fecha);
+            controlDatosPlanificador.setPedidoService(new PedidoService());
+            controlDatosPlanificador.setBloqueoService(new BloqueoService());
+            controlDatosPlanificador.setVehiculoService(new VehiculoService());
+            // Cargar vehículos
+            List<EntidadVehiculo> listaVehiculos = vehiculoService.listaVehiculosDisponibles();
+
+            // Cargar bloqueos
+            controlDatosPlanificador.setBlockList(bloqueoService.listaBloqueosDiaDia());
+
+
+            MapaModel mapa = new MapaModel();
+            MapaModel mapaVer = new MapaModel(70,50,mapa.obtenerPlantarIntermedias());
+            mapaVer.setBlockList(bloqueoService.listaBloqueosDiaDia());
+            controlDatosPlanificador.setMapaModel(mapaVer);
+            Date fechaIni = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(fecha);
+            controlDatosPlanificador.setFechaInicio(fechaIni);
+
+            Calendar aux= Calendar.getInstance();
+            aux.setTime(fechaIni);
+            Calendar init = Calendar.getInstance();
+            init.set(aux.get(Calendar.YEAR), aux.get(Calendar.MONTH), aux.get(Calendar.DATE), 0, 0, 0);
+            Timestamp fechaHora = new Timestamp(init.getTime().getTime());
+            listaVehiculos.forEach(v -> {
+                // Fecha de inicio y copia de fecha de inicio
+                v.setFechaInicio(init);
+                v.setNodoActual(controlDatosPlanificador.getMapaModel().getPlantas().get(0));
+                v.setCombustible(25);
+                v.setVelocidad(50);
+            });
+            vehiculoService.inicializarFechaInicioVehiculo(fechaHora);
+            controlDatosPlanificador.setListaVehiculos(listaVehiculos);
+
+
+            var localDate = fechaIni.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+            // Para aumentar la fecha a 3 dentro de tres días
+            localDate = localDate.plusDays(4);
+            System.out.println(java.sql.Timestamp.valueOf(localDate));
+            controlDatosPlanificador.setFechaFin(java.sql.Timestamp.valueOf(localDate));
+            controlDatosPlanificador.setFechaReferencial(fechaIni);
+            PlanificacionColapso planificacionColapso = new PlanificacionColapso(fechaIni,listaVehiculos);
+            String uuid = UUID.randomUUID().toString();
+            emitter.onCompletion(() -> planificadorTareasServicios.eliminarPlanificadorTareas(uuid));
+            emitter.onTimeout(() -> planificadorTareasServicios.eliminarPlanificadorTareas(uuid));
+            planificacionColapso.setControlTarea(controlDatosPlanificador);
+            planificacionColapso.setEmitter(emitter);
+            planificacionColapso.setUuid(uuid);
+            // cargar servicios
+            planificacionColapso.setBloqueoService(bloqueoService);
+            planificacionColapso.setPedidoService(pedidoService);
+            planificacionColapso.setVehiculoService(vehiculoService);
+            planificacionColapso.setPlanificadorTareasServicios(planificadorTareasServicios);
+            planificadorTareasServicios.planificarTareas(uuid, planificacionColapso, controlDatosPlanificador.getControlCron());
+        }catch (Exception ex){
+            System.out.println(ex.getMessage());
+        }
+        return emitter;
+
+    }
+
 
     @PostMapping(value = "/simularRutasColapso")
     public EntidadRutas ejecutarAlgortimo() throws Exception {
