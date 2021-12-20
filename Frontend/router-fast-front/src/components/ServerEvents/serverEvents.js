@@ -3,6 +3,7 @@ import url from  'src/utils/constant';
 
 //export const startSimulation=false;
 let datax;
+//const hojasR=[];
 const simulacionDia  = (funcionRequest) => {
     console.log("entrando al server event")
     
@@ -17,6 +18,7 @@ const simulacionDia  = (funcionRequest) => {
         console.log("xd");
        // startSimulation=true;
         datax=event.data;
+       // hojasR.push(datax);
         //console.log(x);
         funcionRequest(datax);
     });
@@ -31,14 +33,14 @@ const simulacionDia  = (funcionRequest) => {
         source = null;
         //funcionError();
     });
-    /*
+    
 
     source.addEventListener("Routes_end", function(e) {
         console.log ("Fin de ejecución...");
+        //console.log(hojasR);
         source.close();
         source = null;
-        funcionEnd();
     });
-    */
+    
 }
 export default simulacionDia;

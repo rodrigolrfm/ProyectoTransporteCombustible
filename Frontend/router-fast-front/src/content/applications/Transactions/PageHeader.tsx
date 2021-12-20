@@ -59,7 +59,7 @@ function PageHeader() {
     if( tipo == "2"){
       setSimulacion(2);      
     }
-    setTimeout(() => {executeScroll()}, 1000);
+    //setTimeout(() => {executeScroll()}, 1000);
     
   }
 
@@ -83,7 +83,7 @@ function PageHeader() {
         'Content-Type': 'multipart/form-data'
       }
     }).then((r) => {
-    setAlert({isOpen: true, message: 'Pedidos cargados de manera exitosa.', type: 'success'})
+    setAlert({isOpen: true, message: 'Pedidos y Bloqueos cargados de manera exitosa.', type: 'success'})
     setFilesCheck(filesCheck+1)
     
   }).catch((e) =>{

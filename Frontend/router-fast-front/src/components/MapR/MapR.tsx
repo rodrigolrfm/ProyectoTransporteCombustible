@@ -8,7 +8,11 @@ import BlockIcon from '@mui/icons-material/Block';
 import { IconButton } from '@mui/material';
 import simulacion3Dias from '../ServerEvents/serverMapR';
 import { HomeWork } from '@mui/icons-material';
+import ModalR from '../Custom/ModalR';
 import bloqueosData from './BloqueosR';
+import CardContent from '@mui/material/CardContent';
+import Typography from '@mui/material/Typography';
+import { Dialog, Button, Card } from '@mui/material';
 
 //1 hora es -> 12.5 segundos
 const vectorX = 70;
@@ -16,6 +20,7 @@ const vectorY = 50;
 const path = [ ];
 const intervaloTiempo=500; // 500, 200
 const avance = 286* 1000; // 288 , 115
+const hojasR=[];
 //500 es a 15 minutos
 // 1 es tiempo real
 
@@ -169,6 +174,7 @@ const implementarFecha = (startTime, dateTime) => {
   return new Date (resultado);
 };
 
+
 const useStyles = makeStyles((theme) => ({
     cuadrado: {
       borderColor: '#D89F7B',
@@ -214,13 +220,15 @@ const MapR=(props: simulacion )=>{
     const [bloqueos, setBloqueos] = useState([]);
     const [relativo, setRelativo] = useState(0);
     const [primero, setPrimero] = useState(true);
+    const [openInfo, setOpenInfo] = useState(false);
     const classes = useStyles();
     const map = [];
     let Relativo=0;
     Relativo=(new Date(paths[0]?.dateStart)).getTime();
 
 
-    useEffect(() => {   
+    useEffect(() => { 
+      /*  
       //console.log("antes del if",primero); 
       if (primero && !isNaN(Relativo)){
         setRelativo(Relativo);
@@ -230,15 +238,16 @@ const MapR=(props: simulacion )=>{
 
       else if(!primero){
        //console.log("relativo antes",relativo);
-      Relativo= relativo + avance;
+      Relativo = relativo + avance;
       setRelativo(Relativo);
       const blocksList = bloqueosData.filter((item)=>Relativo>(new Date(item.startTime)).getTime() && Relativo<(new Date(item.endTime)).getTime()).map((item)=>({x:item.bloqueo.x, y:item.bloqueo.y}))
-       console.log("dentro de intervalo",bloqueosData.map((item)=>({start: (new Date(item.startTime)).getTime(),end: (new Date(item.endTime)).getTime()})),Relativo);
-       console.log(blocksList);
-       setBloqueos(blocksList);
+       //console.log("dentro de intervalo",bloqueosData.map((item)=>({start: (new Date(item.startTime)).getTime(),end: (new Date(item.endTime)).getTime()})),Relativo);
+      // console.log(blocksList);
+       //setBloqueos(blocksList);
       
      // console.log("path",paths[0]);
       }
+      */
       //console.log("relativo",new Date(relativo));
       const intervalV=50;
       const interval = setInterval(() => {
@@ -267,20 +276,7 @@ const MapR=(props: simulacion )=>{
       return () => {clearInterval(interval)};
     }, [paths]);
 
-
-    ///BLOQUEOS
-    /*
-    useEffect(() => {
-      //console.log('mostrando bloqueos');
-      axios.get(url+ '/bloqueo/getBloqueos3dias').then((e) => { 
-        setBloqueosData(e.data);
-        console.log(e.data);
-      });
-      
-     */
-      
-
-    
+   /* 
   const findBlocks = useCallback(
       (relativo) => {
          //console.log("relativo",new Date(relativo));
@@ -288,32 +284,37 @@ const MapR=(props: simulacion )=>{
         //console.log("dentro");
        const interval2 = setInterval(() => {
          const blocksList = bloqueosData.filter((item)=>relativo>(new Date(item.startTime)).getTime() && relativo<(new Date(item.endTime)).getTime()).map((item)=>({x:item.bloqueo.x, y:item.bloqueo.y}))
-         console.log("dentro de intervalo",bloqueosData.map((item)=>({start: (new Date(item.startTime)).getTime(),end: (new Date(item.endTime)).getTime()})),relativo);
-         console.log(blocksList);
-         setBloqueos(blocksList);
- 
+         //console.log("dentro de intervalo",bloqueosData.map((item)=>({start: (new Date(item.startTime)).getTime(),end: (new Date(item.endTime)).getTime()})),relativo);
+         //console.log(blocksList);
+         //setBloqueos(blocksList);
        }, 5000);
        return () => {clearInterval(interval2)};
       // }
  
       },[],
       )   
+      */
+     useEffect(()=>{
+      console.log("Bloqueos Y:", bloqueos); 
+
+     },[bloqueos]);
 
     useEffect(() => {
        console.log("Mapa 3 días");
-      
        //con server event
-       
        const funcionRequest= (data)=>{
         data = JSON.parse(data);
-      
-        let newData = data.paths?.map((path) => {
+        hojasR.push(data.arregloRutas);
+        setBloqueos(data.bloqueoTresDias);
+        console.log("Bloqueos:", data.bloqueoTresDias);
+        console.log("Bloqueos x:", bloqueos);
+        let newData = data.arregloRutas.paths?.map((path) => {
           return {
             ...path.path,
             ruta: obtenerRuta(path.path),
             pos: 0,
-            date: implementarFecha(data.paths[0].startTime,path.startTime),
-            dateStart: data.paths[0].startTime,
+            date: implementarFecha(data.arregloRutas.paths[0].startTime,path.startTime),
+            dateStart: data.arregloRutas.paths[0].startTime,
             nowFixed: new Date(),
           };
         });
@@ -323,7 +324,6 @@ const MapR=(props: simulacion )=>{
         simulacion3Dias(funcionRequest);
       
       // sin server events 
-
        /*
         axios
         .get(url + "/ejecutar/obtenerTresDias")
@@ -365,6 +365,15 @@ const MapR=(props: simulacion )=>{
 
       
       }, []);
+
+      const handleClose = () => {
+        setOpenInfo(false);
+      };
+           
+      
+      const handleClickOpen = (ruta) => {
+        setOpenInfo(true);
+      }
       
     for (let i = 0; i < vectorY; i++) { //50
       const squareRows = [];
@@ -385,7 +394,9 @@ const MapR=(props: simulacion )=>{
                   : '#D89F7B',
             }}
           >
-            {bloqueos?.find(({ x, y }) => x === j && y === i) && (
+            {bloqueos?.find((bloqueo) => { 
+              //console.log("Bloques XY", bloqueo.bloqueo);
+              return (bloqueo.bloqueo.x === j && bloqueo.bloqueo.y === i)}) && (
             <div className={classes.iconb}>
               <IconButton>
                 <BlockIcon style={{ color: 'red', fontSize: '20px' }} />
@@ -440,7 +451,23 @@ const MapR=(props: simulacion )=>{
       map.push(<div className={classes.row}>{squareRows}</div>);
     }
     return (
+      <>
+      
         <div className={classes.map}>{map}</div>
+        <div>
+        <Card sx={{ minWidth: 275 , mt: 1 }}>
+      <CardContent>
+        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+          Hoja de Ruta
+        </Typography>
+        <Typography variant="h5" component="div">
+          
+        </Typography>
+      </CardContent>
+    </Card>
+        </div>
+        
+      </>
     );
   }
   
