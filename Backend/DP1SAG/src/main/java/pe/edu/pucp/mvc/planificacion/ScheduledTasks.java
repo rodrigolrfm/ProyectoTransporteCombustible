@@ -208,8 +208,10 @@ public class ScheduledTasks {
                     vertices.clear();
                     v.getListaPedidos().forEach(p -> { vertices.add(p); });
                     System.out.println(v.getListaPedidos());
-                    if(!v.getListaPedidos().isEmpty())
+                    if(!v.getListaPedidos().isEmpty()){
                         GeneticAlgorithm.Genetic(v, vertices, mapaModel);
+                        System.out.println("Output genetico::>>" + v.getRutaVehiculo());
+                    }
                 }
 
                 for(EntidadVehiculo v : listaVehiculos){
@@ -217,6 +219,7 @@ public class ScheduledTasks {
                         v.getFechaInicio().add(Calendar.MINUTE, Math.round((float) Math.ceil(v.calculateTimeToDispatch())));
                         v.setNodoActual(v.getRutaVehiculo().get(v.getRutaVehiculo().size() - 1));
                         totalTime += v.calculateTimeToDispatch();
+                        System.out.println("Entro al if vehiculo::>>" + v.getRutaVehiculo());
                         // se guardan las rutas y los pedidos
                         // aquí se podría enviar cada vehículo con su ruta
                         SimpleDateFormat sdf;
