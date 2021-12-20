@@ -224,13 +224,13 @@ public class ScheduledTasks {
                         sdf.setTimeZone(TimeZone.getTimeZone("America/Bogota"));
                         String text = sdf.format(v.getFechaInicio().getTime());
                         EntidadRuta rutaVehiculo = EntidadRuta.builder().startTime(text).path(v.getRutaVehiculoPositions(requestListDesdoblado)).endTime("F").build();
-                        for(PositionModel pos : rutaVehiculo.getPath()){
-                            if (pos.getDestino() == 1){
-                                rutasFinal.agregarRuta(rutaVehiculo);
-                                break;
-                            }
-                        }
-                        //rutasFinal.agregarRuta(rutaVehiculo);
+//                        for(PositionModel pos : rutaVehiculo.getPath()){
+//                            if (pos.getDestino() == 1){
+//                                rutasFinal.agregarRuta(rutaVehiculo);
+//                                break;
+//                            }
+//                        }
+                        rutasFinal.agregarRuta(rutaVehiculo);
                         v.clearVehicle();
                         vehiculoService.actualizarEstadoVehiculoToVacio(v.getIdVehiculo());
                     }
